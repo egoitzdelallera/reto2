@@ -3,21 +3,42 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 
+<script>
+import api from './services/api.js';
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      datos: [], // Almacenamos los datos de la base de datos
+    };
+  },
+  mounted() {
+    this.cargarDatos();
+  },
+  methods: {
+    async cargarDatos() {
+      try {
+        const response = await api.obtenerDatos(); // Llamar al api
+        this.datos = response.data; // Guardar los datos recibidos
+      } catch (error) {
+        console.error('Error al cargar los datos:', error);
+      }
+    },
+  },
+};
+</script>
+
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div id="app">
+    <h1>Datos desde la base de datos</h1>
+    <ul v-if="datos.length > 0">
+      <li v-for="dato in datos" :key="dato.id">
+        {{ dato.nombre }} - {{ dato.descripcion }}
+      </li>
+    </ul>
+    <p v-else>Cargando datos...</p>
+  </div>
 </template>
 
 <style scoped>
