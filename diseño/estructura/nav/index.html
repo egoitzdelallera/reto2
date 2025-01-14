@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaByte - Sistema</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos existentes sin cambios */
+        .sidebar {
+            width: 60px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            transition: width 0.3s;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .sidebar:hover {
+            width: 190px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: #333;
+            padding: 0.75rem 1rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        .submenu {
+            display: none;
+            position: fixed;
+            left: 190px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+           
+            padding: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition:  0.3s;
+        }
+
+        .nav-item:hover .submenu,
+        .submenu:hover {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .workshop-card, .item-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .workshop-card:hover, .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+        }
+
+        .submenu-title {
+            color: #0d6efd;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background-color: transparent;
+        }
+
+        .submenu-subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .submenu-section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .submenu {
+            width: 300px;
+            background-color: #e0e0e0;
+            box-shadow: inset 5px 0px 10px -4px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: inset 5px 0px 10px -4px rgba(0, 0, 0, 0.3);
+
+            
+        }
+
+        .submenu-title {
+            position: sticky;
+            top: 0;
+            
+            padding: 1rem 0;
+            z-index: 10;
+        }
+
+        .submenu-subtitle {
+            padding: 0 1rem;
+            color: #666;
+        }
+
+        .submenu-section-title {
+            position: sticky;
+            top: 70px;
+            
+            padding: 0.5rem 0;
+            z-index: 9;
+        }
+
+        .workshop-card {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .workshop-card:hover {
+            background-color: #f8fafc;
+        }
+
+        .workshops-container {
+            max-height: calc(100vh - 280px);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        /* Estilos para la barra de desplazamiento */
+        .workshops-container::-webkit-scrollbar {
+            width: 14px;
+            border-radius: 4px;
+            
+        }
+
+        .workshops-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+            width: 10px;
+            
+            
+          
+        }
+
+        .workshops-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+            border-radius: 10px;
+            border:5px solid transparent !important;
+            background-clip: content-box;
+            
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="sidebar p-2">
+        <h1 class="mb-4 text-center">
+            <a href="#" class="logo">N.</a>
+        </h1>
+        <nav class="nav flex-column">
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Incidencias</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Gestión de Incidencias</h2>
+                    <p class="submenu-subtitle">Selecciona una sección.</p>
+                    
+                    <h3 class="submenu-section-title">Incidencias Activas</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Pendientes</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>En Proceso</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>Resueltas</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Todas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Mantenimientos</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Talleres de Mekatrónica</h2>
+                    <p class="submenu-subtitle">Selecciona el taller.</p>
+                    
+                    <h3 class="submenu-section-title"> Talleres</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="workshop-card">
+                            <span>Todos los Talleres</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller A</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller B</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller d</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller e</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller f</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller g</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller h</span>
+                        </div>
+                        <div class="workshop-card">
+                            <span>Taller D</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Técnicos</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Equipo Técnico</h2>
+                    <p class="submenu-subtitle">Gestión de técnicos.</p>
+                    
+                    <h3 class="submenu-section-title">Personal Técnico</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Disponibles</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>En Servicio</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>Calendario</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Informes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Máquinas</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Inventario de Máquinas</h2>
+                    <p class="submenu-subtitle">Gestión de equipamiento.</p>
+                    
+                    <h3 class="submenu-section-title">Equipos</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Activas</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>Mantenimiento</span>
+                            <span class="activity-dot"></span>
+                        </div>
+                        <div class="item-card">
+                            <span>Historial</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Inventario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Usuarios</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Gestión de Usuarios</h2>
+                    <p class="submenu-subtitle">Administración de accesos.</p>
+                    
+                    <h3 class="submenu-section-title">Usuarios del Sistema</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Administradores</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Técnicos</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Operarios</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Permisos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Perfil</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Mi Perfil</h2>
+                    <p class="submenu-subtitle">Gestión de cuenta.</p>
+                    
+                    <h3 class="submenu-section-title">Configuración</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Datos Personales</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Preferencias</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Seguridad</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Notificaciones</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-link-icon me-3">❗</span>
+                    <span>Ayuda</span>
+                </a>
+                <div class="submenu">
+                    <h2 class="submenu-title">Centro de Ayuda</h2>
+                    <p class="submenu-subtitle">Soporte y recursos.</p>
+                    
+                    <h3 class="submenu-section-title">Recursos</h3>
+                    
+                    <div class="workshops-container">
+                        <div class="item-card">
+                            <span>Guías</span>
+                        </div>
+                        <div class="item-card">
+                            <span>FAQ</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Contacto</span>
+                        </div>
+                        <div class="item-card">
+                            <span>Reportar Error</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.querySelectorAll('.nav-item').forEach(item => {
+            const submenu = item.querySelector('.submenu');
+            
+            if (submenu) {
+                let timeout;
+                let isHovered = false;
+        
+                const showSubmenu = () => {
+                    clearTimeout(timeout);
+                    document.querySelectorAll('.submenu').forEach(sub => {
+                        if (sub !== submenu) {
+                            sub.style.display = 'none';
+                            sub.style.opacity = '0';
+                            sub.style.transform = 'translateX(-20px)';
+                        }
+                    });
+                    submenu.style.display = 'block';
+                    // Force a reflow
+                    submenu.offsetHeight;
+                    submenu.style.opacity = '1';
+                    submenu.style.transform = 'translateX(0)';
+                };
+        
+                const hideSubmenu = () => {
+                    if (!isHovered) {
+                        submenu.style.opacity = '0';
+                        submenu.style.transform = 'translateX(-20px)';
+                        timeout = setTimeout(() => {
+                            submenu.style.display = 'none';
+                        }, 300);
+                    }
+                };
+        
+                item.addEventListener('mouseenter', () => {
+                    isHovered = true;
+                    showSubmenu();
+                });
+        
+                item.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    timeout = setTimeout(hideSubmenu, 100);
+                });
+        
+                submenu.addEventListener('mouseenter', () => {
+                    isHovered = true;
+                });
+        
+                submenu.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    timeout = setTimeout(hideSubmenu, 100);
+                });
+            }
+        });
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => {
+                    l.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        </script>
+        
+</body>
+</html>
