@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import IncidentsTable from './components/IncidentesTabla.vue'
-import Mantenimientos from './components/MantenimientosTabla.vue'
-import Usuarios from './components/UsuariosGestion.vue'
-import Perfil from './components/PerfilGestion.vue'
-import iniciosesion from './components/InicioSesion.vue'
+import IncidentsTable from './views/IncidentesView.vue'
+import Mantenimientos from './views/MantenimientosView.vue'
+import Usuarios from './views/UsuarioView.vue'
+import Perfil from './views/PerfilView.vue'
+import iniciosesion from './views/InicioSesionView.vue'
 
 const routes = [
   { path: '/', component: iniciosesion },

@@ -1,11 +1,15 @@
+
+
 <script setup>
   // Función: Mostrar las cuentas del cliente identificado usando el componente MostrarCuentas.
-  import MostrarCuentas from '../components/MostrarCuentas.vue';
+  import Perfil from '../components/PerfilGestion.vue';
+  import SideBar from '../views/SideBar.vue';
+
 </script>
 
 <template>
   <div>
-    <h3>Consultas </h3>
-    <MostrarCuentas> </MostrarCuentas>
+    <SideBar> </SideBar>
+    <Perfil> </Perfil>
   </div>
 </template>

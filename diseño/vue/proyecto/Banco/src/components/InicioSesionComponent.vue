@@ -10,7 +10,7 @@
           <label for="password">Contraseña:</label>
           <input type="password" id="password" v-model="password" required>
         </div>
-        <a href="./UnionWeb">entrar</a>
+        <a href="">entrar</a>
       </form>
     </div>
   </template>
