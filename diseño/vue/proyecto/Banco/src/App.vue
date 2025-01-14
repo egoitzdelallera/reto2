@@ -10,15 +10,12 @@
 <script setup>
 import { computed } from 'vue'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
-import Sidebar from './components/SideBar.vue'
-import IncidentsTable from './components/IncidentesTabla.vue'
-import Mantenimientos from './components/MantenimientosTabla.vue'
-import Login from './components/InicioSesion.vue'
+
+import Login from './views/InicioSesionView.vue'
 
 const routes = [
-  { path: '/', component: IncidentsTable },
-  { path: '/mantenimientos', component: Mantenimientos },
-  { path: '/login', component: Login }
+  { path: '/', component: Login },
+  
 ]
 
 const router = createRouter({
