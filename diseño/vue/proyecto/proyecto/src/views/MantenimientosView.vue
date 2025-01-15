@@ -1,12 +1,14 @@
+
 <script setup>
   // Función: Mostrar las cuentas del cliente identificado usando el componente MostrarCuentas.
-  import Incidentes from '../components/IncidentesTabla.vue';
+  import mantenimientos from '../components/MantenimientosTabla.vue';
   import SideBar from '../views/SideBar.vue';
-</script>
+  import '../assets/css/Mantenimientos.css' // Asegúrate de que la ruta sea correcta
 
+</script>
 <template>
   <div>
     <SideBar> </SideBar>
-    <Incidentes> </Incidentes>
+    <mantenimientos> </mantenimientos>
   </div>
 </template>

@@ -1,0 +1,232 @@
+// Variables
+$fuente-principal: Arial, sans-serif;
+$color-primario: #10b981;
+$color-fondo: #f3f4f6;
+$blanco: #ffffff;
+$gris-100: #e5e7eb;
+$gris-300: #9ca3af;
+$gris-400: #6b7280;
+$gris-500: #4b5563;
+$azul-600: #2563eb;
+$azul-700: #1d4ed8;
+$rojo-100: #fee2e2;
+$rojo-600: #dc2626;
+$verde-100: #d1fae5;
+$verde-600: #059669;
+$naranja-100: #ffedd5;
+$naranja-600: #d97706;
+
+// Mixins
+@mixin tarjeta {
+  background-color: $blanco;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+@mixin etiqueta-estado($color-fondo, $color-texto) {
+  background-color: $color-fondo;
+  color: $color-texto;
+}
+
+// Estilos
+.detalle-incidente {
+  font-family: $fuente-principal;
+  background-color: $color-fondo;
+  min-height: 100vh;
+
+  .cabecera {
+    background-color: $blanco;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+
+    &-titulo {
+      color: $color-primario;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .contenido-principal {
+    padding: 2rem 0;
+  }
+
+  .boton-volver {
+    background: none;
+    border: none;
+    color: $gris-400;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding: 0;
+  }
+
+  .cuadricula-contenido {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .tarjeta {
+    @include tarjeta;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+
+    &-cabecera {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    &-titulo {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .contenedor-titulo {
+    display: flex;
+    align-items: center;
+  }
+
+  .titulo-incidente {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .boton-marcador {
+    background: none;
+    border: none;
+    color: $gris-300;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+
+  .contenedor-estado {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .prioridad {
+    font-size: 0.875rem;
+    color: $gris-400;
+  }
+
+  .estado {
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+
+    &-rojo {
+      @include etiqueta-estado($rojo-100, $rojo-600);
+    }
+
+    &-verde {
+      @include etiqueta-estado($verde-100, $verde-600);
+    }
+
+    &-naranja {
+      @include etiqueta-estado($naranja-100, $naranja-600);
+    }
+  }
+
+  .cuadricula-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .item-info {
+    margin-bottom: 1.5rem;
+  }
+
+  .etiqueta-info {
+    font-size: 0.875rem;
+    color: $gris-400;
+    margin-bottom: 0.25rem;
+  }
+
+  .valor-info {
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .fase {
+    margin-bottom: 2rem;
+
+    &-cabecera {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    &-titulo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &-punto {
+      width: 8px;
+      height: 8px;
+      background-color: $gris-300;
+      border-radius: 50%;
+    }
+
+    &-fecha {
+      font-size: 0.75rem;
+      color: $gris-400;
+    }
+
+    &-descripcion {
+      margin-bottom: 0.5rem;
+    }
+
+    &-etiquetas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  }
+
+  .etiqueta {
+    background-color: $gris-100;
+    color: $gris-500;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .boton-asignar {
+    background-color: $azul-600;
+    color: $blanco;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: $azul-700;
+    }
+  }
+}
+

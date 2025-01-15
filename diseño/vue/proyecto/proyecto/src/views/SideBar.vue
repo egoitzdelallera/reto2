@@ -1,4 +1,5 @@
 <template>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <div class="sidebar p-2" :class="{ 'collapsed': isCollapsed }">
     <h1 class="mb-4 text-center">
       <a href="#" class="logo">
@@ -11,7 +12,7 @@
            @mouseenter="showSubmenu(index)" 
            @mouseleave="hideSubmenu(index)">
         <a href="#" class="nav-link" @click.prevent="navigateTo(item.route)">
-          <span class="nav-link-icon me-3">❗</span>
+          <i :class="item.icon"></i>
           <span class="nav-link-text">{{ item.title }}</span>
         </a>
         <div v-if="item.submenu" class="submenu" :class="{ 'show': item.isHovered }">
@@ -27,13 +28,15 @@
 </div>
       </div>
     </nav>
+    
   </div>
 </template>
 
 
   <script>
   import { useRouter } from 'vue-router'
-  
+  import '../assets/css/Nav.css' // Asegúrate de que la ruta sea correcta
+
   export default {
     setup() {
       const router = useRouter()
@@ -54,6 +57,7 @@
       menuItems: [
         {
           title: 'Incidencias',
+          icon: 'bi bi-pencil-fill',
           route: '/incidencias',
           submenuTitle: 'Gestión de Incidencias',
           submenuSubtitle: 'Selecciona una sección.',
@@ -69,6 +73,7 @@
         },
         {
           title: 'Mantenimientos',
+          icon: 'bi bi-calendar-event',
           route: '/mantenimientos',
           submenuTitle: 'Talleres de Mekatrónica',
           submenuSubtitle: 'Selecciona el taller.',
@@ -86,22 +91,10 @@
             { name: 'Taller H', active: true, route: '/mantenimientos/taller-h' }
           ]
         },
-        {
-          title: 'Técnicos',
-          route: '/tecnicos',
-          submenuTitle: 'Equipo Técnico',
-          submenuSubtitle: 'Gestión de técnicos.',
-          sectionTitle: 'Personal Técnico',
-          isHovered: false,
-          submenu: [
-            { name: 'Disponibles', active: true, route: '/tecnicos/disponibles' },
-            { name: 'En Servicio', active: true, route: '/tecnicos/en-servicio' },
-            { name: 'Calendario', active: false, route: '/tecnicos/calendario' },
-            { name: 'Informes', active: false, route: '/tecnicos/informes' }
-          ]
-        },
+        
         {
           title: 'Máquinas',
+          icon: 'bi bi-pc-display-horizontal',
           route: '/maquinas',
           submenuTitle: 'Inventario de Máquinas',
           submenuSubtitle: 'Gestión de equipamiento.',
@@ -116,7 +109,7 @@
         },
         {
           title: 'Usuarios',
-          
+          icon: 'bi bi-people',
           submenuTitle: 'Gestión de Usuarios',
           submenuSubtitle: 'Administración de accesos.',
           sectionTitle: 'Usuarios del Sistema',
@@ -131,6 +124,7 @@
         },
         {
           title: 'Perfil',
+          icon: 'bi bi-person',
           route: '/perfil',
           submenuTitle: 'Mi Perfil',
           submenuSubtitle: 'Gestión de cuenta.',
@@ -145,6 +139,7 @@
         },
         {
           title: 'Ayuda',
+          icon: 'bi bi-info-circle',
           route: '/ayuda',
           submenuTitle: 'Centro de Ayuda',
           submenuSubtitle: 'Soporte y recursos.',
@@ -185,211 +180,9 @@
     }
   },
 };
+
 </script>
 
 <style scoped>
-*{
-  font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-}
-a{
-  text-decoration: none;
-  color: inherit;
-}
-.sidebar {
-  width: 200px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background: white;
-  border-right: 1px solid #e5e7eb;
-  transition: width 0.3s ease;
-  overflow: hidden;
-  z-index: 1000;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-}
 
-.sidebar:not(:hover) {
-  width: 60px;
-}
-
-.nav-item {
-  position: relative;
-  border-top-right-radius: 40px;
-  border-bottom-right-radius: 40px;
- 
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  visibility: visible;
-}
-
-.logo-full {
-  display: none;
-  
-}
-
-.logo-short {
-  display: block;
- 
-}
-
-.sidebar:not(.collapsed) .logo-full {
-  display: block;
-}
-
-.sidebar:not(.collapsed) .logo-short {
-  display: none;
-}
-
-
-
-.nav-link {
-  color: #333;
-  padding: 0.75rem 1rem;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  width: 95%;
-
-}
-
-.nav-link-text {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.sidebar:not(:hover) .nav-link-text {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.submenu {
-  display: none;
-  position: fixed;
-  left: 0px;
-  top: 0;
-  width: 300px;
-  height: 100vh;
-  background-color: #e0e0e0;
-  padding: 2rem;
-  opacity: 0;
-  transition:  0.3s;
-  box-shadow: inset 5px 0px 10px -4px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: inset 5px 0px 10px -4px rgba(0, 0, 0, 0.3);
-}
-
-.submenu.show {
-  display: block;
-  opacity: 1;
-  left: 190px;
-}
-
-.workshop-card, .item-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-.workshop-card:hover, .item-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.activity-dot {
-  width: 8px;
-  height: 8px;
-  background-color: #0d6efd;
-  border-radius: 50%;
-}
-
-.submenu-title {
-  color: #0d6efd;
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  position: sticky;
-  top: 0;
-  background-color: transparent;
-  padding: 1rem 0;
-  z-index: 10;
-}
-
-.submenu-subtitle {
-  color: #000;
-  margin-bottom: 2rem;
-  padding: 0 1rem;
-}
-
-.submenu-section-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  position: sticky;
-  top: 70px;
-  padding: 0.5rem 0;
-  z-index: 9;
-  color: #000;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-
-.workshops-container {
-  max-height: calc(100vh - 280px);
-  overflow-y: auto;
-  padding-right: 1rem;
-}
-
-.workshops-container::-webkit-scrollbar {
-  width: 14px;
-  border-radius: 4px;
-}
-
-.workshops-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-  width: 10px;
-}
-
-.workshops-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-  border: 5px solid transparent;
-  background-clip: content-box;
-}
-
-.item-card span {
-  color: #000;
-}
 </style>
