@@ -28,7 +28,7 @@
     // For this example, we'll just redirect to the home page
     router.push('/')
   }
-  import '../assets/css/InicioSesion.css' // Asegúrate de que la ruta sea correcta
+  // Asegúrate de que la ruta sea correcta
 
   </script>
   

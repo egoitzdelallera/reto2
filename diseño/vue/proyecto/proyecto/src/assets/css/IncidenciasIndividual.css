@@ -1,27 +1,32 @@
-.detalle-incidente {
+.incident-detail {
   font-family: Arial, sans-serif;
   background-color: #f3f4f6;
   min-height: 100vh;
 }
-.detalle-incidente .cabecera {
+
+.header {
   background-color: #ffffff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   padding: 1rem 0;
 }
-.detalle-incidente .cabecera-titulo {
-  color: #10b981;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-.detalle-incidente .contenedor {
+
+.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
-.detalle-incidente .contenido-principal {
+
+.header-title {
+  color: #10b981;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.main-content {
   padding: 2rem 0;
 }
-.detalle-incidente .boton-volver {
+
+.back-button {
   background: none;
   border: none;
   color: #6b7280;
@@ -30,135 +35,162 @@
   margin-bottom: 1rem;
   padding: 0;
 }
-.detalle-incidente .cuadricula-contenido {
+
+.content-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
+
 @media (min-width: 1024px) {
-  .detalle-incidente .cuadricula-contenido {
+  .content-grid {
     grid-template-columns: 2fr 1fr;
   }
 }
-.detalle-incidente .tarjeta {
+
+.card {
   background-color: #ffffff;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
   padding: 1.5rem;
 }
-.detalle-incidente .tarjeta-cabecera {
+
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1.5rem;
 }
-.detalle-incidente .tarjeta-titulo {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-.detalle-incidente .contenedor-titulo {
+
+.title-container {
   display: flex;
   align-items: center;
 }
-.detalle-incidente .titulo-incidente {
+
+.incident-title {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
 }
-.detalle-incidente .boton-marcador {
+
+.bookmark-button {
   background: none;
   border: none;
   color: #9ca3af;
   cursor: pointer;
   margin-left: 0.5rem;
 }
-.detalle-incidente .contenedor-estado {
+
+.status-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.detalle-incidente .prioridad {
+
+.priority {
   font-size: 0.875rem;
   color: #6b7280;
 }
-.detalle-incidente .estado {
+
+.status {
   font-size: 0.75rem;
   font-weight: bold;
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
 }
-.detalle-incidente .estado-rojo {
+
+.status-red {
   background-color: #fee2e2;
   color: #dc2626;
 }
-.detalle-incidente .estado-verde {
+
+.status-green {
   background-color: #d1fae5;
   color: #059669;
 }
-.detalle-incidente .estado-naranja {
+
+.status-orange {
   background-color: #ffedd5;
   color: #d97706;
 }
-.detalle-incidente .cuadricula-info {
+
+.info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
-.detalle-incidente .item-info {
+
+.info-item {
   margin-bottom: 1.5rem;
 }
-.detalle-incidente .etiqueta-info {
+
+.info-label {
   font-size: 0.875rem;
   color: #6b7280;
   margin-bottom: 0.25rem;
 }
-.detalle-incidente .valor-info {
+
+.info-value {
   font-weight: 500;
   margin: 0;
 }
-.detalle-incidente .fase {
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.phase {
   margin-bottom: 2rem;
 }
-.detalle-incidente .fase-cabecera {
+
+.phase-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
-.detalle-incidente .fase-titulo {
+
+.phase-title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.detalle-incidente .fase-punto {
+
+.phase-dot {
   width: 8px;
   height: 8px;
   background-color: #9ca3af;
   border-radius: 50%;
 }
-.detalle-incidente .fase-fecha {
+
+.phase-date {
   font-size: 0.75rem;
   color: #6b7280;
 }
-.detalle-incidente .fase-descripcion {
+
+.phase-description {
   margin-bottom: 0.5rem;
 }
-.detalle-incidente .fase-etiquetas {
+
+.phase-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.detalle-incidente .etiqueta {
+
+.tag {
   background-color: #e5e7eb;
   color: #4b5563;
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
 }
-.detalle-incidente .boton-asignar {
+
+.assign-button {
   background-color: #2563eb;
   color: #ffffff;
   border: none;
@@ -169,8 +201,7 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
 }
-.detalle-incidente .boton-asignar:hover {
+
+.assign-button:hover {
   background-color: #1d4ed8;
 }
-
-/*# sourceMappingURL=IncidenciasIndividual.css.map */

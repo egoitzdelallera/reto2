@@ -73,8 +73,13 @@ a {
   display: flex;
   align-items: center;
   width: 95%;
+  margin-left: 7px;
+ 
 }
+
+
 .nav-link-text {
+  margin-left: 20px;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 

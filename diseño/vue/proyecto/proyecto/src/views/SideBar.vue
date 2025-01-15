@@ -12,7 +12,7 @@
            @mouseenter="showSubmenu(index)" 
            @mouseleave="hideSubmenu(index)">
         <a href="#" class="nav-link" @click.prevent="navigateTo(item.route)">
-          <i :class="item.icon"></i>
+          <i :class="item.icon" ></i>
           <span class="nav-link-text">{{ item.title }}</span>
         </a>
         <div v-if="item.submenu" class="submenu" :class="{ 'show': item.isHovered }">
@@ -57,7 +57,7 @@
       menuItems: [
         {
           title: 'Incidencias',
-          icon: 'bi bi-pencil-fill',
+          icon: 'bi bi-shield',
           route: '/incidencias',
           submenuTitle: 'Gestión de Incidencias',
           submenuSubtitle: 'Selecciona una sección.',

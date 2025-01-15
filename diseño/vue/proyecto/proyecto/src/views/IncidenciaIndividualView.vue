@@ -4,6 +4,7 @@
   import SideBar from '../views/SideBar.vue';
   import '../assets/css/IncidenciasIndividual.css' // Asegúrate de que la ruta sea correcta
 
+
 </script>
 
 <template>
@@ -12,3 +13,4 @@
     <Incidentes> </Incidentes>
   </div>
 </template>
+<style ></style>
