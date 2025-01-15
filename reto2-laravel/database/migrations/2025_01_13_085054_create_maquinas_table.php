@@ -20,7 +20,6 @@ return new class extends Migration
             $table->bigInteger('id_campus');
             $table->enum('prioridad', ['Alta', 'Media', 'Baja']);
             $table->enum('estado', ['Habilitado', 'Deshabilitado']);
-            $table->timestamp('fecha_creacion')->useCurrent();
             $table->primary('id_maquina');
             $table->foreign('id_taller')->references('id_taller')->on('talleres')->onDelete('cascade');
             $table->foreign('id_campus')->references('id_campus')->on('campus')->onDelete('cascade');

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigInteger('id_usuario')->autoIncrement();
             $table->string('nombre', 100);
+            $table->string('apellido', 100);
             $table->string('correo', 100)->unique();
             $table->string('contrasena', 100);
             $table->bigInteger('id_campus');
             $table->enum('rol', ['Administrador', 'Operario', 'Tecnico']);
             $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->string('imagen_perfil', 100)->nullable();
-            $table->timestamp('fecha_creacion')->useCurrent();
             $table->primary('id_usuario');
             $table->foreign('id_campus')->references('id_campus')->on('campus');
         });

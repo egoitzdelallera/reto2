@@ -27,7 +27,7 @@ return [
     |
     */
     'allowed_origins' => [
-        'http://localhost:8080',  // Cambia esto con el puerto de tu frontend Vue.js
+        'http://localhost:5173',  // Cambia esto con el puerto de tu frontend Vue.js
     ],
 
     'allowed_origins_patterns' => [],

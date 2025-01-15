@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_incidencia')->autoIncrement();
             $table->bigInteger('id_maquina');
             $table->string('descripcion', 300);
-            $table->enum('tipo', ['Mantenimiento', 'General']);
+            $table->enum('gravedad', ['Maquina en Marcha', 'Maquina parada', 'Aviso', 'Mantenimiento']);
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
             $table->bigInteger('id_tipo_averia')->nullable();
             $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);

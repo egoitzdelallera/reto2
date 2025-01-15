@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 
 class MaquinaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $maquinas = Maquina::all();
-        return response()->json($maquinas);
+        return response()->json(Maquina::all());
     }
     
     public function store(Request $request)

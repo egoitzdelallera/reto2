@@ -13,7 +13,6 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \App\Http\Middleware\TrustProxies::class,
-        \Illuminate\Http\Middleware\HandleCors::class,  // Middleware para manejar CORS
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Http\Middleware\LoadModerationState::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,

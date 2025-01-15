@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->string('ubicacion', 100);
             $table->bigInteger('id_responsable');
-            $table->enum('estado', ['Hablitado', 'Deshabilitado']);
-            $table->timestamp('fecha_creacion')->useCurrent();
+            $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->primary('id_taller');
             $table->foreign('id_responsable')->references('id_usuario')->on('users')->onDelete('cascade');
         });
