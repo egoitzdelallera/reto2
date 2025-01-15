@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('estado', ['Hablitado', 'Deshabilitado']);
             $table->timestamp('fecha_creacion')->useCurrent();
             $table->primary('id_taller');
-            $table->foreign('id_responsable')->references('id_usuario')->on('usuarios')->onDelete('cascade');
+            $table->foreign('id_responsable')->references('id_usuario')->on('users')->onDelete('cascade');
         });
     }
 
