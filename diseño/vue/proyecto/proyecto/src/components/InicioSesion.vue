@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex min-vh-100 align-items-center justify-content-center aling-items-center bg-light">
+  <div class="d-flex min-vh-100 align-items-center justify-content-center align-items-center bg-light">
     <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
       <div class="text-center">
         <h2 class="mt-3 mb-4">Iniciar Sesión</h2>

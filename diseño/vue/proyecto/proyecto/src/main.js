@@ -7,6 +7,8 @@ import Usuarios from './views/UsuarioView.vue'
 import Perfil from './views/PerfilView.vue'
 import iniciosesion from './views/InicioSesionView.vue'
 import IncidenciaIndividual from './views/IncidenciaIndividualView.vue'
+import Maquinas from './views/MaquinasView.vue'
+import MaquinaIndividual from './views/MaquinaIndividualView.vue'
 
 const routes = [
   { path: '/', component: iniciosesion },
@@ -15,6 +17,9 @@ const routes = [
   { path: '/usuarios', component: Usuarios},
   { path: '/perfil', component: Perfil},
   { path: '/IncidenciaIndividual/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual },
+  { path: '/maquinas', component: Maquinas },
+  { path: '/MaquinaIndividual/:id',name:'MaquinaIndividual', component: MaquinaIndividual },
+
 
  
 ]
