@@ -1,0 +1,90 @@
+/* Custom styles for MaquinaIndividual component */
+
+/* Adjust container padding */
+.container-fluid {
+  padding-left: 3% !important;
+}
+
+/* Custom styles for priority badge */
+.priority-badge {
+  background: #fff0f0;
+  color: #dc3545;
+  font-size: 12px;
+}
+
+/* Custom styles for status button */
+.status-button {
+  font-size: 13px;
+}
+
+.status-button.enabled {
+  background: #d4edda;
+  color: #198754;
+}
+
+/* Custom styles for info items */
+.info-item label {
+  font-size: 12px;
+}
+
+.info-item span {
+  font-size: 14px;
+}
+
+/* Custom styles for description */
+.description-section p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Custom styles for stats */
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Custom styles for maintenance items */
+.maintenance-item {
+  font-size: 14px;
+}
+
+.frequency {
+  color: #666;
+}
+
+/* Custom styles for footer */
+.company-name {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.company-description {
+  font-size: 14px;
+}
+
+.contact-section h4 {
+  font-size: 14px;
+}
+
+.contact-section p,
+.address-section p {
+  font-size: 14px;
+}
+
+.social-link {
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-content {
+    text-align: center;
+  }
+}
+

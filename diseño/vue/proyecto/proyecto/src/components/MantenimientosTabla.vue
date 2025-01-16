@@ -1,73 +1,75 @@
 <template>
-  <div class="maintenances-container">
-    <h1 class="text-2xl font-bold mb-6">Mantenimientos</h1>
-    <div class="mb-6">
-      <div class="search-container">
+  <div class="container-fluid">
+    <h1 class="display-4 mb-4">Mantenimientos</h1>
+    <div class="row mb-4">
+      <div class="col-md-6 offset-md-6">
         <input
           type="text"
           placeholder="Search..."
-          class="search-input"
+          class="form-control"
           v-model="searchQuery"
         />
       </div>
     </div>
 
-    <div class="table-container">
-      <div class="table-header">
-        <div>TALLER</div>
-        <div>ESTADO</div>
-        <div>PRIORIDAD</div>
-        <div>FECHA INICIO</div>
-        <div>FECHA FIN</div>
-        <div>RESPONSABLE</div>
-        <div>EQUIPOS</div>
-        <div>TIPO</div>
-      </div>
-
-      <div class="table-body">
-        <div 
-          v-for="(maintenance, i) in maintenances" 
-          :key="i" 
-          class="table-row cursor-pointer"
-          @click="goToMaintenance(i)"
-        >
-          <div>{{ maintenance.taller }}</div>
-          <div>
-            <span
-              :class="[
-                'status-badge',
-                maintenance.estado === 'En Curso'
-                  ? 'status-in-progress'
-                  : 'status-scheduled',
-              ]"
-            >
-              {{ maintenance.estado }}
-            </span>
-          </div>
-          <div>{{ maintenance.prioridad }}</div>
-          <div>{{ maintenance.fechaInicio }}</div>
-          <div>{{ maintenance.fechaFin }}</div>
-          <div>{{ maintenance.responsable }}</div>
-          <div>{{ maintenance.equipos }}</div>
-          <div>
-            <span
-              :class="[
-                'status-badge',
-                {
-                  'type-preventive': maintenance.tipo === 'Preventivo',
-                  'type-corrective': maintenance.tipo === 'Correctivo',
-                },
-              ]"
-            >
-              {{ maintenance.tipo }}
-            </span>
-          </div>
-        </div>
-      </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>TALLER</th>
+            <th>ESTADO</th>
+            <th>PRIORIDAD</th>
+            <th>FECHA INICIO</th>
+            <th>FECHA FIN</th>
+            <th>RESPONSABLE</th>
+            <th>EQUIPOS</th>
+            <th>TIPO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            v-for="(maintenance, i) in maintenances" 
+            :key="i" 
+            @click="goToMaintenance(i)"
+            style="cursor: pointer;"
+          >
+            <td>{{ maintenance.taller }}</td>
+            <td>
+              <span
+                :class="[
+                  'badge',
+                  maintenance.estado === 'En Curso'
+                    ? 'bg-primary'
+                    : 'bg-secondary',
+                ]"
+              >
+                {{ maintenance.estado }}
+              </span>
+            </td>
+            <td>{{ maintenance.prioridad }}</td>
+            <td>{{ maintenance.fechaInicio }}</td>
+            <td>{{ maintenance.fechaFin }}</td>
+            <td>{{ maintenance.responsable }}</td>
+            <td>{{ maintenance.equipos }}</td>
+            <td>
+              <span
+                :class="[
+                  'badge',
+                  {
+                    'bg-success': maintenance.tipo === 'Preventivo',
+                    'bg-danger': maintenance.tipo === 'Correctivo',
+                  },
+                ]"
+              >
+                {{ maintenance.tipo }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'

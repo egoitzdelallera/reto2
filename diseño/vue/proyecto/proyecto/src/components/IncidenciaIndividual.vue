@@ -1,6 +1,4 @@
 <template>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <div class="bg-light min-vh-100">
     <!-- Header -->
     <header class="bg-white shadow-sm py-3 mb-4">
@@ -127,12 +125,11 @@
                       <h6 class="text-muted">Fecha de Final</h6>
                       <p>{{ phase.endDate }}</p>
                     </div>
-
                   </div>
 
                   <h6 class="text-muted">Descripción</h6>
                   <p>{{ phase.description }}</p>
-                  <button @click="asignarme">Asignarme fase {{ index + 1 }} </button>
+                  <button @click="asignarme" class="btn btn-primary mb-3">Asignarme fase {{ index + 1 }}</button>
 
                   <h6 class="text-muted mt-3">Técnicos</h6>
                   <div class="row g-3">

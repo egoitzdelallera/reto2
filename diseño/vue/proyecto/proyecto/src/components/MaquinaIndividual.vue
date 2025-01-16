@@ -1,420 +1,157 @@
 <template>
-    <div class="machine-detail">
-      <!-- Back button -->
-      <div class="back-link">
-        <a href="#" class="back-button">Atrás</a>
-      </div>
-  
-      <!-- Machine header -->
-      <div class="machine-header">
-        <div class="header-content">
-          <div class="title-section">
-            <h1>Nombre Máquina</h1>
-            <span class="priority-badge">Prioridad alta</span>
-          </div>
-          <button class="status-button enabled">
-            Habilitado
-          </button>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container-fluid py-4">
+  <!-- Back button -->
+  <div class="mb-4">
+    <a href="#" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>Atrás
+    </a>
+  </div>
+
+  <!-- Machine header -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <h1 class="h3 mb-0">Nombre Máquina</h1>
+          <span class="badge bg-danger">Prioridad alta</span>
         </div>
-        
-        <!-- Machine info grid -->
-        <div class="machine-info">
-          <div class="info-grid">
-            <div class="info-item">
-              <label>Campus</label>
-              <span>Arteaga</span>
-            </div>
-            <div class="info-item">
-              <label>Taller</label>
-              <span>A03</span>
-            </div>
-            <div class="info-item">
-              <label>Responsable de taller</label>
-              <span>Juan López</span>
-            </div>
-            <div class="info-item">
-              <label>Nombre Taller</label>
-              <span>Taller Neumática</span>
-            </div>
-            <button class="edit-button">
-              Editar
-            </button>
-          </div>
-        </div>
-  
-        <!-- Description -->
-        <div class="description-section">
-          <label>Descripción</label>
-          <p>Brazo robótico de alta precisión diseñado para tareas de ensamblaje y manipulación rápida en líneas de producción. Brazo robótico de alta precisión diseñado para tareas de ensamblaje y manipulación rápida.</p>
-        </div>
-      </div>
-  
-      <!-- Stats sections -->
-      <div class="stats-container">
-        <!-- Maintenance stats -->
-        <div class="stats-section">
-          <h2>Mantenimientos</h2>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-value">5</span>
-              <span class="stat-label">Diarios</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">3</span>
-              <span class="stat-label">Semanales</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">4</span>
-              <span class="stat-label">Mensuales</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">1</span>
-              <span class="stat-label">Anuales</span>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Incidents stats -->
-        <div class="stats-section">
-          <h2>Incidencias</h2>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-value">9</span>
-              <span class="stat-label">Núm. de incidencias</span>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Maintenance panel -->
-      <div class="maintenance-panel">
-        <h3>Mantenimientos de máquina</h3>
-        <div class="maintenance-list">
-          <div class="maintenance-item">
-            <span>Limpieza</span>
-            <span class="frequency">Diaria</span>
-          </div>
-          <div class="maintenance-item">
-            <span>Pruebas técnicas</span>
-            <span class="frequency">Mensual</span>
-          </div>
-          <div class="maintenance-item">
-            <span>Listar materiales</span>
-            <span class="frequency">Semanal</span>
-          </div>
-        </div>
-        <button class="add-maintenance">
-          Agregar Mantenimiento
+        <button class="btn btn-success">
+          Habilitado
         </button>
       </div>
-  
-      <!-- Footer -->
-      <footer class="site-footer">
-        <div class="footer-content">
-          <div class="company-info">
-            <span class="company-name">NovaByte.</span>
-            <span class="company-description">Gestión avanzada de incidencias.</span>
-          </div>
-          <div class="contact-info">
-            <div class="contact-section">
-              <h4>Información de Contacto</h4>
-              <p>Teléfono: +34 123 456 789</p>
+
+      <!-- Machine info grid -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label text-muted">Campus</label>
+          <div>Arteaga</div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label text-muted">Taller</label>
+          <div>A03</div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label text-muted">Responsable de taller</label>
+          <div>Juan López</div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label text-muted">Nombre Taller</label>
+          <div>Taller Neumática</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary mb-4">
+        <i class="bi bi-pencil me-2"></i>Editar
+      </button>
+
+      <!-- Description -->
+      <div>
+        <label class="form-label text-muted">Descripción</label>
+        <p>Brazo robótico de alta precisión diseñado para tareas de ensamblaje y manipulación rápida en líneas de producción. Brazo robótico de alta precisión diseñado para tareas de ensamblaje y manipulación rápida.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats sections -->
+  <div class="row g-4 mb-4">
+    <!-- Maintenance stats -->
+    <div class="col-md-8">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5 mb-4">Mantenimientos</h2>
+          <div class="row g-4 text-center">
+            <div class="col-3">
+              <h3 class="h2 mb-0">5</h3>
+              <small class="text-muted">Diarios</small>
             </div>
-            <div class="address-section">
-              <p>Calle 42, 28001 Vitoria, España</p>
-              <p>gestion@metatronica.com</p>
+            <div class="col-3">
+              <h3 class="h2 mb-0">3</h3>
+              <small class="text-muted">Semanales</small>
             </div>
-          </div>
-          <div class="social-links">
-            <a href="#" class="social-link">Facebook</a>
-            <a href="#" class="social-link">Twitter</a>
+            <div class="col-3">
+              <h3 class="h2 mb-0">4</h3>
+              <small class="text-muted">Mensuales</small>
+            </div>
+            <div class="col-3">
+              <h3 class="h2 mb-0">1</h3>
+              <small class="text-muted">Anuales</small>
+            </div>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
-  </template>
-  
-  <style scoped>
-  .machine-detail {
-    padding: 20px;
-    background: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .back-link {
-    margin-bottom: 20px;
-  }
-  
-  .back-button {
-    color: #666;
-    text-decoration: none;
-    font-size: 14px;
-  }
-  
-  .machine-header {
-    margin-bottom: 30px;
-  }
-  
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .title-section {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
-  }
-  
-  .priority-badge {
-    background: #fff0f0;
-    color: #dc3545;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-  }
-  
-  .status-button {
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: none;
-    font-size: 13px;
-  }
-  
-  .status-button.enabled {
-    background: #d4edda;
-    color: #198754;
-  }
-  
-  .machine-info {
-    background: #f8f9fa;
-    border-radius: 4px;
-    padding: 20px;
-  }
-  
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    position: relative;
-  }
-  
-  .info-item {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .info-item label {
-    color: #666;
-    font-size: 12px;
-    margin-bottom: 4px;
-  }
-  
-  .info-item span {
-    font-size: 14px;
-  }
-  
-  .edit-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 4px 12px;
-    border: 1px solid #0d6efd;
-    background: white;
-    color: #0d6efd;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  
-  .description-section {
-    margin-top: 20px;
-  }
-  
-  .description-section label {
-    display: block;
-    color: #666;
-    font-size: 12px;
-    margin-bottom: 4px;
-  }
-  
-  .description-section p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0;
-  }
-  
-  .stats-container {
-    display: flex;
-    gap: 30px;
-    margin: 30px 0;
-  }
-  
-  .stats-section {
-    flex: 1;
-  }
-  
-  .stats-section h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
-  
-  .stats-grid {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .stat-item {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 4px;
-    text-align: center;
-    min-width: 100px;
-  }
-  
-  .stat-value {
-    display: block;
-    font-size: 24px;
-    font-weight: 600;
-    color: #212529;
-  }
-  
-  .stat-label {
-    display: block;
-    font-size: 12px;
-    color: #666;
-    margin-top: 4px;
-  }
-  
-  .maintenance-panel {
-    background: #f8f9fa;
-    border-radius: 4px;
-    padding: 20px;
-    max-width: 300px;
-    position: fixed;
-    right: 20px;
-    top: 20px;
-  }
-  
-  .maintenance-panel h3 {
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-  
-  .maintenance-list {
-    margin-bottom: 15px;
-  }
-  
-  .maintenance-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 14px;
-  }
-  
-  .frequency {
-    color: #666;
-  }
-  
-  .add-maintenance {
-    width: 100%;
-    padding: 8px;
-    background: #212529;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .site-footer {
-    margin-top: auto;
-    padding: 20px;
-    background: #f8f9fa;
-    margin: 40px -20px -20px;
-  }
-  
-  .footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .company-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .company-name {
-    font-weight: 600;
-    font-size: 18px;
-  }
-  
-  .company-description {
-    color: #666;
-    font-size: 14px;
-  }
-  
-  .contact-info {
-    display: flex;
-    gap: 40px;
-  }
-  
-  .contact-section h4 {
-    font-size: 14px;
-    margin: 0 0 5px;
-  }
-  
-  .contact-section p,
-  .address-section p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-  }
-  
-  .social-links {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .social-link {
-    color: #666;
-    text-decoration: none;
-    font-size: 14px;
-  }
-  
-  @media (max-width: 768px) {
-    .stats-container {
-      flex-direction: column;
-    }
-    
-    .maintenance-panel {
-      position: static;
-      max-width: none;
-      margin-top: 20px;
-    }
-    
-    .footer-content {
-      flex-direction: column;
-      gap: 20px;
-      text-align: center;
-    }
-    
-    .contact-info {
-      flex-direction: column;
-      gap: 20px;
-    }
-  }
-  </style>
+
+    <!-- Incidents stats -->
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5 mb-4">Incidencias</h2>
+          <div class="text-center">
+            <h3 class="h2 mb-0">9</h3>
+            <small class="text-muted">Núm. de incidencias</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maintenance panel -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="h5 mb-4">Mantenimientos de máquina</h3>
+      <div class="list-group mb-4">
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <span>Limpieza</span>
+          <span class="badge bg-secondary">Diaria</span>
+        </div>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <span>Pruebas técnicas</span>
+          <span class="badge bg-secondary">Mensual</span>
+        </div>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <span>Listar materiales</span>
+          <span class="badge bg-secondary">Semanal</span>
+        </div>
+      </div>
+      <button class="btn btn-primary">
+        <i class="bi bi-plus me-2"></i>Agregar Mantenimiento
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h4 class="h6 mb-2">NovaByte.</h4>
+          <p class="text-muted small mb-0">Gestión avanzada de incidencias.</p>
+        </div>
+        <div class="col-md-4">
+          <h4 class="h6 mb-2">Información de Contacto</h4>
+          <p class="text-muted small mb-0">Teléfono: +34 123 456 789</p>
+          <p class="text-muted small mb-0">Calle 42, 28001 Vitoria, España</p>
+          <p class="text-muted small mb-0">gestion@metatronica.com</p>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none">Facebook</a>
+            <a href="#" class="text-muted text-decoration-none">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</template>
+
+<script setup>
+// Add any required component logic here
+</script>
+
+<style scoped>
+/* Add any custom styles here */
+
+</style>

@@ -1,18 +1,22 @@
 <template>
-  <div class="machine-list">
-    <div class="header">
-      <h2>Máquinas</h2>
-      <div class="header-actions">
-        <button class="btn-new">
-          Nueva Máquina
-        </button>
-        <div class="search-controls">
-          <button class="btn-filter">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <div class="container-fluid py-4">
+    <div class="row mb-4 align-items-center">
+      <div class="col">
+        <h2 class="mb-0">Máquinas</h2>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-dark me-3">
+            Nueva Máquina
+          </button>
+          <button class="btn btn-outline-secondary me-3">
             <span>Filtrar</span>
           </button>
-          <div class="search-container">
+          <div class="input-group">
             <input 
               type="search" 
+              class="form-control"
               placeholder="Search..."
               v-model="searchQuery"
             >
@@ -21,9 +25,9 @@
       </div>
     </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
           <tr>
             <th>NOMBRE ↑</th>
             <th>DESCRIPCIÓN</th>
@@ -40,10 +44,10 @@
             v-for="machine in machines" 
             :key="machine.id"
             @click="goToMachine(machine.id)"
-            class="machine-row"
+            style="cursor: pointer;"
           >
             <td>{{ machine.name }}</td>
-            <td class="description-cell">{{ machine.description }}</td>
+            <td class="text-truncate" style="max-width: 200px;">{{ machine.description }}</td>
             <td>{{ machine.campus }}</td>
             <td>{{ machine.workshop }}</td>
             <td>
@@ -58,16 +62,16 @@
               </span>
             </td>
             <td>
-              <div class="action-buttons">
+              <div class="d-flex gap-2">
                 <button 
-                  class="btn-status" 
-                  :class="{'enabled': machine.status}"
+                  class="btn btn-sm"
+                  :class="machine.status ? 'btn-success' : 'btn-secondary'"
                   @click.stop="toggleStatus(machine)"
                 >
                   Habilitado
                 </button>
                 <button 
-                  class="btn-edit"
+                  class="btn btn-sm btn-outline-primary"
                   @click.stop="editMachine(machine.id)"
                 >
                   Editar

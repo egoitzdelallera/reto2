@@ -1,58 +1,69 @@
 <template>
-  <div class="incidencias-container">
-    <h1 class="text-2xl font-bold mb-6">Incidencias</h1>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <div class="container-fluid">
+    <h1 class="display-4 mb-4">Incidencias</h1>
 
     <!-- Barra de búsqueda -->
-    <div class="search-container mb-6">
-      <div class="relative">
-        <input
-          type="text"
-          placeholder="Buscar..."
-          v-model="searchQuery"
-          class="search-input"
-        />
-        <SearchIcon class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-      </div>
-    </div>
-
-    <!-- Tabla -->
-    <div class="table-container">
-      <div class="table-header">
-        <div>TÍTULO</div>
-        <div>ESTADO</div>
-        <div>PRIORIDAD</div>
-        <div>FECHA</div>
-        <div>MÁQUINA</div>
-        <div>OPERARIO</div>
-        <div>TÉCNICO</div>
-        <div>GRAVEDAD</div>
-      </div>
-
-      <div class="table-body">
-        <div
-          v-for="(incidencia, i) in incidencias"
-          :key="i"
-          class="table-row cursor-pointer"
-          @click="goToIncidencia(incidencia.id)"
-        >
-          <div class="font-medium">{{ incidencia.titulo }}</div>
-          <div>
-            <span :class="['status-badge', getEstadoClass(incidencia.estado)]">
-              {{ incidencia.estado }}
-            </span>
-          </div>
-          <div>{{ incidencia.prioridad }}</div>
-          <div>{{ incidencia.fecha }}</div>
-          <div>{{ incidencia.maquina }}</div>
-          <div>{{ incidencia.operario }}</div>
-          <div>{{ incidencia.tecnico }}</div>
-          <div>
-            <span :class="['status-badge', getGravedadClass(incidencia.gravedad)]">
-              {{ incidencia.gravedad }}
+    <div class="row mb-4">
+      <div class="col-md-4 ml-auto">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar..."
+            v-model="searchQuery"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <SearchIcon class="text-muted" size="18" />
             </span>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>TÍTULO</th>
+            <th>ESTADO</th>
+            <th>PRIORIDAD</th>
+            <th>FECHA</th>
+            <th>MÁQUINA</th>
+            <th>OPERARIO</th>
+            <th>TÉCNICO</th>
+            <th>GRAVEDAD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(incidencia, i) in incidencias"
+            :key="i"
+            class="cursor-pointer"
+            @click="goToIncidencia(incidencia.id)"
+          >
+            <td class="font-weight-medium">{{ incidencia.titulo }}</td>
+            <td>
+              <span :class="['badge', getEstadoClass(incidencia.estado)]">
+                {{ incidencia.estado }}
+              </span>
+            </td>
+            <td>{{ incidencia.prioridad }}</td>
+            <td>{{ incidencia.fecha }}</td>
+            <td>{{ incidencia.maquina }}</td>
+            <td>{{ incidencia.operario }}</td>
+            <td>{{ incidencia.tecnico }}</td>
+            <td>
+              <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
+                {{ incidencia.gravedad }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -130,32 +141,33 @@ const goToIncidencia = (id) => {
 const getEstadoClass = (estado) => {
   switch (estado) {
     case 'En Proceso':
-      return 'bg-blue-100 text-blue-800'
+      return 'badge-primary'
     case 'Abierta':
-      return 'bg-gray-100 text-gray-800'
+      return 'badge-secondary'
     default:
-      return 'bg-gray-100 text-gray-800'
+      return 'badge-secondary'
   }
 }
 
 const getGravedadClass = (gravedad) => {
   switch (gravedad) {
     case 'Máquina parada':
-      return 'bg-red-100 text-red-800'
+      return 'badge-danger'
     case 'Máquina en marcha':
-      return 'bg-orange-100 text-orange-800'
+      return 'badge-warning'
     case 'Aviso':
-      return 'bg-yellow-100 text-yellow-800'
+      return 'badge-info'
     case 'Mantenimiento':
-      return 'bg-gray-100 text-gray-800'
+      return 'badge-secondary'
     default:
-      return 'bg-gray-100 text-gray-800'
+      return 'badge-secondary'
   }
 }
-
 </script>
 
 <style scoped>
-
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>
 

@@ -1,4 +1,6 @@
 <template>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <div class="app-container">
     <Sidebar v-if="showSidebar" />
     <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
