@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_fase_incidencia');
             $table->bigInteger('id_tecnico');
             $table->foreign('id_fase_incidencia')->references('id_fase_incidencia')->on('fases_incidencias')->onDelete('cascade');
-            $table->foreign('id_tecnico')->references('id_usuario')->on('usuarios')->onDelete('cascade');
+            $table->foreign('id_tecnico')->references('id_usuario')->on('users')->onDelete('cascade');
         });
     }
 
