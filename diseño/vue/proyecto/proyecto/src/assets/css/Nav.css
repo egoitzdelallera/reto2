@@ -74,12 +74,8 @@ a {
   align-items: center;
   width: 95%;
   margin-left: 7px;
- 
 }
-
-
 .nav-link-text {
-  margin-left: 20px;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -90,7 +86,7 @@ a {
   top: 0;
   width: 300px;
   height: 100vh;
-  background-color: #e0e0e0;
+  background-color: #ededed;
   padding: 2rem;
   opacity: 0;
   transition: 0.3s;
@@ -178,6 +174,25 @@ a {
 
 .item-card span {
   color: #333;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../fuentes/Inter-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fuentes/Inter-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../fuentes/Inter-SemiBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
 
 /*# sourceMappingURL=Nav.css.map */

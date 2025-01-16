@@ -10,6 +10,8 @@ import IncidenciaIndividual from './views/IncidenciaIndividualView.vue'
 import Maquinas from './views/MaquinasView.vue'
 import MaquinaIndividual from './views/MaquinaIndividualView.vue'
 
+import './assets/css/global.css';
+
 const routes = [
   { path: '/', component: iniciosesion },
   { path: '/mantenimientos', component: Mantenimientos },
@@ -19,8 +21,6 @@ const routes = [
   { path: '/IncidenciaIndividual/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual },
   { path: '/maquinas', component: Maquinas },
   { path: '/MaquinaIndividual/:id',name:'MaquinaIndividual', component: MaquinaIndividual },
-
-
  
 ]
 

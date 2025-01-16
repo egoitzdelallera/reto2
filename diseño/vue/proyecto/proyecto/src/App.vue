@@ -13,6 +13,7 @@ import { createRouter, createWebHistory, useRoute } from 'vue-router'
 
 import Login from './views/InicioSesionView.vue'
 
+
 const routes = [
   { path: '/', component: Login },
   
