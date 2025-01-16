@@ -6,6 +6,7 @@ import Mantenimientos from './views/MantenimientosView.vue'
 import Usuarios from './views/UsuarioView.vue'
 import Perfil from './views/PerfilView.vue'
 import iniciosesion from './views/InicioSesionView.vue'
+import IncidenciaIndividual from './views/IncidenciaIndividualView.vue'
 
 const routes = [
   { path: '/', component: iniciosesion },
@@ -13,6 +14,7 @@ const routes = [
   { path: '/incidencias', component: IncidentsTable },
   { path: '/usuarios', component: Usuarios},
   { path: '/perfil', component: Perfil},
+  { path: '/IncidenciaIndividual/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual },
 
  
 ]
