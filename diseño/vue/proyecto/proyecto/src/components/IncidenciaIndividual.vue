@@ -1,5 +1,6 @@
 <template>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/bootstrap5_3/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <div class="bg-light min-vh-100">
     <!-- Header -->
@@ -248,6 +249,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import carta from '../views/carta.vue';
 
 // Reusing your existing data structure
 const activeTab = ref('Operario');

@@ -1,12 +1,4 @@
-// Variables
-$font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-$font-size-base: 15px;
-$color-primary: #0d6efd;
-$color-text: #333;
-$color-border: #e5e7eb;
-$color-background: #ffffff;
-$color-submenu-bg: #ededed;
-$transition-duration: 0.3s;
+@import 'global';
 
 // Mixins
 @mixin flex-center {
@@ -18,15 +10,6 @@ $transition-duration: 0.3s;
 @mixin card-hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-// Global styles
-* {
-  font-family: $font-family;
-  font-size: $font-size-base;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -101,7 +84,6 @@ a {
   display: flex;
   align-items: center;
   width: 95%;
-  margin-left: 7px;
 
   &-text {
     transition: opacity $transition-duration ease, transform $transition-duration ease;
@@ -130,12 +112,13 @@ a {
   }
 
   &-title {
-    color: $color-primary;
+    color: $color-text;
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
     position: sticky;
     top: 0;
+    text-align: left;
     background-color: transparent;
     padding: 1rem 0;
     z-index: 10;
