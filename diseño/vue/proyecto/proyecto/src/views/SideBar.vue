@@ -3,8 +3,8 @@
   <div class="sidebar p-2" :class="{ 'collapsed': isCollapsed }">
     <h1 class="mb-4 text-center">
       <a href="#" class="logo">
-        <span class="logo-full">NovaByte</span>
-        <span class="logo-short">N.</span>
+        <span class="logo-full">Egibide</span>
+        <span class="logo-short">E.</span>
       </a>
     </h1>
     <nav class="nav flex-column">
