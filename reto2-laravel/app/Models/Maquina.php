@@ -11,6 +11,8 @@ class Maquina extends Model
     use HasFactory;
 
     protected $table = 'maquinas';
+    protected $primaryKey = 'id_maquina';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',
@@ -22,7 +24,7 @@ class Maquina extends Model
 
     public function taller()
     {
-        return $this->belongsTo(Taller::class, 'id_taller');
+        return $this->belongsTo(Taller::class, 'id_taller', 'id_taller');
     }
 
     public function indidencias()

@@ -1,41 +1,42 @@
 <template>
-  <div id="app">
-    <h1>Listado de Máquinas</h1>
-    
-    <!-- Mostrar lista de máquinas -->
-    <ul>
-      <li v-for="maquina in maquinas" :key="maquina.id">
-        <strong>{{ maquina.nombre }}</strong> - {{ maquina.modelo }}
-      </li>
-    </ul>
+  <div class="app-container">
+    <Sidebar v-if="showSidebar" />
+    <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
-<script>
-import axios from 'axios';
+<script setup>
+import { computed } from 'vue'
+import { createRouter, createWebHistory, useRoute } from 'vue-router'
 
-export default {
-  name: 'App',
+import Login from './views/InicioSesionView.vue'
+
+const routes = [
+  { path: '/', component: Login },
   
-  data() {
-    return {
-      maquinas: [], // Aquí almacenaremos las máquinas obtenidas desde el backend
-    };
-  },
-  
-  mounted() {
-    // Llamada a la API de Laravel para obtener las máquinas
-    axios.get('http://localhost:8000/api/maquinas') // Ajusta la URL si es necesario
-      .then(response => {
-        this.maquinas = response.data; // Asignar los datos de las máquinas a la propiedad 'maquinas'
-      })
-      .catch(error => {
-        console.error('Error al obtener las máquinas:', error);
-      });
-  }
-};
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+const route = useRoute()
+const showSidebar = computed(() => route.path !== '/login')
 </script>
 
-<style>
-/* Aquí puedes agregar estilos */
+<style scoped>
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+
 </style>

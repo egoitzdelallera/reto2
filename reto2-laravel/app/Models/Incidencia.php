@@ -29,6 +29,22 @@ class Incidencia extends Model
         return $this->belongsTo(Maquina::class, 'id_maquina');
     }
 
+    public function operario(){
+        return $this->belongsTo(User::class, 'id_usuario', 'id_usuario')->where('rol', 'Operario');
+    }
+
+    public function tecnico()
+    {
+        return $this->hasOneThrough(
+            User::class,
+            TecnicosFasesIncidencia::class,
+            'id_fase_incidencia',
+            'id_usuario',
+            'id_incidencia',
+            'id_tecnico'
+        )->where('rol', 'Tecnico');
+    }
+
     public function tipoMantenimiento()
     {
         return $this->belongsTo(TipoMantenimiento::class, 'id_tipo_mantenimiento');
