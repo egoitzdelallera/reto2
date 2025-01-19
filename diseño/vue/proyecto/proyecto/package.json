@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap-icons": "^1.11.3",
+    "chart.js": "^4.4.7",
     "iban": "^0.0.14",
     "lucide-vue-next": "^0.471.0",
     "pinia": "^2.1.7",

@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
+    protected $primaryKey = 'id_usuario';
+    public $timestamps = false;
+
     protected $fillable = [
         'nombre',
         'correo',
-        'contrasena',
         'rol',
         'estado',
         'imagen_perfil',
@@ -25,7 +26,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'contraseña',
+        'password',
         'remember_token',
     ];
 
@@ -46,5 +47,47 @@ class User extends Authenticatable
     public function tecnicosFasesIncidencias()
     {
         return $this->hasMany(TecnicosFasesIncidencia::class, 'id_tecnico');
+    }
+
+    public function incidenciasComoOperario()
+    {
+        return $this->hasMany(Incidencia::class, 'id_usuario', 'id_usuario')->where('rol', 'Operario');
+    }
+
+    public function incidenciasComoTecnico()
+    {
+        return $this->hasManyThrough(
+            Incidencia::class,
+            TecnicosFasesIncidencia::class,
+            'id_tecnico',
+            'id_incidencia',
+            'id_usuario',
+            'id_fase_incidencia'
+        )->where('rol', 'Tecnico');
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Implementar el método requerido por JWTSubject
+     */
+    public function getJWTIdentifier()
+    {
+        // Devuelve el identificador único de usuario (en tu caso, 'id_usuario')
+        return $this->getKey();
+    }
+
+    /**
+     * Implementar el método requerido por JWTSubject para reclamar información adicional
+     */
+    public function getJWTCustomClaims()
+    {
+        // Puedes agregar reclamaciones personalizadas si lo necesitas, por ejemplo:
+        return [
+            'rol' => $this->rol, // Añade el rol del usuario al token (ejemplo)
+        ];
     }
 }

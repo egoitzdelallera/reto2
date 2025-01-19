@@ -1,4 +1,6 @@
 <template>
+    <link href="assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
+
   <div class="app-container">
     <Sidebar v-if="showSidebar" />
     <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
