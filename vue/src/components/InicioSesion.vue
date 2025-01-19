@@ -1,40 +1,38 @@
 <template>
-  <div class="d-flex min-vh-100 align-items-center justify-content-center bg-light">
+  <div class="d-flex min-vh-100 align-items-center justify-content-center align-items-center bg-light">
     <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
       <div class="text-center">
         <h2 class="mt-3 mb-4">Iniciar Sesión</h2>
       </div>
       <form @submit.prevent="handleLogin">
         <div class="mb-3">
-          <label for="correo" class="form-label">Correo</label>
+          <label for="username" class="form-label">Usuario</label>
           <input
-            id="correo"
-            name="correo"
-            type="email"
-            v-model="correo"
+            id="username"
+            name="username"
+            type="text"
             required
             class="form-control"
-            placeholder="Correo"
+            placeholder="Usuario"
           />
-        </div>
-        
-        <div class="mb-3">
-          <label for="contrasena" class="form-label">Contraseña</label>
-          <input
-            id="contrasena"
-            name="contrasena"
-            type="password"
-            v-model="contrasena"
-            required
-            class="form-control"
-            placeholder="Contraseña"
-          />
+          
+          <div>
+            <label for="password" class="sr-only">Contraseña</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Contraseña"
+            />
+          </div>
         </div>
 
         <div>
           <button
             type="submit"
-            class="btn btn-primary w-100"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Entrar
           </button>
@@ -44,38 +42,13 @@
   </div>
 </template>
 
-<script>
-import axios from '../axios'; // Importa la instancia de axios configurada si tienes un archivo axios.js
+<script setup>
+import { useRouter } from 'vue-router'
 
-export default {
-  data() {
-    return {
-      correo: '',
-      contrasena: '',
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        // Realizar la solicitud de login a la API de Laravel
-        const response = await axios.post('login', {
-          correo: this.correo,
-          password: this.contrasena, // Debe coincidir con el campo de Laravel 'password'
-        });
+const router = useRouter()
 
-        // Guardar el token JWT en el almacenamiento local
-        localStorage.setItem('jwt_token', response.data.access_token);
-
-        // Establecer el token en las cabeceras de axios para futuras solicitudes
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
-
-        // Redirigir al usuario a la página de incidencias
-        this.$router.push('/incidencias');
-      } catch (error) {
-        console.error('Error en el inicio de sesión:', error);
-        alert('Correo o contraseña incorrectos');
-      }
-    }
-  }
-};
+const handleLogin = () => {
+  // Navegar a la página de incidentes utilizando el path
+  router.push('/incidencias')
+}
 </script>

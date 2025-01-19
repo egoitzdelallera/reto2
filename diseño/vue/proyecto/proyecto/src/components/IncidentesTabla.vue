@@ -1,5 +1,4 @@
 <template>
-      <link href="../assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
   <div class="container-fluid mt-4">
     <!-- Botón para mostrar/ocultar los filtros -->
     <button class="btn btn-primary mb-3 col-md-1" @click="showFilters = !showFilters">
@@ -371,4 +370,3 @@ const getMaintenanceTypeClass = (tipo) => {
   overflow-y: auto;
 }
 </style>
-
