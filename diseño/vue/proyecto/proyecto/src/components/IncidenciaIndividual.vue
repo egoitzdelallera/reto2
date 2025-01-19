@@ -3,18 +3,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 
-<div class="bg-light min-vh-100">
+<div class="bg-grey-1P min-vh-100">
   <!-- Header -->
-  <header class="bg-white shadow-sm py-3 mb-4">
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <h1 class="h3 mb-0">Detalle Incidencia</h1>
-        <button class="btn btn-outline-secondary btn-sm">
-          <i class="bi bi-arrow-left me-2"></i>Atrás
-        </button>
+  <header class="bg-white shadow-sm py-3 mb-4 border-bottom">
+      <div class="container">
+        <div class="d-flex justify-content-start align-items-center">
+          <button class="btn btn-link btn-sm p-0" style="text-decoration: none; width: auto;">
+            <i class="bi bi-arrow-left me-2"></i>Atrás
+          </button>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
   <div class="container">
     <div class="row g-4">
@@ -41,7 +40,7 @@
 
             <div class="row g-3">
               <div class="col-md-6">
-                <h6 class="text-muted">Máquina</h6>
+                <h6 class="text-muted ">Máquina</h6>
                 <p>{{ incident.machine }}</p>
               </div>
               <div class="col-md-6">
