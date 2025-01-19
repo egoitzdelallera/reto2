@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->string('apellido', 100);
             $table->string('correo', 100)->unique();
-            $table->string('contrasena', 100);
+            $table->string('password', 255);
             $table->bigInteger('id_campus');
             $table->enum('rol', ['Administrador', 'Operario', 'Tecnico']);
             $table->enum('estado', ['Habilitado', 'Deshabilitado']);
