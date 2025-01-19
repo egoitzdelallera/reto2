@@ -15,15 +15,18 @@ return new class extends Migration
             $table->bigInteger('id_incidencia')->autoIncrement();
             $table->bigInteger('id_maquina');
             $table->string('descripcion', 300);
-            $table->enum('tipo', ['Mantenimiento', 'General']);
+            $table->enum('gravedad', ['Maquina en Marcha', 'Maquina parada', 'Aviso', 'Mantenimiento']);
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
-            $table->enum('prioridad', ['Baja', 'Media', 'Alta']);
+            $table->bigInteger('id_tipo_averia')->nullable();
+            $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);
             $table->enum('frecuencia', ['Diaria', 'Semanal', 'Mensual', 'Anual'])->nullable();
+            $table->string('multimedia', 300)->nullable();
             $table->timestamp('fecha_reporte')->useCurrent();
             $table->timestamp('fecha_cierre')->nullable();
             $table->primary('id_incidencia');
             $table->foreign('id_maquina')->references('id_maquina')->on('maquinas')->onDelete('cascade');
             $table->foreign('id_tipo_mantenimiento')->references('id_tipo_mantenimiento')->on('tipo_mantenimiento')->onDelete('cascade');
+            $table->foreign('id_tipo_averia')->references('id_tipo_averia')->on('tipo_averia')->onDelete('cascade');
         });
     }
 

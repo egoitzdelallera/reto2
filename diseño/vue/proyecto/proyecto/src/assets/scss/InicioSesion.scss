@@ -1,0 +1,90 @@
+// Variables
+$color-primario: #4CAF50;
+$color-primario-hover: #45a049;
+$color-borde: #ccc;
+$color-texto: #333;
+$color-fondo: #fff;
+
+// Mixins
+@mixin input-estilo {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $color-borde;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primario;
+    box-shadow: 0 0 0 2px rgba($color-primario, 0.2);
+  }
+}
+
+// Estilos
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 300px;
+  padding: 30px;
+  background-color: $color-fondo;
+  border: 1px solid $color-borde;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: $color-texto;
+  }
+
+  input {
+    @include input-estilo;
+  }
+}
+
+button {
+  @include input-estilo;
+  background-color: $color-primario;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover, &:focus {
+    background-color: $color-primario-hover;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Media query para dispositivos más pequeños
+@media (max-width: 480px) {
+  .login-form {
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  button {
+    padding: 12px;
+  }
+}
+

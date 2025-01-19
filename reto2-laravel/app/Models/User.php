@@ -2,47 +2,92 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'id_usuario';
+    public $timestamps = false;
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nombre',
+        'correo',
+        'rol',
+        'estado',
+        'imagen_perfil',
+        'id_campus'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function campus()
     {
+        return $this->belongsTo(Campus::class, 'id_campus');
+    }
+
+    public function talleresResponsable()
+    {
+        return $this->hasMany(Taller::class, 'id_responsable');
+    }
+
+    public function tecnicosFasesIncidencias()
+    {
+        return $this->hasMany(TecnicosFasesIncidencia::class, 'id_tecnico');
+    }
+
+    public function incidenciasComoOperario()
+    {
+        return $this->hasMany(Incidencia::class, 'id_usuario', 'id_usuario')->where('rol', 'Operario');
+    }
+
+    public function incidenciasComoTecnico()
+    {
+        return $this->hasManyThrough(
+            Incidencia::class,
+            TecnicosFasesIncidencia::class,
+            'id_tecnico',
+            'id_incidencia',
+            'id_usuario',
+            'id_fase_incidencia'
+        )->where('rol', 'Tecnico');
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Implementar el método requerido por JWTSubject
+     */
+    public function getJWTIdentifier()
+    {
+        // Devuelve el identificador único de usuario (en tu caso, 'id_usuario')
+        return $this->getKey();
+    }
+
+    /**
+     * Implementar el método requerido por JWTSubject para reclamar información adicional
+     */
+    public function getJWTCustomClaims()
+    {
+        // Puedes agregar reclamaciones personalizadas si lo necesitas, por ejemplo:
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'rol' => $this->rol, // Añade el rol del usuario al token (ejemplo)
         ];
     }
 }
