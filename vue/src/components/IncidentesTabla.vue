@@ -23,7 +23,7 @@
         <div>PRIORIDAD</div>
         <div>FECHA</div>
         <div>MÁQUINA</div>
-        <div>OPERARIO</div>
+        <div>CREADOR</div>
         <div>TÉCNICO</div>
         <div>GRAVEDAD</div>
       </div>
@@ -47,8 +47,8 @@
             </span>
           </div>
           <div>{{ incidencia.fecha_reporte }}</div>
-          <div>{{ incidencia.id_maquina }}</div>
-          <div>{{ incidencia.operario }}</div>
+          <div>{{ incidencia.maquina.nombre }}</div>
+          <div>{{ incidencia.creador.nombre }}</div>
           <div>{{ incidencia.tecnico }}</div>
           <div>
             <span :class="[getGravedadClass(incidencia.gravedad)]">

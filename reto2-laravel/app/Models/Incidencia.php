@@ -21,7 +21,8 @@ class Incidencia extends Model
         'frecuencia',
         'multimedia',
         'fecha_reporte',
-        'fecha_cierre'
+        'fecha_cierre',
+        'id_creador',
     ];
 
     public function maquina()
@@ -29,8 +30,9 @@ class Incidencia extends Model
         return $this->belongsTo(Maquina::class, 'id_maquina');
     }
 
-    public function operario(){
-        return $this->belongsTo(User::class, 'id_usuario', 'id_usuario')->where('rol', 'Operario');
+    public function creador()
+    {
+        return $this->belongsTo(User::class, 'id_creador');
     }
 
     public function tecnico()
