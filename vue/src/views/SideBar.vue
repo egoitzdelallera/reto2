@@ -8,48 +8,75 @@
       </a>
     </h1>
     <nav class="nav flex-column">
-      <div v-for="(item, index) in menuItems" :key="index" class="nav-item" 
-           @mouseenter="showSubmenu(index)" 
+      <div v-for="(item, index) in menuItems" :key="index" class="nav-item"
+           @mouseenter="showSubmenu(index)"
            @mouseleave="hideSubmenu(index)">
         <a href="#" class="nav-link" @click.prevent="navigateTo(item.route)">
           <i :class="item.icon" ></i>
           <span class="nav-link-text">{{ item.title }}</span>
         </a>
         <div v-if="item.submenu" class="submenu" :class="{ 'show': item.isHovered }">
-  <h2 class="submenu-title">{{ item.submenuTitle }}</h2>
-  <p class="submenu-subtitle">{{ item.submenuSubtitle }}</p>
-  <h3 class="submenu-section-title">{{ item.sectionTitle }}</h3>
-  <div class="workshops-container">
-    <div v-for="(subItem, subIndex) in item.submenu" :key="subIndex" class="item-card" @click="navigateTo(subItem.route)">
-      <span>{{ subItem.name }}</span>
-      <span v-if="subItem.active" class="activity-dot"></span>
-    </div>
-  </div>
-</div>
+          <h2 class="submenu-title">{{ item.submenuTitle }}</h2>
+          <p class="submenu-subtitle">{{ item.submenuSubtitle }}</p>
+          <h3 class="submenu-section-title">{{ item.sectionTitle }}</h3>
+          <div class="workshops-container">
+            <div v-for="(subItem, subIndex) in item.submenu" :key="subIndex" class="item-card" @click="navigateTo(subItem.route)">
+              <span>{{ subItem.name }}</span>
+              <span v-if="subItem.active" class="activity-dot"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
-    
+
   </div>
+
+  <div class="table-body">
+        <div
+          v-for="(taller, i) in filteredTalleres"
+          :key="i"
+          class="table-row cursor-pointer"
+          @click="goToTaller(taller.id_taller)"
+        >
+          <div class="font-medium">{{ taller.nombre }}</div>
+          
+
+        </div>
+      </div>
 </template>
 
 
-  <script>
-  import { useRouter } from 'vue-router'
-  import '../assets/css/Nav.css' // Asegúrate de que la ruta sea correcta
+<script>
+import { useRouter } from 'vue-router'
+import '../assets/css/Nav.css' // Asegúrate de que la ruta sea correcta
 
-  export default {
-    setup() {
-      const router = useRouter()
+
+
+export default {
   
-      const navigateTo = (route) => {
-        if (route) {
-          router.push(route)
-        }
+
+  setup() {
+    const router = useRouter()
+
+    const navigateTo = (route) => {
+      if (route) {
+        router.push(route)
       }
-  
-      return { navigateTo }
-    },
-    data() {
+    }
+
+    return { navigateTo }
+  },
+  data() {
+     const talleres =  [
+         { name: 'Taller Mecánico 2', id: 1 },
+          { name: 'Taller Eléctrico Secundario', id: 2 },
+          { name: 'Taller de Desarrollo Web', id: 3 },
+            { name: 'Almacén Auxiliar', id: 4 },
+         { name: 'Laboratorio de Electrónica', id: 5 },
+         { name: 'Taller de Mantenimiento Pesado', id: 6 },
+             { name: 'Taller de Carpintería', id: 7 },
+            { name: 'Laboratorio de Química', id: 8 }
+     ];
     return {
       activeSubmenu: null,
       submenuTimeout: null,
@@ -64,11 +91,12 @@
           sectionTitle: 'Incidencias Activas',
           isHovered: false,
           submenu: [
-          { name: 'Todas', active: false, route: '/incidencias' },
-            { name: 'Pendientes', active: true, route: '/incidencias/pendientes' },
-            { name: 'En Proceso', active: true, route: '/incidencias/en-proceso' },
-            { name: 'Resueltas', active: false, route: '/incidencias/resueltas' }
-            
+             { name: 'Todos los Talleres', active: true, route: '/incidencias' },
+            ...talleres.map(taller => ({
+                   name: taller.name,
+                   active: true,
+                   route: `/incidencias/taller/${taller.id}`
+                 })),
           ]
         },
         {
@@ -81,17 +109,14 @@
           isHovered: false,
           submenu: [
             { name: 'Todos los Talleres', active: true, route: '/mantenimientos' },
-            { name: 'Taller A', active: true, route: '/mantenimientos/taller-a' },
-            { name: 'Taller B', active: false, route: '/mantenimientos/taller-b' },
-            { name: 'Taller C', active: false, route: '/mantenimientos/taller-c' },
-            { name: 'Taller D', active: false, route: '/mantenimientos/taller-d' },
-            { name: 'Taller E', active: false, route: '/mantenimientos/taller-e' },
-            { name: 'Taller F', active: false, route: '/mantenimientos/taller-f' },
-            { name: 'Taller G', active: false, route: '/mantenimientos/taller-g' },
-            { name: 'Taller H', active: true, route: '/mantenimientos/taller-h' }
+             ...talleres.map(taller => ({
+                   name: taller.name,
+                   active: true,
+                  route: `/mantenimientos/taller/${taller.id}`
+                 })),
           ]
         },
-        
+
         {
           title: 'Máquinas',
           icon: 'bi bi-pc-display-horizontal',
@@ -115,11 +140,11 @@
           sectionTitle: 'Usuarios del Sistema',
           isHovered: false,
           submenu: [
-          { name: 'Todos', active: false, route: '/usuarios' },
+            { name: 'Todos', active: false, route: '/usuarios' },
             { name: 'Administradores', active: false, route: '/usuarios/administradores' },
             { name: 'Técnicos', active: false, route: '/usuarios/tecnicos' },
             { name: 'Operarios', active: false, route: '/usuarios/operarios' },
-            
+
           ]
         },
         {
@@ -155,7 +180,7 @@
       ]
     }
   },
-  
+
   methods: {
     showSubmenu(index) {
       clearTimeout(this.submenuTimeout);
@@ -180,7 +205,6 @@
     }
   },
 };
-
 </script>
 
 <style scoped>

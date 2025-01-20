@@ -70,7 +70,7 @@ export default function useIncidencias() {
         console.log('Prioridad:', prioridad); // Verifica el valor de prioridad en la consola
         switch (prioridad) {
           case 'Alta':
-            return 'bg-red-500 text-white';
+            return 'bg-red-500 text-secondary ';
           case 'Media':
             return 'bg-yellow-500 text-white';
           case 'Baja':
