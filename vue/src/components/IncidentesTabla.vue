@@ -49,7 +49,6 @@
           <div>{{ incidencia.fecha_reporte }}</div>
           <div>{{ incidencia.maquina.nombre }}</div>
           <div>{{ incidencia.creador.nombre }}</div>
-          <div>{{ incidencia.tecnico }}</div>
           <div>
             <span :class="[getGravedadClass(incidencia.gravedad)]">
               {{ incidencia.gravedad }}
