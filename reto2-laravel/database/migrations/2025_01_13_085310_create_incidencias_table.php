@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('incidencias', function (Blueprint $table) {
             $table->bigInteger('id_incidencia')->autoIncrement();
             $table->bigInteger('id_maquina');
+            $table->bigInteger('id_creador');
             $table->string('descripcion', 300);
             $table->enum('gravedad', ['Maquina en Marcha', 'Maquina parada', 'Aviso', 'Mantenimiento']);
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->timestamp('fecha_cierre')->nullable();
             $table->primary('id_incidencia');
             $table->foreign('id_maquina')->references('id_maquina')->on('maquinas')->onDelete('cascade');
+            $table->foreign('id_creador')->references('id_usuario')->on('users')->onDelete('cascade');
             $table->foreign('id_tipo_mantenimiento')->references('id_tipo_mantenimiento')->on('tipo_mantenimiento')->onDelete('cascade');
             $table->foreign('id_tipo_averia')->references('id_tipo_averia')->on('tipo_averia')->onDelete('cascade');
         });
