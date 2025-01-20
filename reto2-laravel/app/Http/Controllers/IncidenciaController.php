@@ -9,13 +9,13 @@ class IncidenciaController extends Controller
 {
     public function index()
     {
-        $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'operario', 'tecnico'])->get();
+        $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador', 'tecnico'])->get();
         return response()->json($incidencias);
     }
 
     public function show($id)
     {
-        $incidencia = Incidencia::find($id);
+        $incidencia = Incidencia::with([]);
         if (!$incidencia) {
             return response()->json(['message' => 'Incidencia no encontrada'], 404);
         } 

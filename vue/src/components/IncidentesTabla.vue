@@ -1,6 +1,6 @@
 <template>
-  <div class="incidencias-container">
-    <h1 class="text-2xl font-bold mb-6">Incidencias</h1>
+  <div class="incidencias-container bg-primary pt-5">
+    <h1 class="text-2xl font-bold px-3 mb-6">Incidencias</h1>
 
     <!-- Barra de búsqueda -->
     <div class="search-container mb-6">
@@ -16,19 +16,20 @@
     </div>
 
     <!-- Tabla -->
-    <div class="table-container">
+    <div class="table-container ">
       <div class="table-header">
         <div>TÍTULO</div>
         <div>ESTADO</div>
         <div>PRIORIDAD</div>
         <div>FECHA</div>
         <div>MÁQUINA</div>
-        <div>OPERARIO</div>
+        <div>CREADOR</div>
         <div>TÉCNICO</div>
         <div>GRAVEDAD</div>
       </div>
 
       <div class="table-body">
+        
         <div
           v-for="(incidencia, i) in filteredIncidencias"
           :key="i"
@@ -47,9 +48,9 @@
             </span>
           </div>
           <div>{{ incidencia.fecha_reporte }}</div>
-          <div>{{ incidencia.id_maquina }}</div>
-          <div>{{ incidencia.operario }}</div>
-          <div>{{ incidencia.tecnico }}</div>
+          <div>{{ incidencia.maquina.nombre }}</div>
+          <div>{{ incidencia.creador.nombre }}</div>
+          <div>NULL</div>
           <div>
             <span :class="[getGravedadClass(incidencia.gravedad)]">
               {{ incidencia.gravedad }}
