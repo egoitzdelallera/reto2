@@ -1,24 +1,54 @@
-import {ref, computed, onMounted} from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 export default function useMaquinas() {
     const maquinas = ref([]);
     const searchQuery = ref('');
+    const loading = ref(false);
+    const error = ref(null);
 
-    const loadMaquinas = async () => {
-        try{
-            const token = localStorage.getItem('jwt_token');
-            const response = await axios.get('http://localhost:8000/api/maquinas', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+
+    const fetchMaquinas = async () => {
+        loading.value = true;
+        error.value = null;
+      try {
+        const token = localStorage.getItem('jwt_token');
+        const response = await axios.get('http://localhost:8000/api/maquinas', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
             console.log('Datos de la API:', response.data);
             maquinas.value = response.data;
-        } catch(error) {
-            console.error('Error al cargar las Maquinas', error);
+      } catch (err) {
+            error.value = err;
+        console.error('Error al cargar las Maquinas', err);
+      } finally {
+            loading.value = false;
         }
     };
+
+     const createMaquina = async (maquinaData) => {
+        loading.value = true;
+        error.value = null;
+    try {
+      const token = localStorage.getItem('jwt_token');
+        const response = await axios.post('http://localhost:8000/api/maquinas', maquinaData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log('Maquina creada:', response.data);
+        return response.data;
+    } catch (err) {
+          error.value = err;
+        console.error('Error al crear la máquina', err);
+        throw new Error(err.response?.data?.message || 'Error creating machine');
+      } finally {
+        loading.value = false;
+    }
+  };
+
 
     const filteredMaquinas = computed(() => {
         if (!searchQuery.value) {
@@ -31,7 +61,7 @@ export default function useMaquinas() {
                 maquina.id_maquina.toLowerCase().includes(lowerCaseQuery) ||
                 maquina.nombre.toLowerCase().includes(lowerCaseQuery) ||
                 maquina.descripcion.toLowerCase().includes(lowerCaseQuery) ||
-                maquina.id_taller.toLowerCase().includes(lowerCaseQuery) ||
+                String(maquina.id_taller).toLowerCase().includes(lowerCaseQuery) || // Cast id_taller to string
                 maquina.prioridad.toLowerCase().includes(lowerCaseQuery) ||
                 maquina.estado.toLowerCase().includes(lowerCaseQuery)
             );
@@ -66,15 +96,19 @@ export default function useMaquinas() {
     };
 
     onMounted(() => {
-        loadMaquinas();
+      fetchMaquinas();
     });
+
 
     return {
         maquinas,
         searchQuery,
         filteredMaquinas,
-        loadMaquinas,
+        fetchMaquinas, // Replaced loadMaquinas with fetchMaquinas
         getEstadoClass,
         getPrioridadClass,
+        createMaquina, // Added createMaquina
+        loading,
+        error,
     };
 }
