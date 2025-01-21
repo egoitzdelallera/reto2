@@ -23,6 +23,7 @@ export default function useMaquinas() {
       } catch (err) {
             error.value = err;
         console.error('Error al cargar las Maquinas', err);
+        // Puedes decidir si mostrar este error en el componente o no
       } finally {
             loading.value = false;
         }
@@ -39,11 +40,15 @@ export default function useMaquinas() {
             },
         });
         console.log('Maquina creada:', response.data);
-        return response.data;
+        maquinas.value.push(response.data);
+         // No es necesario retornar response.data si el componente actualiza la lista de maquinas automaticamente con el .push
+         return response.data
     } catch (err) {
           error.value = err;
         console.error('Error al crear la máquina', err);
-        throw new Error(err.response?.data?.message || 'Error creating machine');
+          // Lanzamos el error para que el componente lo pueda manejar
+          throw err; // Esto permite al componente capturar el error
+       // throw new Error(err.response?.data?.message || 'Error creating machine');
       } finally {
         loading.value = false;
     }
@@ -58,7 +63,7 @@ export default function useMaquinas() {
         return maquinas.value.filter((maquina) => {
             const lowerCaseQuery = searchQuery.value.toLowerCase();
             return (
-                maquina.id_maquina.toLowerCase().includes(lowerCaseQuery) ||
+                String(maquina.id_maquina).toLowerCase().includes(lowerCaseQuery) ||
                 maquina.nombre.toLowerCase().includes(lowerCaseQuery) ||
                 maquina.descripcion.toLowerCase().includes(lowerCaseQuery) ||
                 String(maquina.id_taller).toLowerCase().includes(lowerCaseQuery) || // Cast id_taller to string
