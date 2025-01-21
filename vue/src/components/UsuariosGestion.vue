@@ -293,7 +293,7 @@ const newUserAlertClass = ref('');
 const selectedRole = ref(props.initialRole)
 
 // Configuración
-const PAGE_SIZE = 20
+const PAGE_SIZE = 10
 const API_URL = 'http://localhost:8000/api/users'
 
 // Calcular total de páginas

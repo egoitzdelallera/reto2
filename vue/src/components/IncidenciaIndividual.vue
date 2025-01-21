@@ -24,13 +24,13 @@
             <div class="filter-content mt-2" v-show="openFilters[filterType]">
               <div v-for="option in options" :key="option.value" class="form-check">
                 <input
-                  :id="${filterType}-${option.value}"
+                  :id="filterType + '-' + option.value"
                   type="checkbox"
                   :value="option.value"
                   v-model="selectedFilters[filterType]"
                   class="form-check-input"
                 />
-                <label :for="${filterType}-${option.value}" class="form-check-label">{{ option.label }}</label>
+                <label :for="filterType + '-' + option.value" class="form-check-label">{{ option.label }}</label>
               </div>
             </div>
           </div>

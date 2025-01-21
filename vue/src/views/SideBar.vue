@@ -54,10 +54,8 @@ export default {
               submenuSubtitle: 'Selecciona una sección.',
               sectionTitle: 'Incidencias Activas',
               submenu: [
-                  { name: 'Todas', active: false, route: '/incidencias' },
-                  { name: 'Pendientes', active: true, route: '/incidencias/pendientes' },
-                  { name: 'En Proceso', active: true, route: '/incidencias/en-proceso' },
-                  { name: 'Resueltas', active: false, route: '/incidencias/resueltas' }
+                  { name: 'Todas', active: false, route: '/incidencias' }
+                  
               ]
           },
           {
@@ -68,7 +66,7 @@ export default {
               submenuSubtitle: 'Selecciona el taller.',
               sectionTitle: 'Talleres',
               submenu: [
-                  { name: 'Todos los Talleres', active: true, route: '/mantenimientos' },
+                  { name: 'Todos los Talleres', active: true, route: '/mantenimientos' }
               ]
           },
           {

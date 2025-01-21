@@ -15,7 +15,7 @@ import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import incidencias from './views/IncidentesView.vue'
 const routes = [
 
-  { path: '/', component: Login },
+  { path: '/', component: incidencias },
 
 ]
 
