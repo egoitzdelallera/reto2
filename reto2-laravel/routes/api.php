@@ -4,8 +4,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaquinaController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IncidenciaController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CampusController;
+
 use App\Http\Controllers\TalleresController;
 
 Route::get('/user', function (Request $request) {
@@ -20,9 +22,28 @@ Route::middleware('api')->group(function () {
     Route::put('/maquinas/{maquina}', [MaquinaController::class, 'update']);
     Route::delete('/maquinas/{maquina}', [MaquinaController::class, 'destroy']);
 });
+Route::middleware('api')->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/user/{user}', [UserController::class, 'show']);
+    Route::delete('/user/{user}', [UserController::class, 'destroy']);
+});
+
+Route::middleware('jwt.auth')->group(function () {
+     Route::post('/users/{id}', [UserController::class, 'update']);
+     Route::post('/users', [UserController::class, 'store']);
+      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
+});
+Route::middleware('api')->group(function () {
+    Route::get('/talleres', [TalleresController::class, 'index']);
+    Route::get('/talleres/{id}', [TalleresController::class, 'show']);
+    Route::post('/talleres', [TalleresController::class, 'store']);
+    Route::put('/talleres/{id}', [TalleresController::class, 'update']);
+    Route::delete('/talleres/{id}', [TalleresController::class, 'destroy']);
+});
 
 // Ruta para inicio de sesión
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [UserController::class, 'login']);
 
 // Rutas para talleres
 Route::middleware('api')->group(function () {
@@ -43,5 +64,12 @@ Route::middleware('api')->group(function () {
 });
 
 // Rutas protegidas por JWT
-Route::middleware('jwt.auth')->post('logout', [AuthController::class, 'logout']);
-Route::middleware('jwt.auth')->get('user', [AuthController::class, 'user']);
+
+Route::middleware('jwt.auth')->post('logout', [UserController::class, 'logout']);
+Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
+
+//Rutas campus
+Route::middleware('jwt.auth')->group(function () {
+   Route::get('/campus', [CampusController::class, 'index']);
+});
+
