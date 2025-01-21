@@ -30,17 +30,31 @@ class UserController extends Controller
         return response()->json(['message' => 'Sesión cerrada correctamente']);
     }
 
-    public function index(Request $request)
+  public function index(Request $request)
     {
-         $users = User::select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')->get();
-        return response()->json($users);
+    $users = User::with('campus:id_campus,nombre')
+         ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+         ->get();
+        
+     $users->each(function ($user) {
+           $user->campus = $user->campus ? $user->campus->nombre : '-';
+     });
+ 
+      return response()->json($users);
     }
 
-     public function user(Request $request)
+   public function user(Request $request)
     {
-         $users = User::select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil','id_campus')->get();
-        return response()->json($users);
+         $users = User::with('campus:id_campus,nombre')
+         ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+         ->get();
+        
+      $users->each(function ($user) {
+           $user->campus = $user->campus ? $user->campus->nombre : '-';
+     });
+         return response()->json($users);
     }
+
 
     public function update(Request $request, $id)
     {
@@ -52,9 +66,9 @@ class UserController extends Controller
     
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-             'apellido' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users,correo,' . $id . ',id_usuario',
-             'rol' => 'required|in:Admin,Técnico,Operario',
+            'rol' => 'required|in:Administrador,Técnico,Operario',
             'password' => 'nullable|string|min:6',
         ]);
     
@@ -88,32 +102,32 @@ class UserController extends Controller
     
         return response()->json(['message' => 'Estado de usuario actualizado correctamente']);
     }
-        public function store(Request $request)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-             'apellido' => 'required|string|max:255',
+              'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users,correo',
-            'rol' => 'required|in:Admin,Técnico,Operario',
+            'rol' => 'required|in:Administrador,Técnico,Operario',
             'password' => 'required|string|min:6',
              'id_campus' => 'nullable|integer'
         ]);
-
+ 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+ 
         $user = new User();
         $user->nombre = $request->input('nombre');
-         $user->apellido = $request->input('apellido');
+        $user->apellido = $request->input('apellido');
         $user->correo = $request->input('correo');
         $user->rol = $request->input('rol');
         $user->password = Hash::make($request->input('password'));
-         $user->estado = 1;
-         $user->id_campus = $request->input('id_campus');
-
+        $user->estado = 'Habilitado';
+        $user->id_campus = $request->input('id_campus');
+ 
         $user->save();
-
+ 
         return response()->json(['message' => 'Usuario creado correctamente', 'user' => $user]);
     }
 }

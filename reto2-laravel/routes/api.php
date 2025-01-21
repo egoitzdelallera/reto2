@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampusController;
+use App\Http\Controllers\TalleresController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -32,7 +33,13 @@ Route::middleware('jwt.auth')->group(function () {
      Route::post('/users', [UserController::class, 'store']);
       Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
 });
-
+Route::middleware('api')->group(function () {
+    Route::get('/talleres', [TalleresController::class, 'index']);
+    Route::get('/talleres/{id}', [TalleresController::class, 'show']);
+    Route::post('/talleres', [TalleresController::class, 'store']);
+    Route::put('/talleres/{id}', [TalleresController::class, 'update']);
+    Route::delete('/talleres/{id}', [TalleresController::class, 'destroy']);
+});
 
 // Ruta para inicio de sesión
 Route::post('login', [UserController::class, 'login']);

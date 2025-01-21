@@ -15,13 +15,7 @@
             <i class="bi bi-plus-circle me-2"></i>Nuevo Usuario
           </button>
         </div>
-        <div class="col-md-9">
-          <div class="btn-group" role="group" aria-label="Filtrar por rol">
-            <button @click="changeRole('Todos')" class="btn" :class="selectedRole === 'Todos' ? 'btn-primary' : 'btn-outline-primary'">Todos</button>
-            <button @click="changeRole('Administrador')" class="btn" :class="selectedRole === 'Administrador' ? 'btn-primary' : 'btn-outline-primary'">Administradores</button>
-            <button @click="changeRole('Técnico')" class="btn" :class="selectedRole === 'Técnico' ? 'btn-primary' : 'btn-outline-primary'">Técnicos</button>
-            <button @click="changeRole('Operario')" class="btn" :class="selectedRole === 'Operario' ? 'btn-primary' : 'btn-outline-primary'">Operarios</button>
-          </div>
+       
           <div class="d-flex gap-2 mt-3">
             <input 
               type="text" 
@@ -30,9 +24,13 @@
               v-model="searchQuery"
               @input="handleSearch"
             >
-            <button class="btn btn-outline-secondary">
-              <i class="bi bi-funnel me-2"></i>Filtrar
-            </button>
+             <div class="col-md-9">
+          <div class="btn-group" role="group" aria-label="Filtrar por rol">
+            <button @click="changeRole('Todos')" class="btn" :class="selectedRole === 'Todos' ? 'btn-primary' : 'btn-outline-primary'">Todos</button>
+            <button @click="changeRole('Administrador')" class="btn" :class="selectedRole === 'Administrador' ? 'btn-primary' : 'btn-outline-primary'">Administradores</button>
+            <button @click="changeRole('Técnico')" class="btn" :class="selectedRole === 'Técnico' ? 'btn-primary' : 'btn-outline-primary'">Técnicos</button>
+            <button @click="changeRole('Operario')" class="btn" :class="selectedRole === 'Operario' ? 'btn-primary' : 'btn-outline-primary'">Operarios</button>
+          </div>
           </div>
         </div>
       </div>
@@ -50,7 +48,7 @@
               <th>CORREO</th>
               <th>CAMPUS</th>
               <th>ROL</th>
-              <th>ESPECIALIZACIÓN</th>
+              
               <th>ESTADO</th>
               <th>ACCIONES</th>
             </tr>
@@ -58,24 +56,19 @@
           <tbody>
             <tr v-for="user in displayedUsers" :key="user.id_usuario">
               <td>
-                <img 
-                  :src="user.imagen_perfil || '/default-avatar.png'" 
-                  class="rounded-circle"
-                  width="40" 
-                  height="40"
-                  alt="Profile"
-                >
+                <i class="bi bi-person-circle fs-2"></i>
+                
               </td>
               <td>{{ user.nombre }}</td>
               <td>{{ user.apellido }}</td>
               <td>{{ user.correo }}</td>
-              <td>{{ user.campus }}</td>
+              <td>{{ user.campus.nombre }}</td>
               <td>
                 <span class="badge" :class="getRoleBadgeClass(user.rol)">
                   {{ user.rol }}
                 </span>
               </td>
-              <td>{{ user.especializacion || '-' }}</td>
+              
               <td>
                 <span class="badge" :class="user.estado === 'Habilitado' || user.estado === true ? 'bg-success' : 'bg-danger'">
                    {{ user.estado === 'Habilitado' || user.estado === true ? 'Habilitado' : 'Deshabilitado' }}
@@ -177,7 +170,7 @@
                   <div class="mb-3">
                      <label for="editRol" class="form-label">Rol</label>
                     <select class="form-select" id="editRol" v-model="userToEdit.rol">
-                        <option value="Admin">Admin</option>
+                        <option value="Administrador">Administrador</option>
                         <option value="Técnico">Técnico</option>
                         <option value="Operario">Operario</option>
                     </select>
@@ -224,19 +217,19 @@
                   <div class="mb-3">
                      <label for="newRol" class="form-label">Rol</label>
                     <select class="form-select" id="newRol" v-model="newUser.rol">
-                        <option value="Admin">Admin</option>
+                        <option value="Administrador">Administrador</option>
                         <option value="Técnico">Técnico</option>
                         <option value="Operario">Operario</option>
                     </select>
                   </div>
-                   <div class="mb-3">
-                     <label for="newCampus" class="form-label">Campus</label>
-                    <select class="form-select" id="newCampus" v-model="newUser.id_campus">
-                       <option v-for="campusItem in campus" :key="campusItem.id_campus" :value="campusItem.id_campus">
-                           {{ campusItem.nombre }}
-                        </option>
-                   </select>
-                 </div>
+                  <div class="mb-3">
+                      <label for="newCampus" class="form-label">Campus</label>
+                      <select class="form-select" id="newCampus" v-model="newUser.id_campus">
+                        <option v-for="campusItem in campus" :key="campusItem.id_campus" :value="campusItem.id_campus">
+                            {{ campusItem.nombre }}
+                          </option>
+                    </select>
+                  </div>
                   <div class="mb-3">
                       <label for="newPassword" class="form-label">Contraseña</label>
                       <input type="password" class="form-control" id="newPassword" v-model="newUser.password">
@@ -439,6 +432,8 @@ const editUser = (user) => {
 }
 
 // Función para enviar formulario de edición
+// Función para enviar formulario de edición
+// Función para enviar formulario de edición
 const submitEditForm = async () => {
     try {
         const dataToUpdate = {
@@ -451,6 +446,8 @@ const submitEditForm = async () => {
         if (editPassword.value) {
           dataToUpdate.password = editPassword.value;
         }
+      
+        console.log('Valor del Rol (editUser):', JSON.stringify(dataToUpdate.rol));
 
         const token = localStorage.getItem('jwt_token');
         console.log('Token JWT:', token);
@@ -475,6 +472,7 @@ const submitEditForm = async () => {
         editAlertMessage.value = 'Usuario actualizado con éxito';
     } catch (error) {
         console.error('Error updating user:', error);
+         console.error('Response Data (editUser):', error.response?.data);
         editAlertClass.value = 'alert-danger';
         editAlertMessage.value = 'Error al actualizar usuario';
     } finally {
@@ -489,6 +487,8 @@ const submitEditForm = async () => {
 // Función para enviar formulario de nuevo usuario
 const submitNewUserForm = async () => {
   try {
+      console.log('Datos del nuevo usuario:', newUser.value);
+       console.log('Valor del Rol (newUser):', JSON.stringify(newUser.value.rol));
        const response = await axios.post(`${API_URL}`, newUser.value, {
          headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
@@ -504,9 +504,9 @@ const submitNewUserForm = async () => {
         nombre: '',
         apellido: '',
         correo: '',
-        rol: 'Operario',
+        rol: '',
         password: '',
-        id_campus: null,
+        id_campus: '',
       };
 
         newUserAlertClass.value = 'alert-success';
@@ -514,6 +514,7 @@ const submitNewUserForm = async () => {
 
      } catch (error) {
       console.error('Error creating user:', error);
+      console.error('Response Data (newUser):', error.response?.data);
         newUserAlertClass.value = 'alert-danger';
         newUserAlertMessage.value = 'Error al crear usuario';
     } finally{
@@ -544,7 +545,7 @@ const fetchCampus = async () => {
 // Obtener clase para el badge del rol
 const getRoleBadgeClass = (rol) => {
   const classes = {
-    'Admin': 'bg-danger',
+    'Administrador': 'bg-danger',
     'Técnico': 'bg-primary',
     'Operario': 'bg-warning text-dark'
   }
