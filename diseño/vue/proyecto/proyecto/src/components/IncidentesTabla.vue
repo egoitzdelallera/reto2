@@ -370,4 +370,3 @@ const getMaintenanceTypeClass = (tipo) => {
   overflow-y: auto;
 }
 </style>
-

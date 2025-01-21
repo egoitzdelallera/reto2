@@ -36,4 +36,5 @@ class Maquina extends Model
     {
         return $this->belongsTo(Campus::class, 'id_campus');
     }
+
 }

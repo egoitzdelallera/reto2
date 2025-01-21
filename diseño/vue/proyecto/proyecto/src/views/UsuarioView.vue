@@ -8,7 +8,7 @@
 
 <template>
   <div>
-    <SideBar> </SideBar>
-    <Usuario> </Usuario>
+    <SideBar></SideBar>
+    <Usuario></Usuario>
   </div>
 </template>

@@ -1,9 +1,9 @@
 <template>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
 
   <div class="app-container">
     <Sidebar v-if="showSidebar" />
-    <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
+    <main class="main-content p-0" :class="{ 'with-sidebar': showSidebar }">
       <router-view></router-view>
     </main>
   </div>
@@ -14,6 +14,7 @@ import { computed } from 'vue'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 
 import Login from './views/InicioSesionView.vue'
+
 
 const routes = [
   { path: '/', component: Login },
