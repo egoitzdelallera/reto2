@@ -6,9 +6,9 @@
 
 </script>
 
-<template>
-  <div>
-    <SideBar> </SideBar>
-    <Usuario> </Usuario>
-  </div>
-</template>
+  <template>
+    <div>
+      <SideBar> </SideBar>
+      <Usuario> </Usuario>
+    </div>
+  </template>

@@ -20,8 +20,6 @@ const routes = [
   { path: '/maquinas', component: Maquinas },
   { path: '/MaquinaIndividual/:id',name:'MaquinaIndividual', component: MaquinaIndividual },
 
-
- 
 ]
 
 const router = createRouter({

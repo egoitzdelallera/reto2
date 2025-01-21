@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaquinaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IncidenciaController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,9 +19,19 @@ Route::middleware('api')->group(function () {
     Route::put('/maquinas/{maquina}', [MaquinaController::class, 'update']);
     Route::delete('/maquinas/{maquina}', [MaquinaController::class, 'destroy']);
 });
+Route::middleware('api')->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/user/{user}', [UserController::class, 'show']);
+    Route::put('/user/{user}', [UserController::class, 'update']);
+    Route::delete('/user/{user}', [UserController::class, 'destroy']);
+});
+Route::middleware('auth:api')->group(function () {
+    Route::patch('/users/{id}', [UserController::class, 'update']); // Añade esta línea
+  });
 
 // Ruta para inicio de sesión
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [UserController::class, 'login']);
 
 Route::get('/incidencias', [IncidenciaController::class, 'index']);
 
@@ -35,6 +46,6 @@ Route::middleware('api')->group(function () {
 
 
 // Rutas protegidas por JWT
-Route::middleware('jwt.auth')->post('logout', [AuthController::class, 'logout']);
-Route::middleware('jwt.auth')->get('user', [AuthController::class, 'user']);
+Route::middleware('jwt.auth')->post('logout', [UserController::class, 'logout']);
+Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
 

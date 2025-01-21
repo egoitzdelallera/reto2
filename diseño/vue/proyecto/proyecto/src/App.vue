@@ -37,7 +37,8 @@ const showSidebar = computed(() => route.path !== '/login')
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  
+  padding-left: 300px !important;
 }
 
 

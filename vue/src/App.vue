@@ -11,10 +11,10 @@
 import { computed } from 'vue'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 
-import Login from './views/InicioSesionView.vue'
-
+//import Login from './views/InicioSesionView.vue'
+import incidencias from './views/IncidentesView.vue'
 const routes = [
-  { path: '/', component: Login },
+  { path: '/', component: incidencias },
   
 ]
 
