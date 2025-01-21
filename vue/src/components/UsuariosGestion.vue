@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="row text-white py-3 mb-4">
       <div class="col">
-        <h2 class="mb-0">Lista Usuarios</h2>
+        <h2 class="mb-0">Lista de Usuarios: {{ selectedRole }}</h2>
       </div>
     </div>
 
@@ -16,7 +16,13 @@
           </button>
         </div>
         <div class="col-md-9">
-          <div class="d-flex gap-2">
+          <div class="btn-group" role="group" aria-label="Filtrar por rol">
+            <button @click="changeRole('Todos')" class="btn" :class="selectedRole === 'Todos' ? 'btn-primary' : 'btn-outline-primary'">Todos</button>
+            <button @click="changeRole('Administrador')" class="btn" :class="selectedRole === 'Administrador' ? 'btn-primary' : 'btn-outline-primary'">Administradores</button>
+            <button @click="changeRole('Técnico')" class="btn" :class="selectedRole === 'Técnico' ? 'btn-primary' : 'btn-outline-primary'">Técnicos</button>
+            <button @click="changeRole('Operario')" class="btn" :class="selectedRole === 'Operario' ? 'btn-primary' : 'btn-outline-primary'">Operarios</button>
+          </div>
+          <div class="d-flex gap-2 mt-3">
             <input 
               type="text" 
               class="form-control" 
@@ -33,7 +39,7 @@
     </div>
 
     <!-- Table -->
-    <div class="container" ref="tableContainer">
+    <div class="container">
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-light">
@@ -71,8 +77,8 @@
               </td>
               <td>{{ user.especializacion || '-' }}</td>
               <td>
-                <span class="badge" :class="user.estado ? 'bg-success' : 'bg-danger'">
-                  {{ user.estado ? 'Habilitado' : 'Deshabilitado' }}
+                <span class="badge" :class="user.estado === 'Habilitado' || user.estado === true ? 'bg-success' : 'bg-danger'">
+                   {{ user.estado === 'Habilitado' || user.estado === true ? 'Habilitado' : 'Deshabilitado' }}
                 </span>
               </td>
               <td>
@@ -104,14 +110,24 @@
         </div>
       </div>
 
-      <!-- Hidden load more button -->
-      <button 
-        ref="loadMoreTrigger"
-        class="invisible"
-        @click="loadMore"
-      >
-        Load More
-      </button>
+      <!-- Pagination -->
+      <nav v-if="totalPages > 1" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <button class="page-link" @click="changePage(currentPage - 1)" aria-label="Previous">
+              <span aria-hidden="true">«</span>
+            </button>
+          </li>
+          <li v-for="pageNumber in totalPages" :key="pageNumber" class="page-item" :class="{ active: currentPage === pageNumber }">
+            <button class="page-link" @click="changePage(pageNumber)">{{ pageNumber }}</button>
+          </li>
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <button class="page-link" @click="changePage(currentPage + 1)" aria-label="Next">
+              <span aria-hidden="true">»</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
 
       <!-- Modal para Confirmar deshabilitar usuario -->
@@ -119,18 +135,18 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="disableUserModalLabel">Confirmar Deshabilitación</h5>
+              <h5 class="modal-title" id="disableUserModalLabel">Cambiar estado</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p>¿Estás seguro de que quieres deshabilitar al usuario: <strong>{{ userToDisable?.nombre }} {{ userToDisable?.apellido }}</strong>?</p>
+              <p>¿Estás seguro de que quieres cambiar el estado del usuario: <strong>{{ userToDisable?.nombre }} {{ userToDisable?.apellido }}</strong>?</p>
               <div v-if="disableAlertMessage" class="alert" :class="disableAlertClass">
                {{ disableAlertMessage }}
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-danger" @click="disableUser">Deshabilitar Usuario</button>
+              <button type="button" class="btn btn-danger" @click="disableUser">Cambiar estado</button>
             </div>
           </div>
         </div>
@@ -183,92 +199,165 @@
           </div>
         </div>
       </div>
-
+            <!-- Modal para nuevo usuario -->
+      <div class="modal fade" id="newUserModal" tabindex="-1" aria-labelledby="newUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="newUserModalLabel">Nuevo Usuario</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitNewUserForm">
+                  <div class="mb-3">
+                      <label for="newNombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="newNombre" v-model="newUser.nombre">
+                  </div>
+                  <div class="mb-3">
+                      <label for="newApellido" class="form-label">Apellido</label>
+                      <input type="text" class="form-control" id="newApellido" v-model="newUser.apellido">
+                  </div>
+                  <div class="mb-3">
+                      <label for="newCorreo" class="form-label">Correo</label>
+                      <input type="email" class="form-control" id="newCorreo" v-model="newUser.correo">
+                  </div>
+                  <div class="mb-3">
+                     <label for="newRol" class="form-label">Rol</label>
+                    <select class="form-select" id="newRol" v-model="newUser.rol">
+                        <option value="Admin">Admin</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Operario">Operario</option>
+                    </select>
+                  </div>
+                   <div class="mb-3">
+                     <label for="newCampus" class="form-label">Campus</label>
+                    <select class="form-select" id="newCampus" v-model="newUser.id_campus">
+                       <option v-for="campusItem in campus" :key="campusItem.id_campus" :value="campusItem.id_campus">
+                           {{ campusItem.nombre }}
+                        </option>
+                   </select>
+                 </div>
+                  <div class="mb-3">
+                      <label for="newPassword" class="form-label">Contraseña</label>
+                      <input type="password" class="form-control" id="newPassword" v-model="newUser.password">
+                  </div>
+                  <div v-if="newUserAlertMessage" class="alert" :class="newUserAlertClass">
+                    {{ newUserAlertMessage }}
+                  </div>
+                  
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" @click="submitNewUserForm">Crear Usuario</button>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { useIntersectionObserver } from '@vueuse/core'
 import { Modal } from 'bootstrap'; // Importa Modal de bootstrap
+
+const props = defineProps({
+  initialRole: {
+    type: String,
+    default: 'Todos'
+  }
+})
 
 // Estado
 const users = ref([])
 const displayedUsers = ref([])
-const page = ref(1)
+const currentPage = ref(1)
 const isLoading = ref(false)
 const searchQuery = ref('')
-const loadMoreTrigger = ref(null)
-const tableContainer = ref(null)
 // Estados modales
 const userToDisable = ref(null);
 const userToEdit = ref({});
 const editPassword = ref('');
-
+const newUser = ref({
+    nombre: '',
+     apellido:'',
+    correo: '',
+    rol: 'Operario',
+    password: '',
+     id_campus: null,
+});
+const campus = ref([])
 // Estados alertas
 const disableAlertMessage = ref(null);
 const disableAlertClass = ref('');
 const editAlertMessage = ref(null);
 const editAlertClass = ref('');
+const newUserAlertMessage = ref(null);
+const newUserAlertClass = ref('');
+
+// Nueva propiedad reactiva para el rol seleccionado
+const selectedRole = ref(props.initialRole)
 
 // Configuración
 const PAGE_SIZE = 20
 const API_URL = 'http://localhost:8000/api/users'
 
+// Calcular total de páginas
+const totalPages = computed(() => {
+  return Math.ceil(users.value.length / PAGE_SIZE);
+});
+
 // Obtener usuarios
 const fetchUsers = async () => {
-  if (isLoading.value) return
+  if (isLoading.value) return;
 
-  isLoading.value = true
+  isLoading.value = true;
   try {
     const response = await axios.get(`${API_URL}`, {
       params: {
-        page: page.value,
-        limit: PAGE_SIZE,
-        search: searchQuery.value
+        page: 1, // siempre cargar la primera página de la API, la paginación se maneja en el cliente
+        limit: 1000,  // Carga muchos datos para la paginación
+        search: searchQuery.value,
+        role: selectedRole.value !== 'Todos' ? selectedRole.value : undefined
       },
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
       }
-    })
-    
-    // Añadir nuevos usuarios al array existente
-    users.value = [...users.value, ...response.data]
-    displayedUsers.value = users.value
-    page.value++
+    });
+
+    // Filtrar usuarios por rol si es necesario
+    const filteredUsers = selectedRole.value !== 'Todos'
+      ? response.data.filter(user => user.rol === selectedRole.value)
+      : response.data;
+
+    // Actualizar usuarios
+    users.value = filteredUsers;
+    updateDisplayedUsers();
+
   } catch (error) {
-    console.error('Error fetching users:', error)
+    console.error('Error fetching users:', error);
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
-// Configurar Intersection Observer para infinite scroll
-const { stop } = useIntersectionObserver(
-  loadMoreTrigger,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) {
-      loadMore()
-    }
-  },
-  { threshold: 0.5 }
-)
-
-// Cargar más usuarios
-const loadMore = () => {
-  fetchUsers()
-}
-
+const updateDisplayedUsers = () => {
+  const start = (currentPage.value - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  displayedUsers.value = users.value.slice(start, end);
+};
 // Búsqueda de usuarios
 const handleSearch = () => {
-  // Resetear la paginación
-  page.value = 1
-  users.value = []
-  
-  // Recargar usuarios con el término de búsqueda
-  fetchUsers()
+  currentPage.value = 1;
+  fetchUsers();
+};
+
+const changePage = (page) => {
+  currentPage.value = page;
+  updateDisplayedUsers();
 }
+
 
 // Confirmar deshabilitar usuario
 const confirmDisableUser = (user) => {
@@ -280,38 +369,65 @@ const confirmDisableUser = (user) => {
 // Deshabilitar usuario
 const disableUser = async () => {
   try {
-    await axios.patch(`${API_URL}/${userToDisable.value.id_usuario}/toggle-status`, {}, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    userToDisable.value.estado = !userToDisable.value.estado;
+    let token = localStorage.getItem('jwt_token');
+    console.log('Token JWT (disableUser - raw):', token);
 
-    // Actualizar usuario en array de usuarios
+        if (token === null || token === undefined || token === '') {
+            console.error('Error: Token JWT is null, undefined, or empty.');
+             disableAlertClass.value = 'alert-danger';
+             disableAlertMessage.value = 'Error de autenticación. Token inválido';
+              setTimeout(() => {
+                disableAlertMessage.value = null;
+                disableAlertClass.value = '';
+                const modal = Modal.getInstance(document.getElementById('disableUserModal'));
+                modal.hide();
+                }, 2000);
+
+            return; // Salir de la función si el token no es válido
+        }
+
+
+    const parts = token.split('.');
+    console.log('Token JWT (disableUser - segments):', parts);
+
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    console.log('Headers (disableUser):', headers);
+    console.log('URL (disableUser):',`${API_URL}/${userToDisable.value.id_usuario}/toggle-status`)
+
+
+    await axios.patch(`${API_URL}/${userToDisable.value.id_usuario}/toggle-status`, {}, {
+      headers: headers
+    });
+
+    userToDisable.value.estado = !userToDisable.value.estado;
+    
     const userIndex = users.value.findIndex(user => user.id_usuario === userToDisable.value.id_usuario);
     if (userIndex !== -1) {
       users.value[userIndex].estado = userToDisable.value.estado;
-      displayedUsers.value = [...users.value]; // Actualiza displayedUsers
+       updateDisplayedUsers();
     }
-    
+
     disableAlertClass.value = 'alert-success';
     disableAlertMessage.value = 'Usuario deshabilitado con éxito';
+
   } catch (error) {
     console.error('Error toggling user status:', error);
+    console.error('Response Data (disableUser):', error.response?.data);
     disableAlertClass.value = 'alert-danger';
     disableAlertMessage.value = 'Error al deshabilitar usuario';
   } finally {
-      setTimeout(() => {
-        disableAlertMessage.value = null;
-          disableAlertClass.value = '';
-          const modal = Modal.getInstance(document.getElementById('disableUserModal'));
-          modal.hide();
+    setTimeout(() => {
+      disableAlertMessage.value = null;
+      disableAlertClass.value = '';
+      const modal = Modal.getInstance(document.getElementById('disableUserModal'));
+      modal.hide();
 
-      }, 2000);
+    }, 2000);
   }
 };
-
-
 // Editar usuario
 const editUser = (user) => {
     userToEdit.value = { ...user };
@@ -325,9 +441,9 @@ const editUser = (user) => {
 // Función para enviar formulario de edición
 const submitEditForm = async () => {
     try {
-      const dataToUpdate = {
+        const dataToUpdate = {
             nombre: userToEdit.value.nombre,
-            apellido: userToEdit.value.apellido,
+             apellido: userToEdit.value.apellido,
             correo: userToEdit.value.correo,
             rol: userToEdit.value.rol,
         };
@@ -335,36 +451,95 @@ const submitEditForm = async () => {
         if (editPassword.value) {
           dataToUpdate.password = editPassword.value;
         }
-        
-        const response = await axios.patch(`${API_URL}/${userToEdit.value.id_usuario}`, dataToUpdate, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+
+        const token = localStorage.getItem('jwt_token');
+        console.log('Token JWT:', token);
+
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+        console.log('Headers:', headers);
+
+        const response = await axios.post(`${API_URL}/${userToEdit.value.id_usuario}`, dataToUpdate, {
+            headers: headers
         });
-        
-          // Actualizar el usuario en la lista users y displayedUsers
+
         const userIndex = users.value.findIndex(user => user.id_usuario === userToEdit.value.id_usuario);
         if (userIndex !== -1) {
             users.value[userIndex] = { ...userToEdit.value, ...response.data.user};
-            displayedUsers.value = [...users.value];
+            updateDisplayedUsers();
         }
-        
+
         editAlertClass.value = 'alert-success';
         editAlertMessage.value = 'Usuario actualizado con éxito';
     } catch (error) {
-      console.error('Error updating user:', error);
-      editAlertClass.value = 'alert-danger';
-      editAlertMessage.value = 'Error al actualizar usuario';
-    } finally{
+        console.error('Error updating user:', error);
+        editAlertClass.value = 'alert-danger';
+        editAlertMessage.value = 'Error al actualizar usuario';
+    } finally {
         setTimeout(() => {
-          editAlertMessage.value = null;
-          editAlertClass.value = '';
-          const modal = Modal.getInstance(document.getElementById('editUserModal'));
-          modal.hide();
+            editAlertMessage.value = null;
+            editAlertClass.value = '';
+            const modal = Modal.getInstance(document.getElementById('editUserModal'));
+            modal.hide();
         }, 2000);
     }
 };
+// Función para enviar formulario de nuevo usuario
+const submitNewUserForm = async () => {
+  try {
+       const response = await axios.post(`${API_URL}`, newUser.value, {
+         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+          }
+        });
+      
+        // Añadir nuevo usuario a la lista de usuarios
+        users.value.push(response.data.user);
+        updateDisplayedUsers(); // Actualizar la lista de usuarios mostrados
 
+      // Limpiar el formulario
+      newUser.value = {
+        nombre: '',
+        apellido: '',
+        correo: '',
+        rol: 'Operario',
+        password: '',
+        id_campus: null,
+      };
+
+        newUserAlertClass.value = 'alert-success';
+        newUserAlertMessage.value = 'Usuario creado con éxito';
+
+     } catch (error) {
+      console.error('Error creating user:', error);
+        newUserAlertClass.value = 'alert-danger';
+        newUserAlertMessage.value = 'Error al crear usuario';
+    } finally{
+      setTimeout(() => {
+          newUserAlertMessage.value = null;
+          newUserAlertClass.value = '';
+          const modal = Modal.getInstance(document.getElementById('newUserModal'));
+           modal.hide();
+
+       }, 2000);
+    }
+};
+ // Obtener campus
+ // Obtener campus
+const fetchCampus = async () => {
+   try {
+      const response = await axios.get(`${API_URL.replace('/users', '').concat('/campus')}`,{
+           headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+           }
+        });
+      campus.value = response.data
+    } catch (error) {
+      console.error('Error fetching campus:', error);
+    }
+};
 
 // Obtener clase para el badge del rol
 const getRoleBadgeClass = (rol) => {
@@ -376,13 +551,17 @@ const getRoleBadgeClass = (rol) => {
   return classes[rol] || 'bg-secondary'
 }
 
+// Nueva función para cambiar el rol seleccionado
+const changeRole = (role) => {
+  selectedRole.value = role;
+  currentPage.value = 1;
+  fetchUsers();
+}
+
 // Lifecycle hooks
 onMounted(() => {
   fetchUsers()
-})
-
-onUnmounted(() => {
-  stop()
+  fetchCampus()
 })
 </script>
 

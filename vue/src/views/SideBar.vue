@@ -20,7 +20,7 @@
   <p class="submenu-subtitle">{{ item.submenuSubtitle }}</p>
   <h3 class="submenu-section-title">{{ item.sectionTitle }}</h3>
   <div class="workshops-container">
-    <div v-for="(subItem, subIndex) in item.submenu" :key="subIndex" class="item-card" @click="navigateTo(subItem.route)">
+    <div v-for="(subItem, subIndex) in item.submenu" :key="subIndex" class="item-card" @click="navigateTo(subItem.route, subItem.role)">
       <span>{{ subItem.name }}</span>
       <span v-if="subItem.active" class="activity-dot"></span>
     </div>
@@ -35,14 +35,16 @@
 
   <script>
   import { useRouter } from 'vue-router'
-  import '../assets/css/Nav.css' // Asegúrate de que la ruta sea correcta
+  import '../assets/css/Nav.css' 
 
   export default {
     setup() {
       const router = useRouter()
   
-      const navigateTo = (route) => {
-        if (route) {
+      const navigateTo = (route, role) => {
+        if (route === '/usuarios') {
+          router.push({ path: route, query: { role: role || 'Todos' } })
+        } else if (route) {
           router.push(route)
         }
       }
@@ -110,16 +112,16 @@
         {
           title: 'Usuarios',
           icon: 'bi bi-people',
+          route: '/usuarios',
           submenuTitle: 'Gestión de Usuarios',
           submenuSubtitle: 'Administración de accesos.',
           sectionTitle: 'Usuarios del Sistema',
           isHovered: false,
           submenu: [
-          { name: 'Todos', active: false, route: '/usuarios' },
-            { name: 'Administradores', active: false, route: '/usuarios/administradores' },
-            { name: 'Técnicos', active: false, route: '/usuarios/tecnicos' },
-            { name: 'Operarios', active: false, route: '/usuarios/operarios' },
-            
+            { name: 'Todos', active: false, route: '/usuarios', role: 'Todos' },
+            { name: 'Administradores', active: false, route: '/usuarios', role: 'Admin' },
+            { name: 'Técnicos', active: false, route: '/usuarios', role: 'Técnico' },
+            { name: 'Operarios', active: false, route: '/usuarios', role: 'Operario' },
           ]
         },
         {
@@ -167,7 +169,7 @@
             item.isHovered = false;
           }
         });
-      }, 100); // 0.5 second delay
+      }, 100); 
     },
     hideSubmenu(index) {
       clearTimeout(this.submenuTimeout);
@@ -186,3 +188,4 @@
 <style scoped>
 
 </style>
+

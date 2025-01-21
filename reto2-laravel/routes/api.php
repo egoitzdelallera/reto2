@@ -6,6 +6,7 @@ use App\Http\Controllers\MaquinaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CampusController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -23,12 +24,15 @@ Route::middleware('api')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/user/{user}', [UserController::class, 'show']);
-    Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/user/{user}', [UserController::class, 'destroy']);
 });
-Route::middleware('auth:api')->group(function () {
-    Route::patch('/users/{id}', [UserController::class, 'update']); // Añade esta línea
-  });
+
+Route::middleware('jwt.auth')->group(function () {
+     Route::post('/users/{id}', [UserController::class, 'update']);
+     Route::post('/users', [UserController::class, 'store']);
+      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
+});
+
 
 // Ruta para inicio de sesión
 Route::post('login', [UserController::class, 'login']);
@@ -49,3 +53,7 @@ Route::middleware('api')->group(function () {
 Route::middleware('jwt.auth')->post('logout', [UserController::class, 'logout']);
 Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
 
+//Rutas campus
+Route::middleware('jwt.auth')->group(function () {
+   Route::get('/campus', [CampusController::class, 'index']);
+});
