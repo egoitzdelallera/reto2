@@ -5,12 +5,15 @@ import Usuarios from '../views/UsuarioView.vue';
 import Perfil from '../views/PerfilView.vue';
 import iniciosesion from '../views/InicioSesionView.vue';
 import IncidenciaIndividual from '../views/IncidenciaIndividualView.vue';
+import MaquinasView from '../views/MaquinasView.vue';
+
 
 const routes = [
   { path: '/', component: iniciosesion },
   { path: '/mantenimientos', component: Mantenimientos },
   { path: '/incidencias', component: IncidentsTable, meta: { requiresAuth: true } },
   { path: '/usuarios', component: Usuarios, meta: { requiresAuth: true } },
+  { path: '/maquinas', component: MaquinasView, meta: { requiresAuth: true } },
   { path: '/perfil', component: Perfil, meta: { requiresAuth: true } },
   { path: '/incidencia/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual, meta: { requiresAuth: true } },
 ];

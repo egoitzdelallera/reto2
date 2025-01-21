@@ -20,6 +20,7 @@
   --#{$prefix}table-hover-color: #{$table-hover-color};
   --#{$prefix}table-hover-bg: #{$table-hover-bg};
 
+  
   width: 100%;
   margin-bottom: $spacer;
   vertical-align: $table-cell-vertical-align;
@@ -41,12 +42,42 @@
 
   > tbody {
     vertical-align: inherit;
+    
   }
 
   > thead {
     vertical-align: bottom;
   }
 }
+
+
+
+.table-lineas {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 1rem; 
+  padding: 0.5rem 1rem;
+  align-items: center; 
+  border-radius: 5px; 
+  border-bottom: 1px solid grey; 
+  transition: transform 0.2s ease; 
+  
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.table-lineas:hover {
+  transform: translateX(3px); 
+}
+
+.table-lineas > * {
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
 
 .table-group-divider {
   border-top: calc(#{$table-border-width} * 2) solid $table-group-separator-color; // stylelint-disable-line function-disallowed-list
@@ -69,6 +100,7 @@
   // stylelint-disable-next-line selector-max-universal
   > :not(caption) > * > * {
     padding: $table-cell-padding-y-sm $table-cell-padding-x-sm;
+    font-size: 13px;
   }
 }
 
