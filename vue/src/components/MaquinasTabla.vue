@@ -62,13 +62,13 @@
                             <button
                             class="btn btn-sm"
                             :class="maquina.estado === 'Habilitado' ? 'btn-outline-danger' : 'btn-outline-success'"
-                            @click="openToggleStatusModal(maquina)"
+                            @click="cambiarEstado(maquina)"
                             >
                            <i class="bi" :class="maquina.estado === 'Habilitado' ? 'bi-x-circle' : 'bi-check-circle'"></i>
                            </button>
                         <button
                             class="btn btn-sm btn-outline-primary"
-                             @click="openEditMaquinaModal(maquina)"
+                             @click="editarMaquina(maquina)"
                             >
                                 <i class="bi bi-pencil"></i>
                             </button>
@@ -341,8 +341,8 @@ import axios from 'axios'
             fetchMaquinas();
          };
         // Confirmar cambiar estado maquina
-const openToggleStatusModal = (maquina) => {
-    console.log("openToggleStatusModal called with:", maquina)
+const cambiarEstado = (maquina) => {
+    console.log("cambiarEstado called with:", maquina)
     maquinaToToggle.value = maquina;
     isToggleStatusModalOpen.value = true;
 
@@ -401,8 +401,8 @@ const toggleStatus = async () => {
      }
 };
 // Editar maquina
-const openEditMaquinaModal = (maquina) => {
-  console.log("openEditMaquinaModal called with:", maquina);
+const editarMaquina = (maquina) => {
+  console.log("editarMaquina called with:", maquina);
   maquinaToEdit.value = { ...maquina };
     editAlertMessage.value = null; // Resetear mensaje de alerta
     editAlertClass.value = '';
