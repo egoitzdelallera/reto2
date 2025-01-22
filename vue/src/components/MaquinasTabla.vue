@@ -25,7 +25,7 @@
         <div class="table-container">
             <table class="table-auto">
                 <thead>
-                <tr class="table-lineas bg-secondary">
+                <tr class=" bg-secondary">
                     <th>ID</th>
                     <th>NOMBRE</th>
                     <th>DESCRIPCIÓN</th>
@@ -35,11 +35,11 @@
                     <th>ACCIONES</th>
                 </tr>
                 </thead>
-                <tbody class="table-body">
+                <tbody>
                 <tr
                     v-for="maquina in displayedMaquinas"
                     :key="maquina.id_maquina"
-                    class="table-lineas cursor-pointer"
+                    class=" cursor-pointer"
                     >
                     <td class="font-medium">{{ maquina.id_maquina }}</td>
                     <td class="font-medium">{{ maquina.nombre }}</td>

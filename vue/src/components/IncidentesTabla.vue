@@ -152,20 +152,11 @@
 
       <!-- Contenido principal -->
       <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
-        <button
-          v-show="!showFilters"
-          class="filter-toggle btn btn-primary mb-1"
-          :class="{ 'hidden': showFilters }"
-          @click="showFilters = true"
-        >
-          <i class="bi bi-funnel"></i> Filtros
-        </button>
-
         <h1 class="h2 mb-4">Incidencias</h1>
 
         <!-- Barra de búsqueda -->
-        <div class="mb-4">
-          <div class="input-group">
+        <div class="mb-4 d-flex justify-content-between align-items-center">
+          <div class="input-group w-50">
             <span class="input-group-text">
               <i class="bi bi-search"></i>
             </span>
@@ -176,6 +167,22 @@
               class="form-control"
             />
           </div>
+           <div>
+          <button
+            v-show="!showFilters"
+            class="filter-toggle btn btn-primary mb-1 me-2"
+            :class="{ 'hidden': showFilters }"
+            @click="showFilters = true"
+          >
+            <i class="bi bi-funnel"></i> Filtros
+          </button>
+           <button
+              class="btn btn-success mb-1"
+              @click="openModal = true"
+            >
+              <i class="bi bi-plus"></i> Crear Incidencia
+            </button>
+        </div>
         </div>
 
         <!-- Tabla -->
@@ -230,17 +237,101 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de creación de incidencia -->
+    <div class="modal fade" :class="{ show: openModal }" style="display: none;" >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Crear Incidencia</h5>
+            <button type="button" class="btn-close" @click="closeModal"></button>
+          </div>
+          <div class="modal-body">
+             <div class="mb-3">
+                <label class="form-label">Descripción de la Incidencia</label>
+                <textarea class="form-control" v-model="newIncidencia.descripcion"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Gravedad</label>
+              <select class="form-select" v-model="newIncidencia.gravedad">
+                <option value="Maquina parada">Maquina parada</option>
+                <option value="Maquina en marcha">Maquina en marcha</option>
+                <option value="Aviso">Aviso</option>
+                <option value="Mantenimiento">Mantenimiento</option>
+              </select>
+            </div>
+             <!-- Opciones adicionales para Mantenimiento -->
+            <div v-if="newIncidencia.gravedad === 'Mantenimiento'">
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Mantenimiento</label>
+                    <select class="form-select" v-model="newIncidencia.tipo_mantenimiento">
+                      <option v-for="tipo in tiposMantenimiento" :key="tipo.id_tipo_mantenimiento" :value="tipo.id_tipo_mantenimiento">{{tipo.nombre}}</option>
+                    </select>
+                </div>
+                  <div class="mb-3">
+                    <label class="form-label">Frecuencia de Mantenimiento</label>
+                    <select class="form-select" v-model="newIncidencia.frecuencia">
+                        <option value="diaria">Diaria</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="mensual">Mensual</option>
+                        <option value="anual">Anual</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Multimedia</label>
+              <input type="file" class="form-control" @change="handleMultimediaUpload" accept="image/*, video/*">
+               <div v-if="newIncidencia.multimedia">
+                    <div v-if="newIncidencia.multimedia.startsWith('data:image')">
+                    <img :src="newIncidencia.multimedia" alt="Imagen" style="max-width: 100px; max-height: 100px; margin-top: 5px;">
+                    </div>
+                    <div v-else-if="newIncidencia.multimedia.startsWith('data:video')">
+                        <video :src="newIncidencia.multimedia" controls width="100" height="100" style="margin-top: 5px;"></video>
+                    </div>
+                    <p style="margin-top: 5px;">Multimedia seleccionado</p>
+                </div>
+            </div>
+           <div class="mb-3">
+              <label class="form-label">Taller</label>
+              <select class="form-select" v-model="selectedTaller" @change="fetchMaquinas">
+                <option v-for="taller in talleres" :key="taller.id_taller" :value="taller.id_taller">{{ taller.nombre }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Máquina</label>
+                  <select class="form-select" v-model="newIncidencia.id_maquina" :disabled="!maquinas.length">
+                   <option v-for="maquina in maquinas" :key="maquina.id_maquina" :value="maquina.id_maquina">{{ maquina.nombre }}</option>
+                  </select>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
+            <button type="button" class="btn btn-primary" @click="createIncidencia">Crear Incidencia</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
 import useIncidencias from '@/composables/useIncidencias';
+import useTalleres from '@/composables/useTalleres';
+import useMaquinas from '@/composables/useMaquinas';
+import useTiposMantenimiento from '@/composables/useTiposMantenimiento';
 import { ref, reactive, computed } from 'vue';
 
 const router = useRouter();
 const showFilters = ref(false);
 const searchQuery = ref('');
+
+// Obtener datos
+const { incidencias, createIncidencia: createIncidenciaApi } = useIncidencias();
+const { talleres } = useTalleres();
+const { maquinas, fetchMaquinasByTallerId} = useMaquinas();
+const { tiposMantenimiento } = useTiposMantenimiento();
+
 
 const filters = reactive({
   gravedad: [
@@ -284,7 +375,6 @@ const toggleFilter = (filterName) => {
   openFilters[filterName] = !openFilters[filterName];
 };
 
-const { incidencias } = useIncidencias();
 
 const filteredIncidencias = computed(() => {
   return incidencias.value.filter((incidencia) => {
@@ -355,6 +445,68 @@ const getGravedadClass = (gravedad) => {
 const goToIncidencia = (id) => {
   router.push({ name: 'IncidenciaIndividual', params: { id: id } });
 };
+
+//MODAL DE CREAR INCIDENCIA
+const openModal = ref(false);
+const newIncidencia = reactive({
+  descripcion: '',
+  gravedad: 'Maquina parada',
+    tipo_mantenimiento: null,
+    frecuencia: null,
+    multimedia: null,
+    id_maquina: null,
+
+});
+
+const selectedTaller = ref(null);
+
+const closeModal = () => {
+  openModal.value = false;
+  resetNewIncidencia();
+};
+
+
+const resetNewIncidencia = () => {
+    newIncidencia.descripcion = '';
+    newIncidencia.gravedad = 'Maquina parada';
+    newIncidencia.tipo_mantenimiento = null;
+    newIncidencia.frecuencia = null;
+    newIncidencia.multimedia = null;
+    newIncidencia.id_maquina = null;
+    selectedTaller.value = null;
+};
+
+
+const handleMultimediaUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          newIncidencia.multimedia = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+};
+
+
+const createIncidencia = async () => {
+   try {
+    await createIncidenciaApi(newIncidencia);
+    closeModal();
+    } catch (error) {
+    console.error('Error al crear la incidencia:', error);
+    }
+};
+
+const fetchMaquinas = async () => {
+    if (selectedTaller.value) {
+        await fetchMaquinasByTallerId(selectedTaller.value);
+    } else {
+        maquinas.value = [];
+    }
+};
+
+
 </script>
 
 <style scoped>
@@ -404,8 +556,6 @@ const goToIncidencia = (id) => {
 }
 
 .filter-toggle {
-  width: 10%;
-  position: fixed;
   top: 10px;
   left: 10px;
   z-index: 1002;
@@ -419,7 +569,6 @@ const goToIncidencia = (id) => {
 .filter-toggle.hidden {
   transform: translateX(-100%);
 }
-
 
 /* Clases para las insignias */
 .badge {
@@ -483,4 +632,30 @@ const goToIncidencia = (id) => {
   background-color: #17a2b8;
   color: white;
 }
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-dialog{
+     max-width: 600px;
+     margin: 1.75rem auto;
+  }
 </style>
