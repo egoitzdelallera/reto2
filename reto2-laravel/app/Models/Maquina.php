@@ -17,24 +17,17 @@ class Maquina extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'ubicacion',
-        'id_taller',
-        'estado'
+        'id_taller', // Cambiado a id_taller
+        'prioridad',
     ];
 
     public function taller()
     {
-        return $this->belongsTo(Taller::class, 'id_taller', 'id_taller');
+        return $this->belongsTo(Taller::class, 'id_taller'); // Relación con Taller
     }
 
-    public function indidencias()
+    public function incidencias()
     {
         return $this->hasMany(Incidencia::class, 'id_maquina');
     }
-
-    public function campus()
-    {
-        return $this->belongsTo(Campus::class, 'id_campus');
-    }
-
 }
