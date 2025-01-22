@@ -1,104 +1,241 @@
 <template>
-  <div class="incidencias-container flex">
-    <!-- Panel de filtros (a la izquierda) -->
-    <transition name="slide">
-      <div v-if="showFilters" class="filter-sidebar w-52 bg-white p-3 shadow-lg overflow-y-auto h-screen fixed left-0 top-0 z-10">
-        <h2 class="text-lg font-bold mb-3">Filtros</h2>
-        <button @click="showFilters = false" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">
-          <span class="sr-only">Cerrar filtros</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-        
-        <!-- Filtros -->
-        <div class="filters">
-          <div v-for="(options, filterType) in filters" :key="filterType" class="filter-section mb-2">
-            <button 
-              class="btn btn-outline-secondary w-full text-left flex justify-between items-center text-sm"
-              @click="toggleFilter(filterType)"
-            >
-              <span>{{ filterType.toUpperCase() }}</span>
-              <i :class="['bi', openFilters[filterType] ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
-            </button>
-            <div class="filter-content mt-2" v-show="openFilters[filterType]">
-              <div v-for="option in options" :key="option.value" class="form-check">
-                <input
-                  :id="filterType + '-' + option.value"
-                  type="checkbox"
-                  :value="option.value"
-                  v-model="selectedFilters[filterType]"
-                  class="form-check-input"
-                />
-                <label :for="filterType + '-' + option.value" class="form-check-label">{{ option.label }}</label>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <div class="bg-primary min-vh-100 m-0">
+    <!-- Header -->
+    <header class="bg-primary shadow-sm py-3 mb-4 border-bottom">
+      <div class="container">
+        <div class="d-flex justify-content-start align-items-center">
+          <button class="btn btn-link btn-sm p-0 text-info" style="text-decoration: none; width: auto;">
+            <i class="bi bi-arrow-left me-2 btn btn-outline-info"></i>Atrás
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+          <!-- Incident Card -->
+          <div class="card mb-4 bg-primary">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <h2 class="h1 mb-0 ">{{ incident.title }}</h2>
+                    <div><button class="btn btn-link p-0 text-info">
+                      <i class="bi bi-bookmark"></i>
+                    </button></div>
+                  </div>
+                  <div class="mt-2">
+                    <span class="badge bg-danger me-2">{{ incident.machineStatus }}</span>
+                    <span class="badge bg-success">{{ incident.enabledStatus }}</span>
+                  </div>
+                </div>
+                <span class="badge bg-warning text-dark">Prioridad {{ incident.priority }}</span>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <h6 class="text-muted ">Máquina</h6>
+                  <p>{{ incident.machine }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-muted">Estado</h6>
+                  <p>{{ incident.status }}</p>
+                </div>
+                <div class="col-12">
+                  <h6 class="text-muted">Descripción</h6>
+                  <p>{{ incident.description }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-muted">Fecha</h6>
+                  <p>{{ incident.date }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-muted">Tipo de avería</h6>
+                  <p>{{ incident.failureType }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-muted">Taller</h6>
+                  <p>{{ incident.workshop }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-muted">Campus</h6>
+                  <p>{{ incident.campus }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs Card -->
+          <div class="card bg-primary">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Detalles de la incidencia</h3>
+
+              <ul class="nav nav-tabs mb-4">
+                <li class="nav-item " v-for="tab in tabs" :key="tab">
+                  <button
+                    class="nav-link bg-primary"
+                    :class="{ active: activeTab === tab }"
+                    @click="activeTab = tab"
+                  >
+                    {{ tab }}
+                  </button>
+                </li>
+              </ul>
+
+              <!-- Operator Tab -->
+              <div v-if="activeTab === 'Operario'" class="tab-content">
+                <div class="d-flex align-items-center mb-4">
+                  <div class="rounded-circle bg-secondary" style="width: 64px; height: 64px;"></div>
+                  <div class="ms-3">
+                    <h4 class="h5 mb-1">{{ operator.name }}</h4>
+                    <p class="text-muted mb-0">{{ operator.role }}</p>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Correo Electrónico</h6>
+                    <p>{{ operator.email }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Teléfono</h6>
+                    <p>{{ operator.phone }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phases Tab -->
+              <div v-else-if="activeTab === 'Fases'" class="tab-content">
+                <div v-for="(phase, index) in phasesDetails" :key="index" class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="h5 mb-0">Título Fase {{ index + 1 }} - {{ phase.title }}</h4>
+                    <span :class="['badge', phase.status === 'Completada' ? 'bg-success' : 'bg-warning']">
+                      {{ phase.status }}
+                    </span>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Fecha de Inicio</h6>
+                      <p>{{ phase.startDate }}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Fecha de Final</h6>
+                      <p>{{ phase.endDate }}</p>
+                    </div>
+                  </div>
+
+                  <h6 class="text-muted">Descripción</h6>
+                  <p>{{ phase.description }}</p>
+                  <button @click="asignarme" class="btn btn-primary mb-3">Asignarme fase {{ index + 1 }}</button>
+
+                  <h6 class="text-muted mt-3">Técnicos</h6>
+                  <div class="row g-3">
+                    <div v-for="(tech, techIndex) in phase.technicians" :key="techIndex" class="col-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-secondary" style="width: 48px; height: 48px;"></div>
+                            <div class="ms-3">
+                              <h5 class="card-title mb-1">{{ tech.name }}</h5>
+                              <p class="text-muted mb-0">{{ tech.role }}</p>
+                            </div>
+                          </div>
+                          <div class="row g-2">
+                            <div class="col-md-6">
+                              <p class="mb-1"><small class="text-muted">Email:</small> {{ tech.email }}</p>
+                              <p class="mb-1"><small class="text-muted">Teléfono:</small> {{ tech.phone }}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p class="mb-1"><small class="text-muted">Ubicación:</small> {{ tech.location }}</p>
+                              <p class="mb-1"><small class="text-muted">Dirección:</small> {{ tech.address }}</p>
+                            </div>
+                          </div>
+                          <span class="badge bg-success mt-2">Habilitado</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Machine Tab -->
+              <div v-else-if="activeTab === 'Máquina'" class="tab-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div>
+                    <h4 class="h5 mb-1">{{ machine.name }}</h4>
+                    <span class="badge bg-warning text-dark">{{ machine.priority }}</span>
+                  </div>
+                  <span class="badge bg-success">Habilitado</span>
+                </div>
+
+                <h6 class="text-muted">Ubicación</h6>
+                <p class="mb-1">Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava</p>
+                <p class="mb-3">{{ machine.address }}</p>
+
+                <h6 class="text-muted">Descripción</h6>
+                <p class="mb-3">{{ machine.description }}</p>
+
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Taller</h6>
+                    <p>{{ machine.workshop }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Teléfono</h6>
+                    <p>{{ machine.phone }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
 
-    <!-- Contenido principal -->
-    <div class="flex-grow ml-0 transition-all duration-300" :class="{ 'ml-52': showFilters }">
-      <!-- Botón para mostrar/ocultar los filtros -->
-      <button class="btn btn-primary mb-3" @click="showFilters = !showFilters">
-        <i class="bi bi-funnel"></i> Filtros
-      </button>
+        <!-- Phases Sidebar -->
+        <div class="col-lg-4">
+          <div class="card bg-primary">
+            <div class="card-body">
+              <div v-for="(phase, index) in phases" :key="index" class="mb-4">
+                <div class="d-flex align-items-center mb-2">
+                  <div
+                    class="rounded-circle me-2"
+                    :class="phase.status === 'Completada' ? 'bg-success' : 'bg-warning'"
+                    style="width: 12px; height: 12px;"
+                  ></div>
+                  <h5 class="mb-0">Fase {{ index + 1 }}</h5>
+                  <span
+                    class="badge ms-2"
+                    :class="phase.status === 'Completada' ? 'bg-success' : 'bg-warning'"
+                  >
+                    {{ phase.status }}
+                  </span>
+                </div>
+                <p class="text-muted small mb-2">{{ phase.dateRange }}</p>
+                <p class="mb-2">{{ phase.description }}</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <span
+                    v-for="(tag, tagIndex) in phase.tags"
+                    :key="tagIndex"
+                    class="badge bg-info text-dark"
+                  >
+                    {{ tag }}
+                  </span>
+                </div>
+              </div>
 
-      <h1 class="text-2xl font-bold mb-6">Incidencias</h1>
+              <!-- Phase 3 with Assign Button -->
+              <div v-if="showAssignButton" class="mb-4">
+                <button class="btn btn-secondary w-100">Ver Fases</button>
+              </div>
 
-      <!-- Barra de búsqueda -->
-      <div class="search-container mb-6">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            v-model="searchQuery"
-            class="search-input w-full p-2 pl-10 rounded border"
-          />
-          <SearchIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-        </div>
-      </div>
-
-      <!-- Tabla -->
-      <div class="table-container">
-        <div class="table-header grid grid-cols-8 gap-4 font-bold bg-gray-100 p-2">
-          <div>TÍTULO</div>
-          <div>ESTADO</div>
-          <div>PRIORIDAD</div>
-          <div>FECHA</div>
-          <div>MÁQUINA</div>
-          <div>CREADOR</div>
-          <div>TÉCNICO</div>
-          <div>GRAVEDAD</div>
-        </div>
-
-        <div class="table-body">
-          <div
-            v-for="(incidencia, i) in filteredIncidents"
-            :key="i"
-            class="table-row grid grid-cols-8 gap-4 cursor-pointer hover:bg-gray-50 p-2"
-            @click="goToIncidencia(incidencia.id_incidencia)"
-          >
-            <div class="font-medium">{{ incidencia.descripcion }}</div>
-            <div>
-              <span :class="['status-badge', getEstadoClass(incidencia.estado)]">
-                {{ incidencia.estado }}
-              </span>
-            </div>
-            <div>
-              <span :class="['status-badge', getPrioridadClass(incidencia.maquina.prioridad)]">
-                {{ incidencia.maquina.prioridad }}
-              </span>
-            </div>
-            <div>{{ incidencia.fecha_reporte }}</div>
-            <div>{{ incidencia.maquina.nombre }}</div>
-            <div>{{ incidencia.creador.nombre }}</div>
-            <div>{{ incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar' }}</div>
-            <div>
-              <span :class="[getGravedadClass(incidencia.gravedad)]">
-                {{ incidencia.gravedad }}
-              </span>
+              <!-- Action Buttons -->
+              <div class="d-grid gap-2">
+                <button class="btn btn-success">Finalizar la Fase 3</button>
+                <button class="btn btn-secondary">Finalizar Incidencia</button>
+              </div>
             </div>
           </div>
         </div>
@@ -108,146 +245,126 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { SearchIcon } from 'lucide-vue-next';
+import { ref } from 'vue';
 
-const router = useRouter();
-const showFilters = ref(false);
-const searchQuery = ref('');
+// Reusing your existing data structure
+const activeTab = ref('Operario');
+const tabs = ['Operario', 'Fases', 'Máquina'];
 
-const filters = reactive({
-  gravedad: [
-    { value: 'alta', label: 'Alta' },
-    { value: 'media', label: 'Media' },
-    { value: 'baja', label: 'Baja' }
-  ],
-  prioridad: [
-    { value: '01', label: 'Alta' },
-    { value: '02', label: 'Media' },
-    { value: '03', label: 'Baja' }
-  ],
-  campus: [
-    { value: 'Taller A', label: 'Taller A' },
-    { value: 'Taller B', label: 'Taller B' },
-    { value: 'Taller C', label: 'Taller C' }
-  ],
-  estado: [
-    { value: 'En Curso', label: 'En Curso' },
-    { value: 'Pendiente', label: 'Pendiente' },
-    { value: 'Completado', label: 'Completado' }
-  ]
-});
-
-const selectedFilters = reactive({
-  gravedad: [],
-  prioridad: [],
-  campus: [],
-  estado: []
-});
-
-const openFilters = reactive({
-  gravedad: false,
-  prioridad: false,
-  campus: false,
-  estado: false
-});
-
-const toggleFilter = (filterName) => {
-  openFilters[filterName] = !openFilters[filterName];
+const incident = {
+  title: 'Título incidencia',
+  priority: 'Alta',
+  machineStatus: 'Máquina parada',
+  enabledStatus: 'Habilitado',
+  machine: 'Torno PM74',
+  status: 'En Proceso',
+  description:
+    'He tenido un problema con el torno y e tenido un problema con el torno y e tenido un problema con el torno y e tenido un problema con el torno y problema con el torno.',
+  date: 'Hace 3 días',
+  failureType: 'Neumática',
+  workshop: 'Taller Neumática',
+  campus: 'Arriaga'
 };
 
-// Mock data for incidents (replace this with actual data fetching logic)
-const incidents = ref([
+const operator = {
+  name: 'Pepe Lopez Gomez',
+  role: 'Operario',
+  email: 'pepe@gmail.com',
+  phone: '630 63 06 30'
+};
+
+const phases = [
   {
-    id_incidencia: 1,
-    descripcion: 'Fallo en máquina A',
-    estado: 'En Curso',
-    maquina: { prioridad: '01', nombre: 'Máquina A' },
-    fecha_reporte: '2023-05-20',
-    creador: { nombre: 'Juan Pérez' },
-    tecnico: { nombre: 'Ana García' },
-    gravedad: 'alta'
+    status: 'Completada',
+    dateRange: '2 de Agosto / 14 de Agosto',
+    description: 'Título fase 1 - He cambiado el ac...',
+    tags: ['Alfredo Fernandez']
   },
-  // Add more mock incidents as needed
-]);
-
-const filteredIncidents = computed(() => {
-  return incidents.value.filter((incidencia) => {
-    const matchesSearch = Object.values(incidencia).some(value =>
-      value && value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-
-    const matchesFilters = 
-      (selectedFilters.gravedad.length === 0 || selectedFilters.gravedad.includes(incidencia.gravedad)) &&
-      (selectedFilters.prioridad.length === 0 || selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
-      (selectedFilters.campus.length === 0 || selectedFilters.campus.includes(incidencia.maquina.nombre)) &&
-      (selectedFilters.estado.length === 0 || selectedFilters.estado.includes(incidencia.estado));
-
-    return matchesSearch && matchesFilters;
-  });
-});
-
-const getEstadoClass = (estado) => {
-  // Implement this function based on your requirements
-  switch (estado) {
-    case 'En Curso': return 'bg-yellow-200 text-yellow-800';
-    case 'Pendiente': return 'bg-red-200 text-red-800';
-    case 'Completado': return 'bg-green-200 text-green-800';
-    default: return '';
+  {
+    status: 'Completada',
+    dateRange: '14 de Agosto / 20 de Agosto',
+    description: 'Título fase 2 - He cambiado el ac...',
+    tags: ['Alfredo Fernandez', 'Vicente Abad', 'Maite Lezama']
+  },
+  {
+    status: 'En Proceso',
+    dateRange: '20 de Agosto ',
+    description: 'Título fase 3 - He cambiado el ac...'
   }
-};
+];
 
-const getPrioridadClass = (prioridad) => {
-  // Implement this function based on your requirements
-  switch (prioridad) {
-    case '01': return 'bg-red-200 text-red-800';
-    case '02': return 'bg-yellow-200 text-yellow-800';
-    case '03': return 'bg-green-200 text-green-800';
-    default: return '';
+const showAssignButton = true;
+
+const phasesDetails = [
+  {
+    title: 'He cambiado el ac...',
+    status: 'Completada',
+    startDate: '7 de Octubre del 2024',
+    endDate: '9 de Octubre del 2024',
+    description:
+      'Descripción de la fase 1 descripción de la fase 1, descripción de la fase 1 descripción de la fase 1',
+    technicians: [
+      {
+        name: 'Alfredo Fernandez',
+        role: 'Técnico',
+        email: 'alfredo@gmail.com',
+        phone: '630 63 06 30',
+        location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
+        address: 'Pozoa Kalea, s/n, 01013 Gasteiz, Araba'
+      }
+    ]
+  },
+  {
+    title: 'He cambiado el ac...',
+    status: 'Completada',
+    startDate: '13 de Octubre del 2024',
+    endDate: '20 de Octubre del 2024',
+    description: 'Descripción de la fase 2 descripción de la fase 2, descripción de la fase 2',
+    technicians: [
+      {
+        name: 'Alfredo Fernandez',
+        role: 'Técnico',
+        email: 'alfredo@gmail.com',
+        phone: '630 63 06 30',
+        location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
+        address: 'Pozoa Kalea, s/n, 01013 Gasteiz, Araba'
+      },
+      {
+        name: 'Vicente Abad',
+        role: 'Técnico',
+        email: 'vicente@gmail.com',
+        phone: '630 63 06 30',
+        location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
+        address: 'Pozoa Kalea, s/n, 01013 Gasteiz, Araba'
+      },
+      {
+        name: 'Maite Lezama',
+        role: 'Técnico',
+        email: 'maite@gmail.com',
+        phone: '630 63 06 30',
+        location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
+        address: 'Pozoa Kalea, s/n, 01013 Gasteiz, Araba'
+      }
+    ]
+  },
+  {
+    status: 'En Proceso',
+    dateRange: '20 de Agosto '
   }
-};
+];
 
-const getGravedadClass = (gravedad) => {
-  // Implement this function based on your requirements
-  switch (gravedad) {
-    case 'alta': return 'text-red-600 font-bold';
-    case 'media': return 'text-yellow-600 font-bold';
-    case 'baja': return 'text-green-600 font-bold';
-    default: return '';
-  }
-};
-
-const goToIncidencia = (id) => {
-  router.push({ name: 'IncidenciaIndividual', params: { id: id } });
+const machine = {
+  name: 'Brazo Robótico PM74',
+  priority: 'Prioridad Alta',
+  address: 'Pozoa Kalea, s/n, 01013 Gasteiz, Araba',
+  description:
+    'Descripción de la máquina descripción de la máquina, descripción de la máquina descripción de la máquina, máquina, descripción de la máquina descripción de la máquina descripción de la máquina.',
+  workshop: 'Taller A',
+  phone: '630 63 06 30'
 };
 </script>
-
 <style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s ease;
+main{
+  padding: 0px;
 }
-
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateX(-100%);
-}
-
-.filter-sidebar {
-  transition: transform 0.3s ease;
-}
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.status-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
 </style>
