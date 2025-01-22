@@ -1,215 +1,239 @@
 <template>
-  <div class="incident-detail">
-    <header class="header">
-      <div class="container">
-        <h1 class="header-title">Detalle Incidencia</h1>
-      </div>
-    </header>
-
-    <main class="container main-content">
-      <button class="back-button" @click="$router.go(-1)">Atrás</button>
-
-      <div class="content-grid">
-        <div class="main-info">
-          <div class="card">
-            <div class="card-header">
-              <div class="title-container">
-                <h2 class="incident-title">{{ incidencia.descripcion }}</h2>
-                <button class="bookmark-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
-                </button>
-              </div>
-              <div class="status-container">
-                <span class="priority">Prioridad {{ incidencia.gravedad }}</span>
-                <span :class="['status', 'status-red', {'status-red': incidencia.maquina?.estado == 'Deshabilitado'}, {'status-green': incidencia.maquina?.estado == 'Habilitado'}]">{{ incidencia.maquina?.estado }}</span>
-                <span :class="['status', 'status-green', {'status-green': incidencia.estado == 'Habilitado'}, {'status-red': incidencia.estado == 'Deshabilitado'}]">{{ incidencia.estado }}</span>
-              </div>
-            </div>
-
-            <div class="card-content">
-              <div class="info-grid">
-                <div class="info-item">
-                  <h3 class="info-label">Máquina</h3>
-                  <p class="info-value">{{ incidencia.maquina?.nombre }}</p>
-                </div>
-                <div class="info-item">
-                  <h3 class="info-label">Estado</h3>
-                  <p class="info-value">{{ incidencia.estado }}</p>
-                </div>
-              </div>
-
-              <div class="info-item">
-                <h3 class="info-label">Descripción</h3>
-                <p class="info-value">{{ incidencia.descripcion }}</p>
-              </div>
-
-              <div class="info-grid">
-                <div class="info-item">
-                  <h3 class="info-label">Fecha de Reporte</h3>
-                  <p class="info-value">{{ incidencia.fecha_reporte }}</p>
-                </div>
-                <div class="info-item">
-                  <h3 class="info-label">Tipo de avería</h3>
-                  <p class="info-value">{{ incidencia.tipo_averia?.nombre }}</p>
-                </div>
-              </div>
-
-              <div class="info-grid">
-                <div class="info-item">
-                  <h3 class="info-label">Taller</h3>
-                  <p class="info-value">{{ incidencia.maquina?.taller?.nombre }}</p>
-                </div>
-                <div class="info-item">
-                  <h3 class="info-label">Campus</h3>
-                  <p class="info-value">{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
-                </div>
-              </div>
-            </div>
+    <link href="../assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  
+    <div class="bg-primary min-vh-100 m-0">
+      <!-- Header -->
+      <header class="bg-primary shadow-sm py-3 mb-4 border-bottom">
+        <div class="container">
+          <div class="d-flex justify-content-start align-items-center">
+            <button class="btn btn-link btn-sm p-0 text-info" style="text-decoration: none; width: auto;">
+              <i class="bi bi-arrow-left me-2 btn btn-outline-info"></i>Atrás
+            </button>
           </div>
-
-          <div class="card">
-            <h2 class="card-title">Detalles de la incidencia</h2>
-            <div class="tabs">
-              <button
-                v-for="tab in tabs"
-                :key="tab"
-                @click="activeTab = tab"
-                :class="{ active: activeTab === tab }"
-                class="tab-button"
-              >
-                {{ tab }}
-              </button>
-            </div>
-            <div class="tab-content">
-              <div v-if="activeTab === 'Operario'" class="operator-info">
-                <div class="operator-header">
-                  <div class="operator-avatar"></div>
-                  <div class="operator-details">
-                    <h3>{{ incidencia.creador?.nombre }} {{ incidencia.creador?.apellido }}</h3>
-                    <p>{{ incidencia.creador?.rol }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 text-white">{{ incidencia.descripcion }}</h1>
+          </div>  
+        </div>
+      </header>
+  
+      <div class="container">
+        <div class="row g-4">
+          <!-- Main Content -->
+          <div class="col-lg-8">
+            <!-- Incident Card -->
+            <div class="card mb-4 bg-primary">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <div class="d-flex align-items-center gap-2">
+                      <h2 class="h1 mb-0 ">{{ incidencia.nombre }}</h2>
+                      <div><button class="btn btn-link p-0 text-info">
+                        <i class="bi bi-bookmark"></i>
+                      </button></div>
+                    </div>
+                    <div class="mt-2">
+                      <span class="badge bg-danger me-2">{{ incidencia.maquina?.estado }}</span>
+                      <span class="badge bg-success">{{ incidencia.estado }}</span>
+                    </div>
                   </div>
+                  <span class="badge bg-warning text-dark">Prioridad {{ incidencia.gravedad }}</span>
                 </div>
-                <div class="operator-contact">
-                  <div class="contact-item">
-                    <h4>Correo Electrónico</h4>
-                    <p>{{ incidencia.creador?.correo }}</p>
+  
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <h6 class="text-muted ">Máquina</h6>
+                    <p>{{ incidencia.maquina?.nombre }}</p>
                   </div>
-                  <!-- ... (Otros datos del operario si es necesario) ... -->
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Estado</h6>
+                    <p>{{ incidencia.estado }}</p>
+                  </div>
+                  <div class="col-12">
+                    <h6 class="text-muted">Descripción</h6>
+                    <p>{{ incidencia.descripcion }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Fecha</h6>
+                    <p>{{ incidencia.fecha_reporte }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Tipo de avería</h6>
+                    <p>{{ incidencia.tipo_averia?.nombre }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Taller</h6>
+                    <p>{{ incidencia.maquina?.taller?.nombre }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Campus</h6>
+                    <p>{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
+                  </div>
                 </div>
               </div>
-              <div v-else-if="activeTab === 'Fases'" class="phases-tab">
-                <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="phase-detail">
-                  <div class="phase-detail-header">
-                    <h3>Título Fase {{ index + 1 }} - {{ fase.nombre }}</h3>
-                     <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">{{ fase.estado }}</span>
+            </div>
+  
+            <!-- Tabs Card -->
+            <div class="card bg-primary">
+              <div class="card-body">
+                <h3 class="card-title mb-4">Detalles de la incidencia</h3>
+  
+                <ul class="nav nav-tabs mb-4">
+                  <li class="nav-item flex-fill" v-for="tab in tabs" :key="tab">
+                    <button
+                      @click="activeTab = tab"
+                      :class="{ active: activeTab === tab }"
+                      class="tab-button w-100"
+                    >
+                      {{ tab }}
+                    </button>
+                  </li>
+                </ul>
+  
+                <!-- Operator Tab -->
+                <div v-if="activeTab === 'Operario'" class="tab-content">
+                  <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle bg-secondary" style="width: 64px; height: 64px;"></div>
+                    <div class="ms-3">
+                      <h4 class="h5 mb-1">{{ incidencia.creador?.nombre }} {{ incidencia.creador?.apellido }}</h4>
+                      <p class="text-muted mb-0">{{ incidencia.creador?.rol }}</p>
+                    </div>
                   </div>
-
-                  <div class="phase-info">
-                    <div class="phase-dates">
-                      <div class="date-item">
-                        <h4>Fecha de Inicio de Fase {{ index + 1 }}</h4>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Correo Electrónico</h6>
+                      <p>{{ incidencia.creador?.correo }}</p>
+                    </div>
+                  </div>
+                </div>
+  
+                <!-- Phases Tab -->
+                <div v-else-if="activeTab === 'Fases'" class="tab-content">
+                  <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h4 class="h5 mb-0">Título Fase {{ index + 1 }} - {{ fase.nombre }}</h4>
+                      <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">
+                        {{ fase.estado }}
+                      </span>
+                    </div>
+  
+                    <div class="row g-3 mb-3">
+                      <div class="col-md-6">
+                        <h6 class="text-muted">Fecha de Inicio</h6>
                         <p>{{ fase.fecha_inicio }}</p>
                       </div>
-                      <div v-if="fase.fecha_fin" class="date-item">
-                        <h4>Fecha de Final de Fase {{ index + 1 }}</h4>
+                      <div v-if="fase.fecha_fin" class="col-md-6">
+                        <h6 class="text-muted">Fecha de Final</h6>
                         <p>{{ fase.fecha_fin }}</p>
                       </div>
                     </div>
-
-                    <div class="phase-description">
-                      <h4>Descripción de la fase {{ index + 1 }}</h4>
-                      <p>{{ fase.descripcion }}</p>
-                    </div>
-
-                    <div class="technicians">
-                      <h4>Técnicos de la Fase {{ index + 1 }}</h4>
-                      <div class="technician-list">
-                         <div class="technician-card">
-                            <div class="technician-avatar"></div>
-                            <div class="technician-info">
+  
+                    <h6 class="text-muted">Descripción</h6>
+                    <p>{{ fase.descripcion }}</p>
+                    <button @click="asignarme" class="btn btn-primary mb-3">Asignarme fase {{ index + 1 }}</button>
+  
+                    <h6 class="text-muted mt-3">Técnicos</h6>
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="rounded-circle bg-secondary" style="width: 48px; height: 48px;"></div>
+                              <div class="ms-3">
                                 <h5 v-html="fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join('<br>')"></h5>
+                              </div>
                               <div class="contact-info">
                                 <p>{{ fase.tecnicos_fases_incidencias[0]?.tecnico?.correo }}</p>
                               </div>
-                                <span class="status status-green">Habilitado</span>
                             </div>
-                         </div>
+                            <span class="badge bg-success mt-2">Habilitado</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div v-else-if="activeTab === 'Máquina'" class="machine-tab">
-                <div class="machine-header">
-                  <div class="machine-title">
-                    <h3>{{ incidencia.maquina?.nombre }}</h3>
-                    <span class="priority">{{ incidencia.maquina?.prioridad }}</span>
-                  </div>
-                  <span :class="['status', 'status-green', {'status-green': incidencia.maquina?.estado == 'Habilitado'}, {'status-red': incidencia.maquina?.estado == 'Deshabilitado'}]">Habilitado</span>
-                </div>
+  
+                <!-- Machine Tab -->
+                <div v-else-if="activeTab === 'Máquina'" class="tab-content">
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      <h4 class="h5 mb-1">{{ incidencia.maquina?.nombre }}</h4>
+                      <span class="badge bg-warning text-dark">{{ incidencia.maquina?.prioridad }}</span>
+                    </div>
+                    <span 
+                      class="badge" 
+                      :class="{
+                        'bg-success': incidencia.maquina?.estado === 'Habilitado',
+                        'bg-danger': incidencia.maquina?.estado === 'Deshabilitado'
+                      }"
+                    >
+                      {{ incidencia.maquina?.estado }}
+                    </span>
 
-                <div class="machine-info">
-                  <div class="location-info">
-                     <h4>{{ incidencia.maquina?.campus?.nombre }} → {{ incidencia.maquina?.ubicacion }}</h4>
-                   <!--   <p>{{ incidencia.maquina.address }}</p>-->
                   </div>
-
-                  <div class="machine-description">
-                    <h4>Descripción de la máquina</h4>
-                    <p>{{ incidencia.maquina?.descripcion }}</p>
-                  </div>
-
-                  <div class="contact-grid">
-                    <div class="contact-item">
-                      <h4>Taller</h4>
+  
+                  <h6 class="text-muted">Ubicación</h6>
+                  <p class="mb-1">{{ incidencia.maquina?.taller?.campus?.nombre }} → {{ incidencia.maquina?.taller?.campus?.ubicacion }}</p>
+  
+                  <h6 class="text-muted">Descripción</h6>
+                  <p class="mb-3">{{ incidencia.maquina?.descripcion }}</p>
+  
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Taller</h6>
                       <p>{{ incidencia.maquina?.taller?.nombre }}</p>
                     </div>
-                   <!-- <div class="contact-item">
-                      <h4>Teléfono</h4>
-                      <p>{{ incidencia.maquina?.telefono }}</p>
-                    </div>-->
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-       <div class="phases">
-          <div class="card">
-                <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="phase">
-                  <div class="phase-header">
-                    <div class="phase-title">
-                      <div class="phase-dot" :class="fase.estado?.toLowerCase()"></div>
-                      <h3>Fase {{ index + 1 }}</h3>
-                      <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">{{ fase.estado }}</span>
-                    </div>
-                    <span class="phase-date">{{ fase.fecha_inicio }} / {{ fase.fecha_fin }}</span>
+  
+          <!-- Phases Sidebar -->
+          <div class="col-lg-4">
+            <div class="card bg-primary">
+              <div class="card-body">
+                <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
+                  <div class="d-flex align-items-center mb-2">
+                    <div
+                      class="rounded-circle me-2"
+                      :class="fase.estado?.toLowerCase()"
+                      style="width: 12px; height: 12px;"
+                    ></div>
+                    <h5 class="mb-0">Fase {{ index + 1 }}</h5>
+                    <span
+                      class="badge ms-2"
+                      :class="['status', `status-${fase.estado?.toLowerCase()}`]"
+                    >
+                      {{ fase.estado }}
+                    </span>
                   </div>
-                    <p class="phase-description">{{ fase.descripcion }}</p>
-                    <div class="phase-tags">
-                        <span class="tag">{{ fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join(', ') }}</span>
-                      </div>
+                  <p class="text-muted small mb-2">{{ fase.fecha_inicio }} / {{ fase.fecha_fin }}</p>
+                  <p class="mb-2">{{ fase.descripcion }}</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tag">{{ fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join(', ') }}</span>
+                  </div>
                 </div>
-             <!--   <div v-if="showAssignButton" class="phase">
-              <div class="phase-header">
-                <div class="phase-title">
-                  <div class="phase-dot"></div>
-                  <h3>Fase 3</h3>
-                  <span class="status status-orange">En Progreso</span>
+  
+                <!-- Phase 3 with Assign Button -->
+                <div v-if="showAssignButton" class="mb-4">
+                  <button class="btn btn-secondary w-100">Ver Fases</button>
                 </div>
-                <span class="phase-date">2 de Agosto / 14 de Agosto</span>
+  
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                  <button class="btn btn-success">Finalizar la Fase 3</button>
+                  <button class="btn btn-secondary">Finalizar Incidencia</button>
+                </div>
               </div>
-              <p class="phase-description">No asignado</p>
-              <button class="assign-button">Asignarme en la Fase 3</button>
-             </div>-->
             </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</template>
-
+  </template>
+  
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -240,7 +264,8 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style scoped>
-/* ... ( Tus estilos CSS ) ... */
-</style>
+  <style scoped>
+  main{
+    padding: 0px;
+  }
+  </style>

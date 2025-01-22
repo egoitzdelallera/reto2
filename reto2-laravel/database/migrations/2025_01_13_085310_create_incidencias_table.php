@@ -30,6 +30,42 @@ return new class extends Migration
             $table->foreign('id_tipo_mantenimiento')->references('id_tipo_mantenimiento')->on('tipo_mantenimiento')->onDelete('cascade');
             $table->foreign('id_tipo_averia')->references('id_tipo_averia')->on('tipo_averia')->onDelete('cascade');
         });
+
+        // Crear el trigger para BEFORE INSERT
+        DB::unprepared("
+            CREATE TRIGGER before_incidencias_insert
+            BEFORE INSERT ON incidencias
+            FOR EACH ROW
+            BEGIN
+                IF NEW.gravedad != 'Mantenimiento' THEN
+                    SET NEW.id_tipo_mantenimiento = NULL;
+                    SET NEW.frecuencia = NULL;
+                ELSE
+                    IF NEW.id_tipo_mantenimiento IS NULL THEN
+                        SIGNAL SQLSTATE '45000'
+                        SET MESSAGE_TEXT = 'id_tipo_mantenimiento no puede ser NULL si la gravedad es Mantenimiento';
+                    END IF;
+                END IF;
+            END;
+        ");
+
+        // Crear el trigger para BEFORE UPDATE
+        DB::unprepared("
+            CREATE TRIGGER before_incidencias_update
+            BEFORE UPDATE ON incidencias
+            FOR EACH ROW
+            BEGIN
+                IF NEW.gravedad != 'Mantenimiento' THEN
+                    SET NEW.id_tipo_mantenimiento = NULL;
+                    SET NEW.frecuencia = NULL;
+                ELSE
+                    IF NEW.id_tipo_mantenimiento IS NULL THEN
+                        SIGNAL SQLSTATE '45000'
+                        SET MESSAGE_TEXT = 'id_tipo_mantenimiento no puede ser NULL si la gravedad es Mantenimiento';
+                    END IF;
+                END IF;
+            END;
+        ");
     }
 
     /**
@@ -38,5 +74,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('incidencias');
+        DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_insert");
+        DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_update");
     }
 };

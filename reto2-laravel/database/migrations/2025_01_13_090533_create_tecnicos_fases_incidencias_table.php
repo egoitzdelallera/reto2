@@ -19,8 +19,6 @@ return new class extends Migration
         });
 
         DB::unprepared('
-            DELIMITER //
-            
             CREATE TRIGGER checkear_rol_tecnico
             BEFORE INSERT ON tecnicos_fases_incidencias
             FOR EACH ROW
@@ -34,10 +32,41 @@ return new class extends Migration
                 IF user_role NOT IN ("Técnico", "Administrador") THEN
                     SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "El usuario no tiene un rol válido para ser asignado a una fase.";
                 END IF;
-            END //
-            
-            DELIMITER ;
-            ');
+            END;
+        ');
+
+        DB::unprepared('
+            CREATE OR REPLACE TRIGGER before_asignar_persona_a_fase
+            BEFORE INSERT ON tecnicos_fases_incidencias
+            FOR EACH ROW
+            BEGIN
+                DECLARE fase_estado VARCHAR(255);
+                DECLARE usuario_rol VARCHAR(255);
+
+                -- Obtener el estado de la fase
+                SELECT estado INTO fase_estado
+                FROM fases_incidencias
+                WHERE id_fase_incidencia = NEW.id_fase_incidencia;
+
+                -- Obtener el rol del usuario
+                SELECT rol INTO usuario_rol
+                FROM users
+                WHERE id_usuario = NEW.id_tecnico;
+
+                -- Verificar si la fase está completada
+                IF fase_estado = "Completada" THEN
+                    SIGNAL SQLSTATE "45000"
+                    SET MESSAGE_TEXT = "No se pueden asignar personas a una fase que ya está completada.";
+                END IF;
+
+                -- Verificar si el usuario es un operario
+                IF usuario_rol = "Operario" THEN
+                    SIGNAL SQLSTATE "45000"
+                    SET MESSAGE_TEXT = "Los operarios no pueden asignarse a una fase.";
+                END IF;
+            END;
+
+        ');
     }
 
     /**
@@ -48,5 +77,7 @@ return new class extends Migration
         Schema::dropIfExists('tecnicos_fases_incidencias');
 
         DB::unprepared('DROP TRIGGER IF EXISTS checkear_rol_tecnico');
+        DB::unprepared("DROP TRIGGER IF EXISTS before_asignar_persona_a_fase");
+
     }
 };
