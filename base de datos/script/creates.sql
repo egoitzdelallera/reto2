@@ -41,7 +41,6 @@ CREATE TABLE Incidencias (
     id_usuario INT,
     FOREIGN KEY (id_maquina) REFERENCES Maquinas(id_maquina),
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
-    
 );
 
 -- Crear tabla MantenimientosPrev

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <Sidebar v-if="showSidebar" />
-    <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
+    <main class="main-content p-0" :class="{ 'with-sidebar': showSidebar }">
       <router-view></router-view>
     </main>
   </div>
@@ -11,11 +11,12 @@
 import { computed } from 'vue'
 import { createRouter, createWebHistory, useRoute } from 'vue-router'
 
-import Login from './views/InicioSesionView.vue'
-
+//import Login from './views/InicioSesionView.vue'
+import incidencias from './views/IncidentesView.vue'
 const routes = [
+
   { path: '/', component: Login },
-  
+
 ]
 
 const router = createRouter({

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Facades\Auth; // Importa Auth
+use Illuminate\Http\Request;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -19,6 +20,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'nombre',
         'correo',
+         'apellido',
         'rol',
         'estado',
         'imagen_perfil',
@@ -89,5 +91,17 @@ class User extends Authenticatable implements JWTSubject
         return [
             'rol' => $this->rol, // Añade el rol del usuario al token (ejemplo)
         ];
+    }
+
+
+
+
+
+    public function user(Request $request)
+    {
+         // Obtener todos los usuarios, seleccionar campos específicos
+         $users = User::select('id_usuario', 'nombre', 'correo', 'rol', 'estado', 'imagen_perfil','id_campus')->get();
+        
+         return response()->json($users);
     }
 }

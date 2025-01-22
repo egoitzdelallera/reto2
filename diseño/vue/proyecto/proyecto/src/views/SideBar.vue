@@ -35,6 +35,7 @@
 
   <script>
   import { useRouter } from 'vue-router'
+  
   import '../assets/css/Nav.css' // Asegúrate de que la ruta sea correcta
 
   export default {
