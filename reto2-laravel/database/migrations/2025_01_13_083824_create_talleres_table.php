@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('talleres', function (Blueprint $table) {
             $table->bigInteger('id_taller')->autoIncrement();
             $table->string('nombre', 100);
-            $table->string('ubicacion', 100);
+            $table->bigInteger('id_campus');
             $table->bigInteger('id_responsable');
             $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->primary('id_taller');
             $table->foreign('id_responsable')->references('id_usuario')->on('users')->onDelete('cascade');
+            $table->foreign('id_campus')->references('id_campus')->on('campus')->onDelete('cascade');
         });
     }
 

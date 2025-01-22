@@ -12,7 +12,7 @@ const routes = [
   { path: '/incidencias', component: IncidentsTable, meta: { requiresAuth: true } },
   { path: '/usuarios', component: Usuarios, meta: { requiresAuth: true } },
   { path: '/perfil', component: Perfil, meta: { requiresAuth: true } },
-  { path: '/incidencia/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual, meta: { requiresAuth: true } },
+  { path: '/incidencias/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

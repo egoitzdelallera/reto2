@@ -20,6 +20,21 @@ export default function useIncidencias() {
         }
     };
 
+    const getIncidenciaById = async (id) => {
+        try{
+            const token = localStorage.getItem('jwt_token');
+            const response = await axios.get(`http://localhost:8000/api/incidencias/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch(error) {
+            console.error('Error al cargar la incidencia', error);
+            throw error;
+        }
+    }
+
     const filteredIncidencias = computed(() => {
         if (!searchQuery.value) {
             return incidencias.value;
@@ -92,5 +107,6 @@ export default function useIncidencias() {
         getEstadoClass,
         getGravedadClass,
         getPrioridadClass,
+        getIncidenciaById,
     };
 }

@@ -10,6 +10,7 @@ class Incidencia extends Model
     use HasFactory;
 
     protected $table = 'incidencias';
+    protected $primaryKey = 'id_incidencia';
 
     protected $fillable = [
         'id_maquina',
