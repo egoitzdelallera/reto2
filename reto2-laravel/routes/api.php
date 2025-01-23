@@ -18,7 +18,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::patch('/users/{id}', [UserController::class, 'update']); // Changed from post to patch
     Route::post('/users', [UserController::class, 'store']);
      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
-      Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Added this line
+     Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Added this line
 
 });
 
@@ -27,8 +27,9 @@ Route::middleware('api')->group(function () {
     Route::get('/maquinas', [MaquinaController::class, 'index']);
     Route::post('/maquinas', [MaquinaController::class, 'store']);
     Route::get('/maquinas/{maquina}', [MaquinaController::class, 'show']);
-    Route::put('/maquinas/{maquina}', [MaquinaController::class, 'update']);
+    Route::patch('/maquinas/{maquina}', [MaquinaController::class, 'update']); // Changed from put to patch
     Route::delete('/maquinas/{maquina}', [MaquinaController::class, 'destroy']);
+    Route::patch('/maquinas/{maquina}/toggle-status', [MaquinaController::class, 'toggleStatus']);
 });
 Route::middleware('api')->group(function () {
     Route::get('/users', [UserController::class, 'index']);

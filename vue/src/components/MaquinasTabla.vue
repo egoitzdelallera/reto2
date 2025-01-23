@@ -22,10 +22,10 @@
         </div>
 
         <!-- Tabla -->
-        <div class="table-container">
-            <table class="table-auto">
-                <thead>
-                <tr class=" bg-secondary">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                <tr class="bg-secondary">
                     <th>ID</th>
                     <th>NOMBRE</th>
                     <th>DESCRIPCIÓN</th>
@@ -307,7 +307,8 @@ import axios from 'axios'
    const submitNewMaquina = async () => {
     
       try{
-        await createMaquina(newMaquina.value);
+        const response  = await createMaquina(newMaquina.value);
+         console.log('response data:', response);
         alertClass.value = 'bg-green-200 text-green-800 border-2 border-green-800 p-2 rounded'
         alertMessage.value = 'Maquina creada correctamente';
         await fetchMaquinas()
@@ -316,6 +317,8 @@ import axios from 'axios'
             alertMessage.value = null;
           },1000)
       }catch (error){
+          console.error('Error creating machine', error);
+           console.error('Response Data (newMachine):', error.response?.data);
          alertClass.value = 'bg-red-200 text-red-800 border-2 border-red-800 p-2 rounded'
          alertMessage.value = error.message;
          setTimeout(()=>{
@@ -373,24 +376,25 @@ const toggleStatus = async () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
       };
-      await axios.patch(`${API_URL}/${maquinaToToggle.value.id_maquina}/toggle-status`, {}, {
+      console.log("URL toggle:",`${API_URL}/${maquinaToToggle.value.id_maquina}/toggle-status`)
+      const response =  await axios.patch(`${API_URL}/${maquinaToToggle.value.id_maquina}/toggle-status`, {}, {
         headers: headers
       });
-
+       console.log("response toggle:",response.data);
         maquinaToToggle.value.estado = maquinaToToggle.value.estado === 'Habilitado' ? 'Deshabilitado' : 'Habilitado';
-
+    
         const maquinaIndex = maquinas.value.findIndex(maquina => maquina.id_maquina === maquinaToToggle.value.id_maquina);
         if (maquinaIndex !== -1) {
             maquinas.value[maquinaIndex].estado = maquinaToToggle.value.estado;
-            updateDisplayedMaquinas();
+           updateDisplayedMaquinas();
         }
-    toggleAlertClass.value = 'alert-success';
+    toggleAlertClass.value = 'bg-green-200 text-green-800 border-2 border-green-800 p-2 rounded';
     toggleAlertMessage.value = 'Estado de la maquina cambiado con exito';
 
     }catch(error){
         console.error('Error al cambiar estado de la maquina:', error);
         console.error('Response Data (toggleStatus):', error.response?.data);
-        toggleAlertClass.value = 'alert-danger';
+        toggleAlertClass.value = 'bg-red-200 text-red-800 border-2 border-red-800 p-2 rounded'
         toggleAlertMessage.value = 'Error al cambiar el estado de la maquina';
     }finally {
       setTimeout(() => {
@@ -428,23 +432,23 @@ const submitEditMaquina = async () => {
             id_taller: maquinaToEdit.value.id_taller,
             prioridad: maquinaToEdit.value.prioridad,
         };
-         console.log("URL to update:",`${API_URL}/${maquinaToEdit.value.id_maquina}`);
-         const response = await axios.post(`${API_URL}/${maquinaToEdit.value.id_maquina}`, dataToUpdate, {
+       console.log("url: ", `${API_URL}/${maquinaToEdit.value.id_maquina}`);
+         const response = await axios.patch(`${API_URL}/${maquinaToEdit.value.id_maquina}`, dataToUpdate, {
             headers: headers
           });
-
+          console.log("response from patch:",response.data);
            const maquinaIndex = maquinas.value.findIndex(maquina => maquina.id_maquina === maquinaToEdit.value.id_maquina);
             if (maquinaIndex !== -1) {
               maquinas.value[maquinaIndex] = { ...maquinaToEdit.value, ...response.data.maquina};
                  updateDisplayedMaquinas();
         }
 
-         editAlertClass.value = 'alert-success';
+         editAlertClass.value = 'bg-green-200 text-green-800 border-2 border-green-800 p-2 rounded'
           editAlertMessage.value = 'Maquina actualizada con éxito';
       }catch (error) {
         console.error('Error al actualizar la máquina:', error);
           console.error('Response Data (submitEditMaquina):', error.response?.data);
-          editAlertClass.value = 'alert-danger';
+          editAlertClass.value = 'bg-red-200 text-red-800 border-2 border-red-800 p-2 rounded'
           editAlertMessage.value = 'Error al actualizar la máquina';
         } finally {
           setTimeout(() => {

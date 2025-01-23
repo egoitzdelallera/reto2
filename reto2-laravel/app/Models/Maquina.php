@@ -19,6 +19,7 @@ class Maquina extends Model
         'descripcion',
         'ubicacion',
         'id_taller',
+        'prioridad',
         'estado'
     ];
 
