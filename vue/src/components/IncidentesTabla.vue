@@ -167,9 +167,9 @@
                   </table>
               </div>
 
-              <!-- Paginación -->
-                <nav aria-label="Page navigation" class="mt-4">
-                    <ul class="pagination justify-content-center">
+               <!-- Paginación -->
+               <nav aria-label="Page navigation" class="mt-4">
+                  <ul class="pagination justify-content-center">
                     <li class="page-item" :class="{ disabled: currentPage === 1 }">
                         <button class="page-link" @click="previousPage" aria-label="Previous" >
                             <span aria-hidden="true">«</span>
@@ -206,14 +206,25 @@
                               required>
                       </div>
                       <div class="mb-3">
-                          <label for="incidencia-maquina" class="form-label">Máquina</label>
-                          <select class="form-select" id="incidencia-maquina" v-model="selectedMachine" required>
-                              <option v-for="maquina in maquinas" :key="maquina.id_maquina" :value="maquina">
+                          <label for="incidencia-taller" class="form-label">Taller</label>
+                            <select class="form-select" id="incidencia-taller" v-model="selectedTaller" required>
+                                <option value="">Selecciona un taller</option>
+                                    <option v-for="taller in talleres" :key="taller.id_taller" :value="taller">
+                                        {{ taller.nombre }}
+                                    </option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                           <label for="incidencia-maquina" class="form-label">Máquina</label>
+                            <select class="form-select" id="incidencia-maquina"  v-model="selectedMachine" required>
+                            <option value="">Selecciona una máquina</option>
+                                <option v-for="maquina in filteredMaquinas" :key="maquina.id_maquina" :value="maquina">
                                   {{ maquina.nombre }} - {{ maquina.descripcion }}
-                              </option>
-                          </select>
-                      </div>
-
+                                </option>
+                           </select>
+                        </div>
+                        
                       <div class="mb-3">
                           <label for="incidencia-gravedad" class="form-label">Gravedad</label>
                           <select class="form-select" id="incidencia-gravedad" v-model="newIncidencia.gravedad"
@@ -233,6 +244,7 @@
       <div v-if="showModal" class="modal-backdrop fade show"></div>
   </div>
 </template>
+
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
 import useIncidencias from '@/composables/useIncidencias';
@@ -251,6 +263,7 @@ const currentPage = ref(1);
 const { maquinas,  } = useMaquinas();
 const { incidencias, createIncidencia: apiCreateIncidencia } = useIncidencias();
 const { talleres, fetchTalleres } = useTalleres();
+
 const newIncidencia = reactive({
 descripcion: '',
 gravedad: '',
@@ -259,12 +272,13 @@ onMounted(async () => {
   await fetchTalleres();
 });
 const selectedMachine = ref(null);
+const selectedTaller = ref(null);
 const filters = reactive({
   gravedad: [
-      { value: 'Maquina Parada', label: 'Maquina Parada' },
+      { value: 'Maquina parada', label: 'Maquina parada' },
       { value: 'Aviso', label: 'Aviso' },
       { value: 'Maquina en Marcha', label: 'Maquina en Marcha' },
-          { value: 'Mantenimiento', label: 'Mantenimiento' },
+        { value: 'Mantenimiento', label: 'Mantenimiento' },
   ],
   prioridad: [
       { value: 'Alta', label: 'Alta' },
@@ -272,11 +286,10 @@ const filters = reactive({
       { value: 'Baja', label: 'Baja' },
   ],
   estado: [
-      { value: 'Abierta', label: 'Abierta' },
-      { value: 'En Progreso', label: 'En Progreso' },
-      { value: 'Resuelta', label: 'Resuelta' },
-      { value: 'Cancelada', label: 'Cancelada' },
-     
+    { value: 'Abierta', label: 'Abierta' },
+    { value: 'En Progreso', label: 'En Progreso' },
+    { value: 'Resuelta', label: 'Resuelta' },
+    { value: 'Cancelada', label: 'Cancelada' },
   ],
 });
 
@@ -298,6 +311,12 @@ const toggleFilter = (filterName) => {
   openFilters[filterName] = !openFilters[filterName];
 };
 
+const filteredMaquinas = computed(() => {
+    if (!selectedTaller.value) {
+      return maquinas.value;
+    }
+   return maquinas.value.filter(maquina => maquina.id_taller === selectedTaller.value.id_taller);
+});
 
 const filteredIncidencias = computed(() => {
     const tallerFilter = route.query.taller;
@@ -309,7 +328,7 @@ const filteredIncidencias = computed(() => {
                 value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
         );
         const matchesTaller = !tallerFilter || (incidencia.maquina?.taller?.nombre === tallerFilter);
-
+            
         const matchesSelectTaller = selectedFilters.taller.length === 0 || 
             selectedFilters.taller.includes(incidencia.maquina?.taller?.nombre);
             
@@ -350,7 +369,6 @@ watch(
   { deep: true }
 );
 
-
 const getEstadoClass = (estado) => {
   switch (estado) {
       case 'Cancelada':
@@ -359,13 +377,12 @@ const getEstadoClass = (estado) => {
           return 'badge badge-en-proceso';
       case 'Resuelta':
           return 'badge badge-resuelta';
-      case 'Abierta':
+       case 'Abierta':
           return 'badge badge-Abierta';
       default:
           return 'badge';
   }
 };
-
 
 const getPrioridadClass = (prioridad) => {
   switch (prioridad) {
@@ -382,15 +399,14 @@ const getPrioridadClass = (prioridad) => {
 
 const getGravedadClass = (gravedad) => {
   switch (gravedad) {
-      
+      case 'Maquina Parada':
+          return 'badge badge-maquina-parada';
       case 'Aviso':
           return 'badge badge-aviso';
       case 'Maquina en Marcha':
           return 'badge badge-maquina-en-marcha';
-         case 'Mantenimiento':
+          case 'Mantenimiento':
           return 'badge badge-mantenimiento';
-          case 'Maquina Parada':
-          return 'badge badge-maquina-parada';
       default:
           return 'badge';
   }
@@ -423,13 +439,14 @@ const closeModal = () => {
 
 const createIncidencia = async () => {
     try {
-      if (!selectedMachine.value) {
-        throw new Error('No Machine Selected');
-      }
+        if (!selectedMachine.value || !selectedTaller.value) {
+            throw new Error('No Machine or Taller Selected');
+        }
+    
         const newIncidenciaToSend = {
-             ...newIncidencia,
-             id_maquina: selectedMachine.value.id_maquina,
-        };
+            ...newIncidencia,
+            id_maquina: selectedMachine.value.id_maquina,
+         };
       await apiCreateIncidencia(newIncidenciaToSend, selectedMachine.value);
       closeModal();
     } catch (error) {
@@ -440,7 +457,8 @@ const createIncidencia = async () => {
 
 const resetForm = () => {
   newIncidencia.descripcion = '';
-  selectedMachine.value = null;
+    selectedTaller.value = null;
+    selectedMachine.value = null;
   newIncidencia.gravedad = '';
 }
 
@@ -552,11 +570,11 @@ const nextPage = () => {
   background-color: #198754;
   color: white;
 }
-.badge-Abierta {
-  background-color: #34a36f;
-  color: white;
-}
 
+.badge-Abierta {
+    background-color: #34a36f;
+    color: white;
+}
 
 .badge-alta {
   background-color: #dc3545;
