@@ -7,6 +7,7 @@ use App\Http\Controllers\MaquinaController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampusController;
+use App\Http\Controllers\TipoAveriaController;
 
 use App\Http\Controllers\TalleresController;
 
@@ -61,6 +62,9 @@ Route::middleware('api')->group(function () {
     Route::post('/incidencias', [IncidenciaController::class, 'store']);
     Route::put('/incidencias/{id}', [IncidenciaController::class, 'update']);
     Route::delete('/incidencias/{id}', [IncidenciaController::class, 'destroy']);
+    Route::get('/tipo-averia-options', [IncidenciaController::class, 'getTipoAveriaOptions']);
+    //Tipos Averia Resource (Protected)
+    Route::get('/tipos-averia', [TipoAveriaController::class, 'index']);
 });
 
 // Rutas protegidas por JWT

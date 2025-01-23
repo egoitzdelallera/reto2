@@ -18,6 +18,7 @@ class Incidencia extends Model
        'id_maquina',
         'id_creador',
         'fecha_ini',
+        'id_tipo_averia',
    ];
 
   public function maquina()

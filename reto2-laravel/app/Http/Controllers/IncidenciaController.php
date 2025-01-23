@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Incidencia;
+use App\Models\TipoAveria; // Import the TipoAveria Model
 
 class IncidenciaController extends Controller
 {
     public function index()
     {
-         $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'tecnico'])
+        $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'tecnico'])
             ->get();
         
         $incidencias->each(function ($incidencia) {
@@ -31,33 +32,41 @@ class IncidenciaController extends Controller
         return response()->json($incidencia);
     }
 
-    public function store(Request $request)
-{
-  $request->validate([
-    'id_maquina' => 'required|integer',
-     'descripcion' => 'required|string',
-     'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
-   ]);
-   
-  try {
-         // Obtener la fecha y hora actual
-         $fecha_ini = now();  // La función `now()` obtiene la fecha y hora actual
+    public function getTipoAveriaOptions()
+    {
+        $tipoAverias = TipoAveria::all();
+        return response()->json($tipoAverias);
+    }
 
-        // Crear la incidencia
-        $incidencia = Incidencia::create([
-           'id_maquina' => $request->id_maquina,
-            'descripcion' => $request->descripcion,
-             'gravedad' => $request->gravedad,
-             'estado' => "Abierta",
-            'id_creador' => $request->id_creador,
-         ]);
-         // Retornar la respuesta con la incidencia creada
-        return response()->json($incidencia, 201);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_maquina' => 'required|integer',
+            'descripcion' => 'required|string',
+            'gravedad' => 'in:Maquina Parada,Maquina en Marcha,Aviso,Mantenimiento',
+            'id_tipo_averia' => 'nullable|integer',
+        ]);
+
+        try {
+            // Obtener la fecha y hora actual
+            $fecha_ini = now();  // La función `now()` obtiene la fecha y hora actual
+
+            // Crear la incidencia
+            $incidencia = Incidencia::create([
+                'id_maquina' => $request->id_maquina,
+                'descripcion' => $request->descripcion,
+                'gravedad' => $request->gravedad,
+                'estado' => "Abierta",
+                'id_creador' => $request->user()->id_usuario, // Get ID from token
+                'id_tipo_averia' => $request->id_tipo_averia, // <- Keep this
+            ]);
+            // Retornar la respuesta con la incidencia creada
+            return response()->json($incidencia, 201);
         } catch (\Exception $e) {
             // Retornar un mensaje de error
             return response()->json(['message' => 'Error al crear la incidencia'], 500);
         }
- }
+    }
 
     public function update(Request $request, $id)
     {

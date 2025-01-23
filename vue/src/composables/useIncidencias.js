@@ -108,7 +108,7 @@ export default function useIncidencias() {
         }
     };
 
-    const createIncidencia = async (incidenciaData, selectedMachine) => {
+    const createIncidencia = async (incidenciaData, selectedMachine,selectedTipoAveria) => {
         loading.value = true;
         error.value = null;
         message.value = null; // Reset message before request
@@ -125,6 +125,7 @@ export default function useIncidencias() {
               estado: 'Abierta', // Estado por defecto
               id_creador: 1, //  usuario que crea la incidencia
               fecha_ini: new Date().toISOString(), // Fecha actual
+              id_tipo_averia:selectedTipoAveria.id_tipo_averia,
             };
 
 
