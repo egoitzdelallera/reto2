@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('correo', 100)->unique();
             $table->string('password', 255);
             $table->bigInteger('id_campus');
-            $table->enum('rol', ['Administrador', 'Operario', 'Tecnico']);
+            $table->enum('rol', ['Administrador', 'Operario', 'Técnico']);
             $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->string('imagen_perfil', 100)->nullable();
             $table->primary('id_usuario');

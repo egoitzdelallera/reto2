@@ -1,253 +1,271 @@
 <template>
-  <div class="incidencias-container flex">
-    <!-- Panel de filtros (a la izquierda) -->
-    <transition name="slide">
-      <div v-if="showFilters" class="filter-sidebar w-52 bg-white p-3 shadow-lg overflow-y-auto h-screen fixed left-0 top-0 z-10">
-        <h2 class="text-lg font-bold mb-3">Filtros</h2>
-        <button @click="showFilters = false" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">
-          <span class="sr-only">Cerrar filtros</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-        
-        <!-- Filtros -->
-        <div class="filters">
-          <div v-for="(options, filterType) in filters" :key="filterType" class="filter-section mb-2">
-            <button 
-              class="btn btn-outline-secondary w-full text-left flex justify-between items-center text-sm"
-              @click="toggleFilter(filterType)"
-            >
-              <span>{{ filterType.toUpperCase() }}</span>
-              <i :class="['bi', openFilters[filterType] ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
+    <link href="../assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  
+    <div class="bg-primary min-vh-100 m-0">
+      <!-- Header -->
+      <header class="bg-primary shadow-sm py-3 mb-4 border-bottom">
+        <div class="container">
+          <div class="d-flex justify-content-start align-items-center">
+            <button class="btn btn-link btn-sm p-0 text-info" style="text-decoration: none; width: auto;">
+              <i class="bi bi-arrow-left me-2 btn btn-outline-info"></i>Atrás
             </button>
-            <div class="filter-content mt-2" v-show="openFilters[filterType]">
-              <div v-for="option in options" :key="option.value" class="form-check">
-                <input
-                  :id="filterType + '-' + option.value"
-                  type="checkbox"
-                  :value="option.value"
-                  v-model="selectedFilters[filterType]"
-                  class="form-check-input"
-                />
-                <label :for="filterType + '-' + option.value" class="form-check-label">{{ option.label }}</label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 text-white">{{ incidencia.descripcion }}</h1>
+          </div>  
+        </div>
+      </header>
+  
+      <div class="container">
+        <div class="row g-4">
+          <!-- Main Content -->
+          <div class="col-lg-8">
+            <!-- Incident Card -->
+            <div class="card mb-4 bg-primary">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <div class="d-flex align-items-center gap-2">
+                      <h2 class="h1 mb-0 ">{{ incidencia.nombre }}</h2>
+                      <div><button class="btn btn-link p-0 text-info">
+                        <i class="bi bi-bookmark"></i>
+                      </button></div>
+                    </div>
+                    <div class="mt-2">
+                      <span class="badge bg-danger me-2">{{ incidencia.maquina?.estado }}</span>
+                      <span class="badge bg-success">{{ incidencia.estado }}</span>
+                    </div>
+                  </div>
+                  <span class="badge bg-warning text-dark">Prioridad {{ incidencia.gravedad }}</span>
+                </div>
+  
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <h6 class="text-muted ">Máquina</h6>
+                    <p>{{ incidencia.maquina?.nombre }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Estado</h6>
+                    <p>{{ incidencia.estado }}</p>
+                  </div>
+                  <div class="col-12">
+                    <h6 class="text-muted">Descripción</h6>
+                    <p>{{ incidencia.descripcion }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Fecha</h6>
+                    <p>{{ incidencia.fecha_reporte }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Tipo de avería</h6>
+                    <p>{{ incidencia.tipo_averia?.nombre }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Taller</h6>
+                    <p>{{ incidencia.maquina?.taller?.nombre }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-muted">Campus</h6>
+                    <p>{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Tabs Card -->
+            <div class="card bg-primary">
+              <div class="card-body">
+                <h3 class="card-title mb-4">Detalles de la incidencia</h3>
+  
+                <ul class="nav nav-tabs mb-4">
+                  <li class="nav-item flex-fill" v-for="tab in tabs" :key="tab">
+                    <button
+                      @click="activeTab = tab"
+                      :class="{ active: activeTab === tab }"
+                      class="tab-button w-100"
+                    >
+                      {{ tab }}
+                    </button>
+                  </li>
+                </ul>
+  
+                <!-- Operator Tab -->
+                <div v-if="activeTab === 'Operario'" class="tab-content">
+                  <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle bg-secondary" style="width: 64px; height: 64px;"></div>
+                    <div class="ms-3">
+                      <h4 class="h5 mb-1">{{ incidencia.creador?.nombre }} {{ incidencia.creador?.apellido }}</h4>
+                      <p class="text-muted mb-0">{{ incidencia.creador?.rol }}</p>
+                    </div>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Correo Electrónico</h6>
+                      <p>{{ incidencia.creador?.correo }}</p>
+                    </div>
+                  </div>
+                </div>
+  
+                <!-- Phases Tab -->
+                <div v-else-if="activeTab === 'Fases'" class="tab-content">
+                  <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h4 class="h5 mb-0">Título Fase {{ index + 1 }} - {{ fase.nombre }}</h4>
+                      <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">
+                        {{ fase.estado }}
+                      </span>
+                    </div>
+  
+                    <div class="row g-3 mb-3">
+                      <div class="col-md-6">
+                        <h6 class="text-muted">Fecha de Inicio</h6>
+                        <p>{{ fase.fecha_inicio }}</p>
+                      </div>
+                      <div v-if="fase.fecha_fin" class="col-md-6">
+                        <h6 class="text-muted">Fecha de Final</h6>
+                        <p>{{ fase.fecha_fin }}</p>
+                      </div>
+                    </div>
+  
+                    <h6 class="text-muted">Descripción</h6>
+                    <p>{{ fase.descripcion }}</p>
+                    <button @click="asignarme" class="btn btn-primary mb-3">Asignarme fase {{ index + 1 }}</button>
+  
+                    <h6 class="text-muted mt-3">Técnicos</h6>
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="rounded-circle bg-secondary" style="width: 48px; height: 48px;"></div>
+                              <div class="ms-3">
+                                <h5 v-html="fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join('<br>')"></h5>
+                              </div>
+                              <div class="contact-info">
+                                <p>{{ fase.tecnicos_fases_incidencias[0]?.tecnico?.correo }}</p>
+                              </div>
+                            </div>
+                            <span class="badge bg-success mt-2">Habilitado</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <!-- Machine Tab -->
+                <div v-else-if="activeTab === 'Máquina'" class="tab-content">
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      <h4 class="h5 mb-1">{{ incidencia.maquina?.nombre }}</h4>
+                      <span class="badge bg-warning text-dark">{{ incidencia.maquina?.prioridad }}</span>
+                    </div>
+                    <span 
+                      class="badge" 
+                      :class="{
+                        'bg-success': incidencia.maquina?.estado === 'Habilitado',
+                        'bg-danger': incidencia.maquina?.estado === 'Deshabilitado'
+                      }"
+                    >
+                      {{ incidencia.maquina?.estado }}
+                    </span>
+
+                  </div>
+  
+                  <h6 class="text-muted">Ubicación</h6>
+                  <p class="mb-1">{{ incidencia.maquina?.taller?.campus?.nombre }} → {{ incidencia.maquina?.taller?.campus?.ubicacion }}</p>
+  
+                  <h6 class="text-muted">Descripción</h6>
+                  <p class="mb-3">{{ incidencia.maquina?.descripcion }}</p>
+  
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <h6 class="text-muted">Taller</h6>
+                      <p>{{ incidencia.maquina?.taller?.nombre }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Phases Sidebar -->
+          <div class="col-lg-4">
+            <div class="card bg-primary">
+              <div class="card-body">
+                <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
+                  <div class="d-flex align-items-center mb-2">
+                    <div
+                      class="rounded-circle me-2"
+                      :class="fase.estado?.toLowerCase()"
+                      style="width: 12px; height: 12px;"
+                    ></div>
+                    <h5 class="mb-0">Fase {{ index + 1 }}</h5>
+                    <span
+                      class="badge ms-2"
+                      :class="['status', `status-${fase.estado?.toLowerCase()}`]"
+                    >
+                      {{ fase.estado }}
+                    </span>
+                  </div>
+                  <p class="text-muted small mb-2">{{ fase.fecha_inicio }} / {{ fase.fecha_fin }}</p>
+                  <p class="mb-2">{{ fase.descripcion }}</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="tag">{{ fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join(', ') }}</span>
+                  </div>
+                </div>
+  
+                <!-- Phase 3 with Assign Button -->
+                <div v-if="showAssignButton" class="mb-4">
+                  <button class="btn btn-secondary w-100">Ver Fases</button>
+                </div>
+  
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                  <button class="btn btn-success">Finalizar la Fase 3</button>
+                  <button class="btn btn-secondary">Finalizar Incidencia</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </transition>
-
-    <!-- Contenido principal -->
-    <div class="flex-grow ml-0 transition-all duration-300" :class="{ 'ml-52': showFilters }">
-      <!-- Botón para mostrar/ocultar los filtros -->
-      <button class="btn btn-primary mb-3" @click="showFilters = !showFilters">
-        <i class="bi bi-funnel"></i> Filtros
-      </button>
-
-      <h1 class="text-2xl font-bold mb-6">Incidencias</h1>
-
-      <!-- Barra de búsqueda -->
-      <div class="search-container mb-6">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            v-model="searchQuery"
-            class="search-input w-full p-2 pl-10 rounded border"
-          />
-          <SearchIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-        </div>
-      </div>
-
-      <!-- Tabla -->
-      <div class="table-container">
-        <div class="table-header grid grid-cols-8 gap-4 font-bold bg-gray-100 p-2">
-          <div>TÍTULO</div>
-          <div>ESTADO</div>
-          <div>PRIORIDAD</div>
-          <div>FECHA</div>
-          <div>MÁQUINA</div>
-          <div>CREADOR</div>
-          <div>TÉCNICO</div>
-          <div>GRAVEDAD</div>
-        </div>
-
-        <div class="table-body">
-          <div
-            v-for="(incidencia, i) in filteredIncidents"
-            :key="i"
-            class="table-row grid grid-cols-8 gap-4 cursor-pointer hover:bg-gray-50 p-2"
-            @click="goToIncidencia(incidencia.id_incidencia)"
-          >
-            <div class="font-medium">{{ incidencia.descripcion }}</div>
-            <div>
-              <span :class="['status-badge', getEstadoClass(incidencia.estado)]">
-                {{ incidencia.estado }}
-              </span>
-            </div>
-            <div>
-              <span :class="['status-badge', getPrioridadClass(incidencia.maquina.prioridad)]">
-                {{ incidencia.maquina.prioridad }}
-              </span>
-            </div>
-            <div>{{ incidencia.fecha_reporte }}</div>
-            <div>{{ incidencia.maquina.nombre }}</div>
-            <div>{{ incidencia.creador.nombre }}</div>
-            <div>{{ incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar' }}</div>
-            <div>
-              <span :class="[getGravedadClass(incidencia.gravedad)]">
-                {{ incidencia.gravedad }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-</template>
-
+  </template>
+  
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { SearchIcon } from 'lucide-vue-next';
-
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import useIncidencias from '../composables/useIncidencias'; // Importa el composable
+const route = useRoute();
 const router = useRouter();
-const showFilters = ref(false);
-const searchQuery = ref('');
+const { getIncidenciaById } = useIncidencias();
 
-const filters = reactive({
-  gravedad: [
-    { value: 'alta', label: 'Alta' },
-    { value: 'media', label: 'Media' },
-    { value: 'baja', label: 'Baja' }
-  ],
-  prioridad: [
-    { value: '01', label: 'Alta' },
-    { value: '02', label: 'Media' },
-    { value: '03', label: 'Baja' }
-  ],
-  campus: [
-    { value: 'Taller A', label: 'Taller A' },
-    { value: 'Taller B', label: 'Taller B' },
-    { value: 'Taller C', label: 'Taller C' }
-  ],
-  estado: [
-    { value: 'En Curso', label: 'En Curso' },
-    { value: 'Pendiente', label: 'Pendiente' },
-    { value: 'Completado', label: 'Completado' }
-  ]
-});
+const activeTab = ref('Operario');
+const tabs = ['Operario', 'Fases', 'Máquina'];
+const incidencia = ref({});
 
-const selectedFilters = reactive({
-  gravedad: [],
-  prioridad: [],
-  campus: [],
-  estado: []
-});
 
-const openFilters = reactive({
-  gravedad: false,
-  prioridad: false,
-  campus: false,
-  estado: false
-});
 
-const toggleFilter = (filterName) => {
-  openFilters[filterName] = !openFilters[filterName];
-};
-
-// Mock data for incidents (replace this with actual data fetching logic)
-const incidents = ref([
-  {
-    id_incidencia: 1,
-    descripcion: 'Fallo en máquina A',
-    estado: 'En Curso',
-    maquina: { prioridad: '01', nombre: 'Máquina A' },
-    fecha_reporte: '2023-05-20',
-    creador: { nombre: 'Juan Pérez' },
-    tecnico: { nombre: 'Ana García' },
-    gravedad: 'alta'
-  },
-  // Add more mock incidents as needed
-]);
-
-const filteredIncidents = computed(() => {
-  return incidents.value.filter((incidencia) => {
-    const matchesSearch = Object.values(incidencia).some(value =>
-      value && value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-
-    const matchesFilters = 
-      (selectedFilters.gravedad.length === 0 || selectedFilters.gravedad.includes(incidencia.gravedad)) &&
-      (selectedFilters.prioridad.length === 0 || selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
-      (selectedFilters.campus.length === 0 || selectedFilters.campus.includes(incidencia.maquina.nombre)) &&
-      (selectedFilters.estado.length === 0 || selectedFilters.estado.includes(incidencia.estado));
-
-    return matchesSearch && matchesFilters;
-  });
-});
-
-const getEstadoClass = (estado) => {
-  // Implement this function based on your requirements
-  switch (estado) {
-    case 'En Curso': return 'bg-yellow-200 text-yellow-800';
-    case 'Pendiente': return 'bg-red-200 text-red-800';
-    case 'Completado': return 'bg-green-200 text-green-800';
-    default: return '';
+onMounted(async () => {
+  const incidenciaId = route.params.id;
+  try {
+    const foundIncidencia = await getIncidenciaById(incidenciaId);
+    if (foundIncidencia) {
+      incidencia.value = foundIncidencia;
+    } else {
+      console.error('Incidencia no encontrada');
+      router.push('/incidencias');
+    }
+  } catch (error) {
+    console.error('Error al cargar la incidencia:', error);
+    router.push('/incidencias');
   }
-};
-
-const getPrioridadClass = (prioridad) => {
-  // Implement this function based on your requirements
-  switch (prioridad) {
-    case '01': return 'bg-red-200 text-red-800';
-    case '02': return 'bg-yellow-200 text-yellow-800';
-    case '03': return 'bg-green-200 text-green-800';
-    default: return '';
-  }
-};
-
-const getGravedadClass = (gravedad) => {
-  // Implement this function based on your requirements
-  switch (gravedad) {
-    case 'alta': return 'text-red-600 font-bold';
-    case 'media': return 'text-yellow-600 font-bold';
-    case 'baja': return 'text-green-600 font-bold';
-    default: return '';
-  }
-};
-
-const goToIncidencia = (id) => {
-  router.push({ name: 'IncidenciaIndividual', params: { id: id } });
-};
+});
 </script>
-
-<style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s ease;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateX(-100%);
-}
-
-.filter-sidebar {
-  transition: transform 0.3s ease;
-}
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.status-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-</style>
+  <style scoped>
+  main{
+    padding: 0px;
+  }
+  </style>

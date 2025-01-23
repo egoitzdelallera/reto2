@@ -16,7 +16,7 @@ class Taller extends Model
 
     protected $fillable = [
         'nombre',
-        'ubicacion',
+        'id_campus',
         'id_responsable',
         'estado',
         'id_campus'

@@ -22,9 +22,9 @@ class IncidenciaController extends Controller
         return response()->json($incidencias);
     }
 
-    public function show($id)
+    public function show($id_incidencia)
     {
-        $incidencia = Incidencia::with([]);
+        $incidencia = Incidencia::with(['maquina', 'maquina.taller', 'maquina.taller.campus', 'creador', 'fasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias.tecnico', 'tipoAveria'])->find($id_incidencia);
         if (!$incidencia) {
             return response()->json(['message' => 'Incidencia no encontrada'], 404);
         }
