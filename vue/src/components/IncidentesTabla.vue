@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                <!-- Filtro de Prioridad -->
               <div class="mb-3">
                 <button
@@ -268,8 +268,8 @@
              </div>
             </div>
            <div v-if="showMantenimientoModal" class="modal-backdrop fade show"></div>
-    
-    
+
+
       <!-- Modal para crear incidencia -->
       <div class="modal fade" :class="{ 'show d-block': showModal }" tabindex="-1" role="dialog">
           <div class="modal-dialog" role="document">
@@ -363,7 +363,7 @@ const selectedMantenimientoTaller = ref([]);
 const selectedMantenimientoMachine = ref([]);
 const filters = reactive({
   gravedad: [
-      { value: 'Maquina Parada', label: 'Maquina Parada' },
+      { value: 'Maquina parada', label: 'Maquina parada' },
       { value: 'Aviso', label: 'Aviso' },
       { value: 'Maquina en Marcha', label: 'Maquina en Marcha' },
          { value: 'Mantenimiento', label: 'Mantenimiento' },
@@ -375,9 +375,7 @@ const filters = reactive({
   ],
   estado: [
      { value: 'Abierta', label: 'Abierta' },
-    { value: 'En Progreso', label: 'En Progreso' },
-    { value: 'Resuelta', label: 'Resuelta' },
-     { value: 'Cancelada', label: 'Cancelada' },
+    { value: 'En progreso', label: 'En progreso' },
   ],
 });
 
@@ -423,9 +421,9 @@ const filteredIncidencias = computed(() => {
                 value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
         );
         const matchesTaller = !tallerFilter || (incidencia.maquina?.taller?.nombre === tallerFilter);
-        
+
         const matchesSelectTaller = selectedFilters.taller.length === 0 || selectedFilters.taller.includes(incidencia.maquina?.taller?.nombre);
-            
+
         const matchesFilters =
             (selectedFilters.gravedad.length === 0 ||
                 selectedFilters.gravedad.includes(incidencia.gravedad)) &&
@@ -433,7 +431,7 @@ const filteredIncidencias = computed(() => {
                 selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
             (selectedFilters.estado.length === 0 ||
                 selectedFilters.estado.includes(incidencia.estado));
-        
+
       return matchesSearch && matchesFilters && matchesTaller && matchesSelectTaller;
     });
 });
@@ -463,48 +461,54 @@ watch(
   { deep: true }
 );
 
+// ***************************************************************************************
+// Aquí están los cambios en las funciones getEstadoClass, getPrioridadClass y getGravedadClass
+// ***************************************************************************************
+
 const getEstadoClass = (estado) => {
   switch (estado) {
     case 'Cancelada':
-        return 'badge badge-pendiente';
-    case 'En Progreso':
-        return 'badge badge-en-proceso';
+      return 'badge bg-primary text-info fw-normal';  
+    case 'En progreso':
+    return 'badge bg-primary text-black fw-normal border border-black border-dashed';
     case 'Resuelta':
-        return 'badge badge-resuelta';
-     case 'Abierta':
-        return 'badge badge-Abierta';
+      return 'badge bg-black text-primary fw-normal';
+    case 'Abierta':
+      return 'badge bg-info text-white fw-normal';
     default:
-        return 'badge';
+      return 'badge bg-info text-white fw-normal';
   }
 };
 
 const getPrioridadClass = (prioridad) => {
-  switch (prioridad) {
+    console.log('Prioridad:', prioridad);
+    switch (prioridad) {
       case 'Alta':
-          return 'badge badge-alta';
+        return 'badge bg-fondoRojo text-danger';
       case 'Media':
-          return 'badge badge-media';
+        return 'badge bg-fondoNaranja text-naranja';
       case 'Baja':
-          return 'badge badge-baja';
+        return 'badge bg-info text-white fw-normal';
       default:
-          return 'badge';
-  }
-};
+        return 'badge bg-info text-white fw-normal';
+    }
+  };
 
 const getGravedadClass = (gravedad) => {
   switch (gravedad) {
-      case 'Maquina Parada':
-          return 'badge badge-maquina-parada';
-      case 'Aviso':
-          return 'badge badge-aviso';
-      case 'Maquina en Marcha':
-          return 'badge badge-maquina-en-marcha';
-          case 'Mantenimiento':
-          return 'badge badge-mantenimiento';
-      default:
-          return 'badge';
+    case 'Maquina parada':
+      return 'badge bg-danger text-white';  // Rojo
+    case 'Aviso':
+      return 'badge bg-warning text-dark'; // Amarillo (texto oscuro para contraste)
+    case 'Maquina en Marcha':
+      return 'badge bg-info text-white'; // Celeste
+    case 'Mantenimiento':
+      return 'badge bg-secondary text-white'; // Gris
+    default:
+      return 'badge bg-secondary text-white'; // Gris
   }
 };
+// ***************************************************************************************
 
 const goToIncidencia = (id) => {
   router.push({ name: 'IncidenciaIndividual', params: { id: id } });
@@ -558,7 +562,7 @@ const createIncidencia = async () => {
         if (!selectedMantenimientoTaller.value || selectedMantenimientoTaller.value.length === 0 || selectedMantenimientoMachine.value.length === 0 ) {
             throw new Error('No Machine or Taller Selected');
         }
-        
+
         const newIncidencias = selectedMantenimientoMachine.value.map(machine => ({
            ...newMantenimiento,
           id_maquina: machine.id_maquina,
@@ -567,7 +571,7 @@ const createIncidencia = async () => {
            fecha_ini: newMantenimiento.frecuencia === 'Semanal' ? newMantenimiento.fechaSemanal : new Date().toISOString(),
 
         }));
-        
+
           await Promise.all(newIncidencias.map(incidenciaData => apiCreateIncidencia(incidenciaData, null)));
           closeMantenimientoModal();
     } catch (error) {
@@ -672,72 +676,6 @@ const nextPage = () => {
 }
 
 
-/* Clases para las insignias */
-.badge {
-  display: inline-block;
-  padding: 0.25em 0.5em;
-  font-size: 0.75em;
-  font-weight: 700;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.25rem;
-}
-
-.badge-pendiente {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-en-proceso {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-resuelta {
-  background-color: #198754;
-  color: white;
-}
-.badge-Abierta {
-    background-color: #34a36f;
-    color: white;
-}
-
-.badge-alta {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-media {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-baja {
-  background-color: #28a745;
-  color: white;
-}
-
-.badge-maquina-parada {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-aviso {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-maquina-en-marcha {
-  background-color: #17a2b8;
-  color: white;
-}
- .badge-mantenimiento {
-  background-color: #007bff;
-  color: white;
-}
-
 .modal {
   display: none;
   position: fixed;
@@ -771,5 +709,10 @@ const nextPage = () => {
 
 .modal-backdrop.show {
   opacity: 0.5;
+}
+.border-dashed {
+
+  border-style: dashed !important;
+  border-width: 2px !important;
 }
 </style>

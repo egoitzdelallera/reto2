@@ -27,8 +27,8 @@
 
     <div class="table-responsive">
       <table class="table table-hover">
-        <thead class="table-light">
-          <tr>
+        <thead class="bg-secondary">
+          <tr class="bg-info">
             <th>NOMBRE ↑</th>
             <th>DESCRIPCIÓN</th>
             <th>CAMPUS ↑</th>

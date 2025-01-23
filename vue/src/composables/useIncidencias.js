@@ -64,49 +64,7 @@ export default function useIncidencias() {
         });
     });
 
-    const getEstadoClass = (estado) => {
-        switch (estado) {
-            case 'En Proceso':
-                return 'bg-blue-100 text-blue-800';
-            case 'Abierta':
-                return 'bg-gray-100 text-gray-800';
-            case 'Pendiente':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'Resuelta':
-                 return 'bg-green-100 text-green-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    const getGravedadClass = (gravedad) => {
-        switch (gravedad) {
-            case 'Maquina parada':
-                return 'bg-red-100 text-red-800';
-            case 'Maquina en Marcha':
-                return 'bg-orange-100 text-orange-800';
-            case 'Aviso':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'Mantenimiento':
-                return 'bg-gray-100 text-gray-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    const getPrioridadClass = (prioridad) => {
-        console.log('Prioridad:', prioridad);
-        switch (prioridad) {
-            case 'Alta':
-                return 'bg-red-500 text-secondary ';
-            case 'Media':
-                return 'bg-yellow-500 text-white';
-            case 'Baja':
-                return 'bg-green-500 text-white';
-            default:
-                return 'bg-gray-500 text-white';
-        }
-    };
+    
 
     const createIncidencia = async (incidenciaData, selectedMachine) => {
         loading.value = true;
@@ -159,9 +117,6 @@ export default function useIncidencias() {
         searchQuery,
         filteredIncidencias,
         loadIncidencias,
-        getEstadoClass,
-        getGravedadClass,
-        getPrioridadClass,
         createIncidencia,
         getIncidenciaById,
         loading,
