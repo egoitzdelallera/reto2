@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoAveria extends Model
+class TipoMantenimiento extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipo_averia';
+    protected $table = 'tipo_mantenimiento';
 
-    protected $primaryKey = 'id_tipo_averia';
     protected $fillable = [
-        'nombre'
+        'nombre',
+        'descripcion'
     ];
 
     public function incidencias()
     {
-        return $this->hasMany(Incidencia::class, 'id_tipo_averia');
+        return $this->hasMany(Incidencia::class, 'id_tipo_mantenimiento');
     }
 }

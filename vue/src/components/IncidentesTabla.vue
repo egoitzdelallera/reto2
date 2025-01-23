@@ -10,364 +10,388 @@
         <transition name="fade">
           <div v-if="showFilters" class="filter-panel-content">
             <h2 class="h4 mb-4">Filtros</h2>
-            <button
-              @click="showFilters = false"
-              class="btn-close position-absolute top-0 end-0 m-2"
-              aria-label="Cerrar filtros"
-            ></button>
+            <button @click="showFilters = false" class="btn-close position-absolute top-0 end-0 m-2"
+              aria-label="Cerrar filtros"></button>
 
             <!-- Filtros -->
             <div class="filters">
-              <!-- Filtro de Gravedad -->
-              <div class="mb-3">
-                <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
-                  @click="toggleFilter('gravedad')"
-                >
-                  <span>GRAVEDAD</span>
-                  <i
-                    :class="['bi', openFilters.gravedad ? 'bi-chevron-up' : 'bi-chevron-down']"
-                  ></i>
-                </button>
-                <div class="mt-2" v-show="openFilters.gravedad">
-                  <div
-                    v-for="option in filters.gravedad"
-                    :key="option.value"
-                    class="form-check"
-                  >
-                    <input
-                      :id="'gravedad-' + option.value"
-                      type="checkbox"
-                      :value="option.value"
-                      v-model="selectedFilters.gravedad"
-                      class="form-check-input"
-                    />
-                    <label
-                      :for="'gravedad-' + option.value"
-                      class="form-check-label"
-                      >{{ option.label }}</label
+                <!-- Filtro de Gravedad -->
+                <div class="mb-3">
+                    <button
+                      class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                      @click="toggleFilter('gravedad')"
                     >
-                  </div>
+                        <span>GRAVEDAD</span>
+                        <i :class="['bi', openFilters.gravedad ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
+                    </button>
+                    <div class="mt-2" v-show="openFilters.gravedad">
+                        <div v-for="option in filters.gravedad" :key="option.value" class="form-check">
+                            <input :id="'gravedad-' + option.value" type="checkbox" :value="option.value"
+                                v-model="selectedFilters.gravedad" class="form-check-input" />
+                            <label :for="'gravedad-' + option.value" class="form-check-label">{{ option.label
+                            }}</label>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-              <!-- Filtro de Prioridad -->
+                
+               <!-- Filtro de Prioridad -->
               <div class="mb-3">
                 <button
                   class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
                   @click="toggleFilter('prioridad')"
                 >
                   <span>PRIORIDAD</span>
-                  <i
-                    :class="['bi', openFilters.prioridad ? 'bi-chevron-up' : 'bi-chevron-down']"
-                  ></i>
+                  <i :class="['bi', openFilters.prioridad ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
                 </button>
                 <div class="mt-2" v-show="openFilters.prioridad">
-                  <div
-                    v-for="option in filters.prioridad"
-                    :key="option.value"
-                    class="form-check"
-                  >
-                    <input
-                      :id="'prioridad-' + option.value"
-                      type="checkbox"
-                      :value="option.value"
-                      v-model="selectedFilters.prioridad"
-                      class="form-check-input"
-                    />
-                    <label
-                      :for="'prioridad-' + option.value"
-                      class="form-check-label"
-                      >{{ option.label }}</label
-                    >
+                  <div v-for="option in filters.prioridad" :key="option.value" class="form-check">
+                    <input :id="'prioridad-' + option.value" type="checkbox" :value="option.value"
+                      v-model="selectedFilters.prioridad" class="form-check-input" />
+                    <label :for="'prioridad-' + option.value" class="form-check-label">{{ option.label
+                    }}</label>
                   </div>
                 </div>
               </div>
 
-              <!-- Filtro de Campus -->
-              <div class="mb-3">
-                <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
-                  @click="toggleFilter('campus')"
-                >
-                  <span>CAMPUS</span>
-                  <i
-                    :class="['bi', openFilters.campus ? 'bi-chevron-up' : 'bi-chevron-down']"
-                  ></i>
-                </button>
-                <div class="mt-2" v-show="openFilters.campus">
-                  <div
-                    v-for="option in filters.campus"
-                    :key="option.value"
-                    class="form-check"
-                  >
-                    <input
-                      :id="'campus-' + option.value"
-                      type="checkbox"
-                      :value="option.value"
-                      v-model="selectedFilters.campus"
-                      class="form-check-input"
-                    />
-                    <label :for="'campus-' + option.value" class="form-check-label"
-                      >{{ option.label }}</label
-                    >
+                          <!-- Filtro de Taller -->
+                            <div class="mb-3">
+                          <button
+                            class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                            @click="toggleFilter('taller')"
+                          >
+                            <span>TALLER</span>
+                            <i :class="['bi', openFilters.taller ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
+                          </button>
+                          <div class="mt-2" v-show="openFilters.taller">
+                            <div v-for="taller in talleres" :key="taller.id_taller" class="form-check">
+                              <input
+                                :id="'taller-' + taller.id_taller"
+                                type="checkbox"
+                                :value="taller.nombre"
+                                v-model="selectedFilters.taller"
+                                class="form-check-input"
+                              />
+                              <label :for="'taller-' + taller.id_taller" class="form-check-label">{{ taller.nombre }}</label>
+                            </div>
+                          </div>
+                        </div>
+
+
+                          <!-- Filtro de Estado -->
+                          <div class="mb-3">
+                              <button
+                                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                                  @click="toggleFilter('estado')">
+                                  <span>ESTADO</span>
+                                  <i :class="['bi', openFilters.estado ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
+                              </button>
+                              <div class="mt-2" v-show="openFilters.estado">
+                                  <div v-for="option in filters.estado" :key="option.value" class="form-check">
+                                      <input :id="'estado-' + option.value" type="checkbox" :value="option.value"
+                                          v-model="selectedFilters.estado" class="form-check-input" />
+                                      <label :for="'estado-' + option.value" class="form-check-label">{{ option.label
+                                      }}</label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </div>
-              </div>
+              </transition>
+          </div>
 
-              <!-- Filtro de Estado -->
-              <div class="mb-3">
-                <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
-                  @click="toggleFilter('estado')"
-                >
-                  <span>ESTADO</span>
-                  <i
-                    :class="['bi', openFilters.estado ? 'bi-chevron-up' : 'bi-chevron-down']"
-                  ></i>
-                </button>
-                <div class="mt-2" v-show="openFilters.estado">
-                  <div
-                    v-for="option in filters.estado"
-                    :key="option.value"
-                    class="form-check"
-                  >
-                    <input
-                      :id="'estado-' + option.value"
-                      type="checkbox"
-                      :value="option.value"
-                      v-model="selectedFilters.estado"
-                      class="form-check-input"
-                    />
-                    <label :for="'estado-' + option.value" class="form-check-label"
-                      >{{ option.label }}</label
-                    >
+          <!-- Contenido principal -->
+          <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
+              <button v-show="!showFilters" class="filter-toggle btn btn-primary mb-1"
+                  :class="{ 'hidden': showFilters }" @click="showFilters = true">
+                  <i class="bi bi-funnel"></i> Filtros
+              </button>
+
+              <h1 class="h2 mb-4">Incidencias</h1>
+
+              <!-- Barra de búsqueda -->
+              <div class="d-flex justify-content-between mb-4">
+                  <div class="input-group w-75">
+                      <span class="input-group-text">
+                          <i class="bi bi-search"></i>
+                      </span>
+                      <input type="text" placeholder="Buscar..." v-model="searchQuery" class="form-control" />
                   </div>
-                </div>
+
+                   <div class="d-flex justify-content-end">
+                     <button class="btn btn-success ml-2" @click="openModal">
+                        <i class="bi bi-plus-square"></i> Nueva Incidencia
+                    </button>
+                     <button class="btn btn-primary ml-2" @click="openMantenimientoModal">
+                        <i class="bi bi-tools"></i> Crear Mantenimiento
+                    </button>
+                 </div>
               </div>
-            </div>
+
+              <!-- Tabla -->
+              <div class="table-responsive">
+                  <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th>TÍTULO</th>
+                              <th>ESTADO</th>
+                              <th>PRIORIDAD</th>
+                              <th>FECHA</th>
+                              <th>MÁQUINA</th>
+                              <th>TALLER</th>
+                              <th>CREADOR</th>
+                              <th>TÉCNICO</th>
+                              <th>GRAVEDAD</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="(incidencia, i) in paginatedIncidencias" :key="i"
+                              @click="goToIncidencia(incidencia.id_incidencia)" style="cursor: pointer;">
+                              <td class="fw-medium">{{ incidencia.descripcion }}</td>
+                              <td>
+                                  <span :class="['badge', getEstadoClass(incidencia.estado)]">
+                                      {{ incidencia.estado }}
+                                  </span>
+                              </td>
+                              <td>
+                                  <span :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]">
+                                      {{ incidencia.maquina.prioridad }}
+                                  </span>
+                              </td>
+                              <td>{{ formatDate(incidencia.fecha_reporte) }}</td>
+                              <td>{{ incidencia.maquina.nombre }}</td>
+                              <td>
+                                  {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
+                              </td>
+                              <td>{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
+                              <td>{{
+                                      incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar'
+                                  }}</td>
+                              <td>
+                                  <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
+                                      {{ incidencia.gravedad }}
+                                  </span>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+
+              <!-- Paginación -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <button class="page-link" @click="previousPage" aria-label="Previous" >
+                            <span aria-hidden="true">«</span>
+                        </button>
+                    </li>
+                    <li v-for="page in totalPages" :key="page"
+                        class="page-item"
+                    :class="{ active: page === currentPage }"
+                    >
+                        <button class="page-link" @click="goToPage(page)">{{ page }}</button>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <button class="page-link" @click="nextPage" aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                        </button>
+                    </li>
+                    </ul>
+                </nav>
           </div>
-        </transition>
       </div>
 
-      <!-- Contenido principal -->
-      <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
-        <h1 class="h2 mb-4">Incidencias</h1>
+        <!-- Modal para crear mantenimiento -->
+        <div class="modal fade" :class="{ 'show d-block': showMantenimientoModal }" tabindex="-1" role="dialog">
+           <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                     <div class="modal-header">
+                         <h5 class="modal-title">Nuevo Mantenimiento</h5>
+                         <button type="button" class="btn-close" @click="closeMantenimientoModal"></button>
+                     </div>
+                    <div class="modal-body">
+                         <div class="mb-3">
+                            <label for="mantenimiento-titulo" class="form-label">Título</label>
+                             <input type="text" class="form-control" id="mantenimiento-titulo" v-model="newMantenimiento.descripcion"
+                                required>
+                         </div>
+                          <div class="mb-3">
+                            <label for="mantenimiento-taller" class="form-label">Taller</label>
+                             <div class="mt-2" style="height: auto; overflow-y: auto; border: 1px solid #ced4da; padding: 5px; border-radius: 5px;">
+                                <div v-for="taller in talleres" :key="taller.id_taller" class="form-check">
+                                   <input
+                                        :id="'taller-mantenimiento-' + taller.id_taller"
+                                        type="checkbox"
+                                        :value="taller"
+                                        v-model="selectedMantenimientoTaller"
+                                        class="form-check-input"
+                                   />
+                                  <label :for="'taller-mantenimiento-' + taller.id_taller" class="form-check-label">{{ taller.nombre }}</label>
+                               </div>
+                              </div>
+                            </div>
+                             <div class="mb-3">
+                              <label for="mantenimiento-maquina" class="form-label">Máquina</label>
+                               <div class="mt-2" style="max-height: 250px; overflow-y: auto; border: 1px solid #ced4da; padding: 5px; border-radius: 5px;">
+                                    <div v-for="maquina in filteredMantenimientoMaquinas" :key="maquina.id_maquina" class="form-check">
+                                        <input
+                                          :id="'maquina-mantenimiento-' + maquina.id_maquina"
+                                          type="checkbox"
+                                          :value="maquina"
+                                         v-model="selectedMantenimientoMachine"
+                                          class="form-check-input"
+                                        />
+                                        <label :for="'maquina-mantenimiento-' + maquina.id_maquina" class="form-check-label">{{ maquina.nombre }}</label>
+                                    </div>
+                                </div>
+                          </div>
 
-        <!-- Barra de búsqueda -->
-        <div class="mb-4 d-flex justify-content-between align-items-center">
-          <div class="input-group w-50">
-            <span class="input-group-text">
-              <i class="bi bi-search"></i>
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              v-model="searchQuery"
-              class="form-control"
-            />
-          </div>
-           <div>
-          <button
-            v-show="!showFilters"
-            class="filter-toggle btn btn-primary mb-1 me-2"
-            :class="{ 'hidden': showFilters }"
-            @click="showFilters = true"
-          >
-            <i class="bi bi-funnel"></i> Filtros
-          </button>
-           <button
-              class="btn btn-success mb-1"
-              @click="openModal = true"
-            >
-              <i class="bi bi-plus"></i> Crear Incidencia
-            </button>
-        </div>
-        </div>
+                        <div class="mb-3">
+                            <label for="mantenimiento-frecuencia" class="form-label">Frecuencia</label>
+                            <select class="form-select" id="mantenimiento-frecuencia" v-model="newMantenimiento.frecuencia" required>
+                                <option value="">Selecciona una frecuencia</option>
+                                <option value="Diaria">Diaria</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Mensual">Mensual</option>
+                                <option value="Anual">Anual</option>
+                            </select>
+                        </div>
+                          <div class="mb-3" v-if="newMantenimiento.frecuencia === 'Semanal'">
+                            <label for="mantenimiento-fecha-semanal" class="form-label">Día de la semana</label>
+                            <input type="date" class="form-control" id="mantenimiento-fecha-semanal" v-model="newMantenimiento.fechaSemanal" required>
+                        </div>
+                     </div>
+                      <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" @click="closeMantenimientoModal">Cancelar</button>
+                           <button type="button" class="btn btn-primary" @click="createMantenimiento">Guardar</button>
+                      </div>
+                 </div>
+             </div>
+            </div>
+           <div v-if="showMantenimientoModal" class="modal-backdrop fade show"></div>
+    
+    
+      <!-- Modal para crear incidencia -->
+      <div class="modal fade" :class="{ 'show d-block': showModal }" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Nueva Incidencia</h5>
+                      <button type="button" class="btn-close" @click="closeModal"></button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="mb-3">
+                          <label for="incidencia-titulo" class="form-label">Título</label>
+                          <input type="text" class="form-control" id="incidencia-titulo" v-model="newIncidencia.descripcion"
+                              required>
+                      </div>
+                      <div class="mb-3">
+                         <label for="incidencia-taller" class="form-label">Taller</label>
+                           <select class="form-select" id="incidencia-taller" v-model="selectedTaller" required>
+                             <option value="">Selecciona un taller</option>
+                                  <option v-for="taller in talleres" :key="taller.id_taller" :value="taller">
+                                        {{ taller.nombre }}
+                                  </option>
+                            </select>
+                      </div>
+                      <div class="mb-3">
+                          <label for="incidencia-maquina" class="form-label">Máquina</label>
+                          <select class="form-select" id="incidencia-maquina" v-model="selectedMachine" required>
+                           <option value="">Selecciona una máquina</option>
+                              <option v-for="maquina in filteredMaquinas" :key="maquina.id_maquina" :value="maquina">
+                                {{ maquina.nombre }} - {{ maquina.descripcion }}
+                            </option>
+                          </select>
+                      </div>
 
-        <!-- Tabla -->
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>TÍTULO</th>
-                <th>ESTADO</th>
-                <th>PRIORIDAD</th>
-                <th>FECHA</th>
-                <th>MÁQUINA</th>
-                <th>CREADOR</th>
-                <th>TÉCNICO</th>
-                <th>GRAVEDAD</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(incidencia, i) in filteredIncidencias"
-                :key="i"
-                @click="goToIncidencia(incidencia.id_incidencia)"
-                style="cursor: pointer;"
-              >
-                <td class="fw-medium">{{ incidencia.descripcion }}</td>
-                <td>
-                  <span :class="['badge', getEstadoClass(incidencia.estado)]">
-                    {{ incidencia.estado }}
-                  </span>
-                </td>
-                <td>
-                  <span
-                    :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]"
-                  >
-                    {{ incidencia.maquina.prioridad }}
-                  </span>
-                </td>
-                <td>{{ incidencia.fecha_reporte }}</td>
-                <td>{{ incidencia.maquina.nombre }}</td>
-                <td>{{ incidencia.creador.nombre }}</td>
-                <td>{{
-                  incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar'
-                }}</td>
-                <td>
-                  <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
-                    {{ incidencia.gravedad }}
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal de creación de incidencia -->
-    <div class="modal fade" :class="{ show: openModal }" style="display: none;" >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Crear Incidencia</h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
-          </div>
-          <div class="modal-body">
-             <div class="mb-3">
-                <label class="form-label">Descripción de la Incidencia</label>
-                <textarea class="form-control" v-model="newIncidencia.descripcion"></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Gravedad</label>
-              <select class="form-select" v-model="newIncidencia.gravedad">
-                <option value="Maquina parada">Maquina parada</option>
-                <option value="Maquina en marcha">Maquina en marcha</option>
-                <option value="Aviso">Aviso</option>
-                <option value="Mantenimiento">Mantenimiento</option>
-              </select>
-            </div>
-             <!-- Opciones adicionales para Mantenimiento -->
-            <div v-if="newIncidencia.gravedad === 'Mantenimiento'">
-                <div class="mb-3">
-                    <label class="form-label">Tipo de Mantenimiento</label>
-                    <select class="form-select" v-model="newIncidencia.tipo_mantenimiento">
-                      <option v-for="tipo in tiposMantenimiento" :key="tipo.id_tipo_mantenimiento" :value="tipo.id_tipo_mantenimiento">{{tipo.nombre}}</option>
-                    </select>
-                </div>
-                  <div class="mb-3">
-                    <label class="form-label">Frecuencia de Mantenimiento</label>
-                    <select class="form-select" v-model="newIncidencia.frecuencia">
-                        <option value="diaria">Diaria</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="mensual">Mensual</option>
-                        <option value="anual">Anual</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Multimedia</label>
-              <input type="file" class="form-control" @change="handleMultimediaUpload" accept="image/*, video/*">
-               <div v-if="newIncidencia.multimedia">
-                    <div v-if="newIncidencia.multimedia.startsWith('data:image')">
-                    <img :src="newIncidencia.multimedia" alt="Imagen" style="max-width: 100px; max-height: 100px; margin-top: 5px;">
-                    </div>
-                    <div v-else-if="newIncidencia.multimedia.startsWith('data:video')">
-                        <video :src="newIncidencia.multimedia" controls width="100" height="100" style="margin-top: 5px;"></video>
-                    </div>
-                    <p style="margin-top: 5px;">Multimedia seleccionado</p>
-                </div>
-            </div>
-           <div class="mb-3">
-              <label class="form-label">Taller</label>
-              <select class="form-select" v-model="selectedTaller" @change="fetchMaquinas">
-                <option v-for="taller in talleres" :key="taller.id_taller" :value="taller.id_taller">{{ taller.nombre }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Máquina</label>
-                  <select class="form-select" v-model="newIncidencia.id_maquina" :disabled="!maquinas.length">
-                   <option v-for="maquina in maquinas" :key="maquina.id_maquina" :value="maquina.id_maquina">{{ maquina.nombre }}</option>
-                  </select>
+                      <div class="mb-3">
+                          <label for="incidencia-gravedad" class="form-label">Gravedad</label>
+                          <select class="form-select" id="incidencia-gravedad" v-model="newIncidencia.gravedad"
+                              required>
+                              <option v-for="option in filters.gravedad" :key="option.value" :value="option.value">{{
+                                  option.label }}</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
+                      <button type="button" class="btn btn-primary" @click="createIncidencia">Guardar</button>
+                  </div>
               </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
-            <button type="button" class="btn btn-primary" @click="createIncidencia">Crear Incidencia</button>
-          </div>
-        </div>
       </div>
-    </div>
+       <div v-if="showModal" class="modal-backdrop fade show"></div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import useIncidencias from '@/composables/useIncidencias';
-import useTalleres from '@/composables/useTalleres';
 import useMaquinas from '@/composables/useMaquinas';
-import useTiposMantenimiento from '@/composables/useTiposMantenimiento';
-import { ref, reactive, computed } from 'vue';
+import useTalleres from '@/composables/useTalleres';
+import { ref, reactive, computed, watch, onMounted } from 'vue';
 
 const router = useRouter();
+const route = useRoute();
 const showFilters = ref(false);
 const searchQuery = ref('');
+const showModal = ref(false);
+const showMantenimientoModal = ref(false);
+const itemsPerPage = 30;
+const currentPage = ref(1);
 
-// Obtener datos
-const { incidencias, createIncidencia: createIncidenciaApi } = useIncidencias();
-const { talleres } = useTalleres();
-const { maquinas, fetchMaquinasByTallerId} = useMaquinas();
-const { tiposMantenimiento } = useTiposMantenimiento();
+const { maquinas,  } = useMaquinas();
+const { incidencias, createIncidencia: apiCreateIncidencia } = useIncidencias();
+const { talleres, fetchTalleres } = useTalleres();
 
+const newIncidencia = reactive({
+descripcion: '',
+gravedad: '',
+});
 
+const newMantenimiento = reactive({
+    descripcion: '',
+    frecuencia: null,
+    fechaSemanal:null
+});
+
+onMounted(async () => {
+  await fetchTalleres();
+});
+const selectedMachine = ref(null);
+const selectedTaller = ref(null);
+const selectedMantenimientoTaller = ref([]);
+const selectedMantenimientoMachine = ref([]);
 const filters = reactive({
   gravedad: [
-    { value: 'Maquina parada', label: 'Maquina parada' },
-    { value: 'Aviso', label: 'Aviso' },
-    { value: 'Mantenimiento', label: 'Mantenimiento' },
+      { value: 'Maquina Parada', label: 'Maquina Parada' },
+      { value: 'Aviso', label: 'Aviso' },
+      { value: 'Maquina en Marcha', label: 'Maquina en Marcha' },
+         { value: 'Mantenimiento', label: 'Mantenimiento' },
   ],
   prioridad: [
-    { value: 'Alta', label: 'Alta' },
-    { value: 'Media', label: 'Media' },
-    { value: 'Baja', label: 'Baja' },
-  ],
-  campus: [
-    { value: 'Taller A', label: 'Taller A' },
-    { value: 'Taller B', label: 'Taller B' },
-    { value: 'Taller C', label: 'Taller C' },
+      { value: 'Alta', label: 'Alta' },
+      { value: 'Media', label: 'Media' },
+      { value: 'Baja', label: 'Baja' },
   ],
   estado: [
-    { value: 'Abierta', label: 'Abierta' },
-    { value: 'En progreso', label: 'En progreso' },
+     { value: 'Abierta', label: 'Abierta' },
+    { value: 'En Progreso', label: 'En Progreso' },
     { value: 'Resuelta', label: 'Resuelta' },
-    { value: 'Cancelada', label: 'Cancelada' },
+     { value: 'Cancelada', label: 'Cancelada' },
   ],
 });
 
 const selectedFilters = reactive({
   gravedad: [],
   prioridad: [],
-  campus: [],
+  taller: [],
   estado: [],
 });
 
 const openFilters = reactive({
   gravedad: false,
   prioridad: false,
-  campus: false,
+  taller:false,
   estado: false,
 });
 
@@ -375,70 +399,110 @@ const toggleFilter = (filterName) => {
   openFilters[filterName] = !openFilters[filterName];
 };
 
-
-const filteredIncidencias = computed(() => {
-  return incidencias.value.filter((incidencia) => {
-    const matchesSearch = Object.values(incidencia).some(
-      (value) =>
-        value &&
-        value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-
-    const matchesFilters =
-      (selectedFilters.gravedad.length === 0 ||
-        selectedFilters.gravedad.includes(incidencia.gravedad)) &&
-      (selectedFilters.prioridad.length === 0 ||
-        selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
-      (selectedFilters.campus.length === 0 ||
-        selectedFilters.campus.includes(incidencia.maquina.campus)) &&
-      (selectedFilters.estado.length === 0 ||
-        selectedFilters.estado.includes(incidencia.estado));
-
-    return matchesSearch && matchesFilters;
-  });
+const filteredMaquinas = computed(() => {
+    if (!selectedTaller.value) {
+      return maquinas.value;
+    }
+   return maquinas.value.filter(maquina => maquina.id_taller === selectedTaller.value.id_taller);
+});
+const filteredMantenimientoMaquinas = computed(() => {
+    if (selectedMantenimientoTaller.value.length === 0) {
+        return maquinas.value;
+    }
+     const selectedTallerIds = selectedMantenimientoTaller.value.map(taller => taller.id_taller);
+     return maquinas.value.filter(maquina => selectedTallerIds.includes(maquina.id_taller));
 });
 
+const filteredIncidencias = computed(() => {
+    const tallerFilter = route.query.taller;
+
+    return incidencias.value.filter((incidencia) => {
+        const matchesSearch = Object.values(incidencia).some(
+            (value) =>
+                value &&
+                value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+        const matchesTaller = !tallerFilter || (incidencia.maquina?.taller?.nombre === tallerFilter);
+        
+        const matchesSelectTaller = selectedFilters.taller.length === 0 || selectedFilters.taller.includes(incidencia.maquina?.taller?.nombre);
+            
+        const matchesFilters =
+            (selectedFilters.gravedad.length === 0 ||
+                selectedFilters.gravedad.includes(incidencia.gravedad)) &&
+            (selectedFilters.prioridad.length === 0 ||
+                selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
+            (selectedFilters.estado.length === 0 ||
+                selectedFilters.estado.includes(incidencia.estado));
+        
+      return matchesSearch && matchesFilters && matchesTaller && matchesSelectTaller;
+    });
+});
+
+const paginatedIncidencias = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+   return filteredIncidencias.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredIncidencias.value.length / itemsPerPage);
+});
+
+watch(
+  () => selectedFilters,
+  () => {
+      currentPage.value = 1;
+  },
+ { deep: true }
+);
+watch(
+  () => route.query,
+  () => {
+    currentPage.value = 1
+  },
+  { deep: true }
+);
 
 const getEstadoClass = (estado) => {
   switch (estado) {
-    case 'Abierta':
-      return 'badge-abierta';
-    case 'En progreso':
-      return 'badge-en-progreso';
-    case 'Resuelta':
-      return 'badge-resuelta';
     case 'Cancelada':
-      return 'badge-cancelada';
+        return 'badge badge-pendiente';
+    case 'En Progreso':
+        return 'badge badge-en-proceso';
+    case 'Resuelta':
+        return 'badge badge-resuelta';
+     case 'Abierta':
+        return 'badge badge-Abierta';
     default:
-      return '';
+        return 'badge';
   }
 };
 
-
 const getPrioridadClass = (prioridad) => {
-    switch (prioridad) {
+  switch (prioridad) {
       case 'Alta':
-        return 'badge-alta';
+          return 'badge badge-alta';
       case 'Media':
-        return 'badge-media';
+          return 'badge badge-media';
       case 'Baja':
-        return 'badge-baja';
+          return 'badge badge-baja';
       default:
-        return '';
-    }
-  };
-
+          return 'badge';
+  }
+};
 
 const getGravedadClass = (gravedad) => {
   switch (gravedad) {
-    case 'Maquina parada':
-      return 'badge-maquina-parada';
-    case 'Aviso':
-      return 'badge-aviso';
-    case 'Mantenimiento':
-      return 'badge-mantenimiento';
-    default:
-      return '';
+      case 'Maquina Parada':
+          return 'badge badge-maquina-parada';
+      case 'Aviso':
+          return 'badge badge-aviso';
+      case 'Maquina en Marcha':
+          return 'badge badge-maquina-en-marcha';
+          case 'Mantenimiento':
+          return 'badge badge-mantenimiento';
+      default:
+          return 'badge';
   }
 };
 
@@ -446,67 +510,99 @@ const goToIncidencia = (id) => {
   router.push({ name: 'IncidenciaIndividual', params: { id: id } });
 };
 
-//MODAL DE CREAR INCIDENCIA
-const openModal = ref(false);
-const newIncidencia = reactive({
-  descripcion: '',
-  gravedad: 'Maquina parada',
-    tipo_mantenimiento: null,
-    frecuencia: null,
-    multimedia: null,
-    id_maquina: null,
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
-});
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 
-const selectedTaller = ref(null);
+const openModal = () => {
+  showModal.value = true;
+};
+const openMantenimientoModal = () => {
+    showMantenimientoModal.value = true;
+};
 
 const closeModal = () => {
-  openModal.value = false;
-  resetNewIncidencia();
+  showModal.value = false;
+  resetForm();
 };
-
-
-const resetNewIncidencia = () => {
-    newIncidencia.descripcion = '';
-    newIncidencia.gravedad = 'Maquina parada';
-    newIncidencia.tipo_mantenimiento = null;
-    newIncidencia.frecuencia = null;
-    newIncidencia.multimedia = null;
-    newIncidencia.id_maquina = null;
-    selectedTaller.value = null;
+const closeMantenimientoModal = () => {
+    showMantenimientoModal.value = false;
+  resetMantenimientoForm();
 };
-
-
-const handleMultimediaUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-          newIncidencia.multimedia = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-};
-
 
 const createIncidencia = async () => {
-   try {
-    await createIncidenciaApi(newIncidencia);
-    closeModal();
+    try {
+      if (!selectedMachine.value || !selectedTaller.value) {
+        throw new Error('No Machine or Taller Selected');
+      }
+        const newIncidenciaToSend = {
+             ...newIncidencia,
+             id_maquina: selectedMachine.value.id_maquina,
+        };
+      await apiCreateIncidencia(newIncidenciaToSend, selectedMachine.value);
+      closeModal();
     } catch (error) {
-    console.error('Error al crear la incidencia:', error);
+      console.error("Error creating incidencia:", error);
     }
+  };
+    const createMantenimiento = async () => {
+    try {
+        if (!selectedMantenimientoTaller.value || selectedMantenimientoTaller.value.length === 0 || selectedMantenimientoMachine.value.length === 0 ) {
+            throw new Error('No Machine or Taller Selected');
+        }
+        
+        const newIncidencias = selectedMantenimientoMachine.value.map(machine => ({
+           ...newMantenimiento,
+          id_maquina: machine.id_maquina,
+           gravedad: 'Mantenimiento',
+           frecuencia: newMantenimiento.frecuencia,
+           fecha_ini: newMantenimiento.frecuencia === 'Semanal' ? newMantenimiento.fechaSemanal : new Date().toISOString(),
+
+        }));
+        
+          await Promise.all(newIncidencias.map(incidenciaData => apiCreateIncidencia(incidenciaData, null)));
+          closeMantenimientoModal();
+    } catch (error) {
+        console.error("Error creating mantenimiento:", error);
+    }
+  };
+
+
+
+const resetForm = () => {
+  newIncidencia.descripcion = '';
+  selectedTaller.value = null;
+  selectedMachine.value = null;
+  newIncidencia.gravedad = '';
+};
+const resetMantenimientoForm = () => {
+  newMantenimiento.descripcion = '';
+  newMantenimiento.frecuencia = null;
+  newMantenimiento.fechaSemanal = null;
+    selectedMantenimientoTaller.value = [];
+    selectedMantenimientoMachine.value = [];
 };
 
-const fetchMaquinas = async () => {
-    if (selectedTaller.value) {
-        await fetchMaquinasByTallerId(selectedTaller.value);
-    } else {
-        maquinas.value = [];
-    }
+const goToPage = (page) => {
+   currentPage.value = page;
 };
-
-
+const previousPage = () => {
+ if (currentPage.value > 1){
+      currentPage.value--;
+ }
+};
+const nextPage = () => {
+  if (currentPage.value < totalPages.value)
+   currentPage.value++;
+};
 </script>
 
 <style scoped>
@@ -522,7 +618,8 @@ const fetchMaquinas = async () => {
   left: 0;
   bottom: 0;
   z-index: 1001;
-  transition: transform 0.3s ease-out; /* Transición solo para el translateX */
+  transition: transform 0.3s ease-out;
+  /* Transición solo para el translateX */
   transform: translateX(-100%);
 }
 
@@ -546,7 +643,8 @@ const fetchMaquinas = async () => {
 }
 
 .main-content {
-  transition: margin-left 0.3s ease-out, width 0.3s ease-out;
+  transition: margin-left 0.3s ease-out,
+      width 0.3s ease-out;
   position: relative;
   z-index: 1;
 }
@@ -556,10 +654,13 @@ const fetchMaquinas = async () => {
 }
 
 .filter-toggle {
+  width: 10%;
+  position: fixed;
   top: 10px;
   left: 10px;
   z-index: 1002;
-  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  transition: opacity 0.3s ease-out,
+      transform 0.3s ease-out;
 }
 
 .filter-toggle:not(:hover) {
@@ -570,37 +671,37 @@ const fetchMaquinas = async () => {
   transform: translateX(-100%);
 }
 
+
 /* Clases para las insignias */
 .badge {
-    display: inline-block;
-    padding: 0.25em 0.5em;
-    font-size: 0.75em;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: 0.25rem;
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
 }
 
-.badge-abierta {
+.badge-pendiente {
   background-color: #dc3545;
   color: white;
 }
 
-.badge-en-progreso {
-    background-color: #ffc107;
-    color: black;
+.badge-en-proceso {
+  background-color: #ffc107;
+  color: black;
 }
 
 .badge-resuelta {
   background-color: #198754;
   color: white;
 }
-
-.badge-cancelada {
-  background-color: #6c757d;
-  color: white;
+.badge-Abierta {
+    background-color: #34a36f;
+    color: white;
 }
 
 .badge-alta {
@@ -628,34 +729,47 @@ const fetchMaquinas = async () => {
   color: black;
 }
 
-.badge-mantenimiento {
+.badge-maquina-en-marcha {
   background-color: #17a2b8;
   color: white;
 }
-
+ .badge-mantenimiento {
+  background-color: #007bff;
+  color: white;
+}
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1050;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
 
 .modal.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .modal-dialog{
-     max-width: 600px;
-     margin: 1.75rem auto;
-  }
+  display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
 </style>
