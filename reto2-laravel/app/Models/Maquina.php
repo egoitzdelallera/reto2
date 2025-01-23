@@ -17,8 +17,10 @@ class Maquina extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'id_taller', // Cambiado a id_taller
+        'ubicacion',
+        'id_taller',
         'prioridad',
+        'estado'
     ];
 
     public function taller()
