@@ -473,10 +473,10 @@ const filters = reactive({
     { value: 'Baja', label: 'Baja' },
   ],
   estado: [
-    { value: 'Abierta', label: 'Abierta' },
+     { value: 'Abierta', label: 'Abierta' },
     { value: 'En Progreso', label: 'En Progreso' },
     { value: 'Resuelta', label: 'Resuelta' },
-    { value: 'Cancelada', label: 'Cancelada' },
+     { value: 'Cancelada', label: 'Cancelada' },
   ],
 });
 

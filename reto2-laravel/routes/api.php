@@ -11,17 +11,27 @@ use App\Http\Controllers\TipoAveriaController;
 
 use App\Http\Controllers\TalleresController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('jwt.auth');
+// Rutas protegidas por JWT
+Route::middleware('jwt.auth')->group(function () {
+    Route::get('/user', [UserController::class, 'user']);
+    Route::get('/perfil', [UserController::class, 'user']);
+    Route::post('logout', [UserController::class, 'logout']);
+    Route::get('/campus', [CampusController::class, 'index']);
+    Route::patch('/users/{id}', [UserController::class, 'update']); // Changed from post to patch
+    Route::post('/users', [UserController::class, 'store']);
+     Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
+     Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Added this line
+
+});
 
 // Rutas para máquinas
 Route::middleware('api')->group(function () {
     Route::get('/maquinas', [MaquinaController::class, 'index']);
     Route::post('/maquinas', [MaquinaController::class, 'store']);
     Route::get('/maquinas/{maquina}', [MaquinaController::class, 'show']);
-    Route::put('/maquinas/{maquina}', [MaquinaController::class, 'update']);
+    Route::patch('/maquinas/{maquina}', [MaquinaController::class, 'update']); // Changed from put to patch
     Route::delete('/maquinas/{maquina}', [MaquinaController::class, 'destroy']);
+    Route::patch('/maquinas/{maquina}/toggle-status', [MaquinaController::class, 'toggleStatus']);
 });
 Route::middleware('api')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
@@ -30,11 +40,6 @@ Route::middleware('api')->group(function () {
     Route::delete('/user/{user}', [UserController::class, 'destroy']);
 });
 
-Route::middleware('jwt.auth')->group(function () {
-     Route::post('/users/{id}', [UserController::class, 'update']);
-     Route::post('/users', [UserController::class, 'store']);
-      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
-});
 Route::middleware('api')->group(function () {
     Route::get('/talleres', [TalleresController::class, 'index']);
     Route::get('/talleres/{id}', [TalleresController::class, 'show']);
@@ -58,6 +63,7 @@ Route::middleware('api')->group(function () {
 // Rutas para incidencias
 Route::middleware('api')->group(function () {
     Route::get('/incidencias', [IncidenciaController::class, 'index']);
+    Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index2']);
     Route::get('/incidencias/{id_incidencia}', [IncidenciaController::class, 'show']);
     Route::post('/incidencias', [IncidenciaController::class, 'store']);
     Route::put('/incidencias/{id}', [IncidenciaController::class, 'update']);
@@ -65,14 +71,4 @@ Route::middleware('api')->group(function () {
     Route::get('/tipo-averia-options', [IncidenciaController::class, 'getTipoAveriaOptions']);
     //Tipos Averia Resource (Protected)
     Route::get('/tipos-averia', [TipoAveriaController::class, 'index']);
-});
-
-// Rutas protegidas por JWT
-
-Route::middleware('jwt.auth')->post('logout', [UserController::class, 'logout']);
-Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
-
-//Rutas campus
-Route::middleware('jwt.auth')->group(function () {
-   Route::get('/campus', [CampusController::class, 'index']);
 });

@@ -23,6 +23,7 @@ class IncidenciaController extends Controller
         return response()->json($incidencias);
     }
 
+
     public function show($id_incidencia)
     {
         $incidencia = Incidencia::with(['maquina', 'maquina.taller', 'maquina.taller.campus', 'creador', 'fasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias.tecnico', 'tipoAveria'])->find($id_incidencia);
@@ -31,6 +32,26 @@ class IncidenciaController extends Controller
         }
         return response()->json($incidencia);
     }
+    public function index2(Request $request)
+    {
+          $idTecnico = $request->query('id_tecnico');
+        
+          $incidencias = Incidencia::select('incidencias.*', 'maquinas.nombre as maquina_nombre')
+                ->join('maquinas', 'incidencias.id_maquina', '=', 'maquinas.id_maquina')
+                ->join('fases_incidencias', 'incidencias.id_incidencia', '=', 'fases_incidencias.id_incidencia')
+                ->join('tecnicos_fases_incidencias', 'fases_incidencias.id_fase_incidencia', '=', 'tecnicos_fases_incidencias.id_fase_incidencia')
+                 ->where('tecnicos_fases_incidencias.id_tecnico', $idTecnico)
+                  ->distinct()
+                   ->with(['maquina:id_maquina,nombre', 'maquina.taller:id_taller,nombre',])
+                 ->get();
+           $incidencias->each(function ($incidencia) {
+                $incidencia->maquina_nombre = $incidencia->maquina->nombre;
+           });
+
+         return response()->json($incidencias);
+    }
+
+
 
     public function getTipoAveriaOptions()
     {
@@ -96,7 +117,6 @@ class IncidenciaController extends Controller
             'estado' => "Abierta",
              'id_creador' => 1,
         ]);
-
         return response()->json($incidencia);
     }
 
