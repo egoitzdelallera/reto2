@@ -163,6 +163,7 @@ export default function useIncidencias() {
         getGravedadClass,
         getPrioridadClass,
         createIncidencia,
+        getIncidenciaById,
         loading,
         error,
         message,
