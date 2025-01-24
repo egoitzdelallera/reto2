@@ -265,19 +265,19 @@ const descripcion = ref('');
 const faseSeleccionada = ref(null);
 
 onMounted(async () => {
-  const incidenciaId = route.params.id;
-  try {
-    const foundIncidencia = await getIncidenciaById(incidenciaId);
-    if (foundIncidencia) {
-      incidencia.value = foundIncidencia;
-    } else {
-      console.error('Incidencia no encontrada');
-      router.push('/incidencias');
-    }
-  } catch (error) {
-    console.error('Error al cargar la incidencia:', error);
+const incidenciaId = route.params.id;
+try {
+  const foundIncidencia = await getIncidenciaById(incidenciaId);
+  if (foundIncidencia) {
+    incidencia.value = foundIncidencia;
+  } else {
+    console.error('Incidencia no encontrada');
     router.push('/incidencias');
   }
+} catch (error) {
+  console.error('Error al cargar la incidencia:', error);
+  router.push('/incidencias');
+}
 });
 
 const openPopup = (fase) => {

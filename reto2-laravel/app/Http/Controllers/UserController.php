@@ -65,7 +65,7 @@ class UserController extends Controller
 
   public function index(Request $request)
     {
-    $users = User::with('campus:id_campus,nombre')
+        $users = User::with('campus:id_campus,nombre')
          ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
          ->get();
         
@@ -76,51 +76,61 @@ class UserController extends Controller
       return response()->json($users);
     }
 
-   public function user(Request $request)
+    public function user(Request $request)
     {
-         $users = User::with('campus:id_campus,nombre')
-         ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
-         ->get();
+          try {
+             $user = JWTAuth::parseToken()->authenticate();
+             
+              $userWithCampus = User::with('campus:id_campus,nombre')
+                ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+                ->find($user->id_usuario);
+                  $userWithCampus->campus = $userWithCampus->campus ? $userWithCampus->campus->nombre : '-';
+              return response()->json($userWithCampus);
+            } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                return response()->json(['message' => 'Token expirado'], 401);
+             } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+                 return response()->json(['message' => 'Token inválido'], 401);
+            }  catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                 return response()->json(['message' => 'Token ausente'], 401);
+             }
         
-      $users->each(function ($user) {
-           $user->campus = $user->campus ? $user->campus->nombre : '-';
-     });
-         return response()->json($users);
     }
 
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+          $user = User::find($id);
     
-          if (!$user) {
+        if (!$user) {
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
-    
-        $validator = Validator::make($request->all(), [
+         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'correo' => 'required|string|email|max:255|unique:users,correo,' . $id . ',id_usuario',
-            'rol' => 'required|in:Administrador,Técnico,Operario',
-            'password' => 'nullable|string|min:6',
+              'apellido' => 'required|string|max:255',
+             'password' => 'nullable|string|min:6',
+          
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         $user->nombre = $request->input('nombre');
-        $user->apellido = $request->input('apellido');
-        $user->correo = $request->input('correo');
-        $user->rol = $request->input('rol');
+         $user->apellido = $request->input('apellido');
     
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
         }
+    
+         $user->save();
 
-        $user->save();
+        $userWithCampus = User::with('campus:id_campus,nombre')
+            ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+            ->find($user->id_usuario);
+            $userWithCampus->campus = $userWithCampus->campus ? $userWithCampus->campus->nombre : '-';
 
-        return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $user]);
+        return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $userWithCampus]);
+
     }
     public function toggleStatus(Request $request, $id)
     {
@@ -130,10 +140,15 @@ class UserController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
     
-        $user->estado = $user->estado ? "Habilitado" : "Deshabilitado";
+       $user->estado = $user->estado === 'Habilitado' ? "Deshabilitado" : "Habilitado";
+
         $user->save();
+         $userWithCampus = User::with('campus:id_campus,nombre')
+            ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+            ->find($user->id_usuario);
+                 $userWithCampus->campus = $userWithCampus->campus ? $userWithCampus->campus->nombre : '-';
     
-        return response()->json(['message' => 'Estado de usuario actualizado correctamente']);
+        return response()->json(['message' => 'Estado de usuario actualizado correctamente', 'user' => $userWithCampus]);
     }
     public function store(Request $request)
     {

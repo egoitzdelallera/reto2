@@ -19,22 +19,17 @@ class Maquina extends Model
         'descripcion',
         'ubicacion',
         'id_taller',
+        'prioridad',
         'estado'
     ];
 
     public function taller()
     {
-        return $this->belongsTo(Taller::class, 'id_taller', 'id_taller');
+        return $this->belongsTo(Taller::class, 'id_taller'); // Relación con Taller
     }
 
-    public function indidencias()
+    public function incidencias()
     {
         return $this->hasMany(Incidencia::class, 'id_maquina');
     }
-
-    public function campus()
-    {
-        return $this->belongsTo(Campus::class, 'id_campus');
-    }
-
 }
