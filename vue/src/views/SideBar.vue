@@ -53,7 +53,7 @@ export default {
               route: '/incidencias',
               submenuTitle: 'Gestión de Incidencias',
               submenuSubtitle: 'Selecciona una sección.',
-              sectionTitle: 'Incidencias Activas',
+              sectionTitle: 'Talleres',
               submenu: [
                   { name: 'Todas', active: false, route: '/incidencias' }
               ]
@@ -62,16 +62,7 @@ export default {
           {
               title: 'Máquinas',
               icon: 'bi bi-pc-display-horizontal',
-              route: '/maquinas',
-              submenuTitle: 'Inventario de Máquinas',
-              submenuSubtitle: 'Gestión de equipamiento.',
-              sectionTitle: 'Equipos',
-              submenu: [
-                  { name: 'Activas', active: true, route: '/maquinas/activas' },
-                  { name: 'Mantenimiento', active: true, route: '/maquinas/mantenimiento' },
-                  { name: 'Historial', active: false, route: '/maquinas/historial' },
-                  { name: 'Inventario', active: false, route: '/maquinas/inventario' }
-              ]
+              route: '/maquinas'
           },
           {
               title: 'Usuarios',
@@ -86,6 +77,18 @@ export default {
                   { name: 'Técnicos', active: false, route: '/usuarios', role: 'Técnico' },
                   { name: 'Operarios', active: false, route: '/usuarios', role: 'Operario' },
               ]
+          },
+          {
+              title: 'Campus',
+                icon: 'bi bi-building',
+                route: '/campus',
+                submenuTitle: 'Gestión de Campus',
+                submenuSubtitle: 'Configuración de campus.',
+                sectionTitle: 'Opciones',
+                submenu: [
+                      { name: 'Nuevo campus', active: false, route: '/campus/nuevo' },
+                      { name: 'Editar campus', active: false, route: '/campus/editar'},
+                  ]
           },
           {
               title: 'Perfil',
@@ -182,5 +185,5 @@ export default {
 };
 </script>
 <style scoped>
-/* Your scoped styles here */
+
 </style>

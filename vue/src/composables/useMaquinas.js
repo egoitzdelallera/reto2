@@ -74,11 +74,11 @@ export default function useMaquinas() {
   const getEstadoClass = (estado) => {
     switch (estado) {
       case 'Habilitado':
-        return 'badge bg-success text-white';
+        return 'badge bg-black text-white fw-normal';
       case 'Deshabilitado':
-        return 'badge bg-dark text-white';
+        return 'badge bg-secondary text-black fw-normal';
       default:
-        return 'badge bg-info text-white';
+        return 'badge bg-info text-white fw-normal';
     }
   };
 
@@ -86,13 +86,13 @@ export default function useMaquinas() {
     console.log('Prioridad:', prioridad);
     switch (prioridad) {
       case 'Alta':
-        return 'badge bg-danger text-white';
+        return 'badge bg-fondoRojo text-danger';
       case 'Media':
-        return 'badge bg-warning text-dark';
+        return 'badge bg-fondoNaranja text-naranja';
       case 'Baja':
-        return 'badge bg-info text-white';
+        return 'badge bg-info text-white fw-normal';
       default:
-        return 'badge bg-info text-white';
+        return 'badge bg-info text-white fw-normal';
     }
   };
 
