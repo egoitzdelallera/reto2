@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid bg-primary">
     <div class="row">
       <!-- Panel de filtros (a la izquierda) -->
       <div
@@ -101,72 +101,74 @@
 
           <!-- Contenido principal -->
           <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
-              <button v-show="!showFilters" class="filter-toggle btn btn-primary mb-1"
-                  :class="{ 'hidden': showFilters }" @click="showFilters = true">
-                  <i class="bi bi-funnel"></i> Filtros
-              </button>
+              
 
               <h1 class="h2 mb-4">Incidencias</h1>
 
               <!-- Barra de búsqueda -->
-              <div class="d-flex justify-content-between mb-4">
-                  <div class="input-group w-75">
+              <div class="d-flex justify-content-around mb-4">
+                  <div class="input-group w-50">
                       <span class="input-group-text">
                           <i class="bi bi-search"></i>
                       </span>
                       <input type="text" placeholder="Buscar..." v-model="searchQuery" class="form-control" />
                   </div>
 
-                   <div class="d-flex justify-content-end">
-                     <button class="btn btn-success ml-2" @click="openModal">
+                   <div class="d-flex justify-content-between">
+                    <button v-show="!showFilters" class=" btn btn-primary mb-1"
+                      :class="{ 'hidden': showFilters }" @click="showFilters = true">
+                      <i class="bi bi-funnel"></i> Filtros
+                    </button>
+                     <button class="btn btn-secondary bg-black text-primary mx-3 ml-2" @click="openModal">
                         <i class="bi bi-plus-square"></i> Nueva Incidencia
                     </button>
-                     <button class="btn btn-primary ml-2" @click="openMantenimientoModal">
+                     <button class="btn btn-primary border border-secondary ml-2" @click="openMantenimientoModal">
                         <i class="bi bi-tools"></i> Crear Mantenimiento
                     </button>
                  </div>
               </div>
 
               <!-- Tabla -->
+              <div class="container bg-primary">
               <div class="table-responsive">
                   <table class="table table-hover">
-                      <thead>
+                      <thead class="table-light">
                           <tr>
-                              <th>TÍTULO</th>
-                              <th>ESTADO</th>
-                              <th>PRIORIDAD</th>
-                              <th>FECHA</th>
-                              <th>MÁQUINA</th>
-                              <th>TALLER</th>
-                              <th>CREADOR</th>
-                              <th>TÉCNICO</th>
-                              <th>GRAVEDAD</th>
+                              <th class="bg-secondary text-info">TÍTULO</th>
+                              <th class="bg-secondary text-info">ESTADO</th>
+                              <th class="bg-secondary text-info">PRIORIDAD</th>
+                              <th class="bg-secondary text-info">FECHA</th>
+                              <th class="bg-secondary text-info">MÁQUINA</th>
+                              <th class="bg-secondary text-info">TALLER</th>
+                              <th class="bg-secondary text-info">CREADOR</th>
+                              <th class="bg-secondary text-info">TÉCNICO</th>
+                              <th class="bg-secondary text-info">GRAVEDAD</th>
                           </tr>
                       </thead>
-                      <tbody>
+                      <tbody class="table-light">
                           <tr v-for="(incidencia, i) in paginatedIncidencias" :key="i"
                               @click="goToIncidencia(incidencia.id_incidencia)" style="cursor: pointer;">
-                              <td class="fw-medium">{{ incidencia.descripcion }}</td>
-                              <td>
-                                  <span :class="['badge', getEstadoClass(incidencia.estado)]">
+                              <td class="font-medium bg-primary">{{ incidencia.descripcion }}</td>
+                                <td class="font-medium bg-primary">
+                        
                                       {{ incidencia.estado }}
-                                  </span>
+                                
                               </td>
-                              <td>
+                              <td class="font-medium bg-primary">
                                   <span :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]">
                                       {{ incidencia.maquina.prioridad }}
                                   </span>
                               </td>
-                              <td>{{ formatDate(incidencia.fecha_reporte) }}</td>
-                              <td>{{ incidencia.maquina.nombre }}</td>
-                              <td>
+                              <td class="font-medium bg-primary">{{ formatDate(incidencia.fecha_reporte) }}</td>
+                              <td class="font-medium bg-primary">{{ incidencia.maquina.nombre }}</td>
+                              <td class="font-medium bg-primary">
                                   {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
                               </td>
-                              <td>{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
-                              <td>{{
+                              <td class="font-medium bg-primary">{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
+                              <td class="font-medium bg-primary">{{
                                       incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar'
                                   }}</td>
-                              <td>
+                              <td class="font-medium bg-primary">
                                   <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
                                       {{ incidencia.gravedad }}
                                   </span>
@@ -175,6 +177,7 @@
                       </tbody>
                   </table>
               </div>
+            </div>
 
               <!-- Paginación -->
                 <nav aria-label="Page navigation" class="mt-4">
@@ -465,30 +468,17 @@ watch(
 // Aquí están los cambios en las funciones getEstadoClass, getPrioridadClass y getGravedadClass
 // ***************************************************************************************
 
-const getEstadoClass = (estado) => {
-  switch (estado) {
-    case 'Cancelada':
-      return 'badge bg-primary text-info fw-normal';  
-    case 'En progreso':
-    return 'badge bg-primary text-black fw-normal border border-black border-dashed';
-    case 'Resuelta':
-      return 'badge bg-black text-primary fw-normal';
-    case 'Abierta':
-      return 'badge bg-info text-white fw-normal';
-    default:
-      return 'badge bg-info text-white fw-normal';
-  }
-};
+
 
 const getPrioridadClass = (prioridad) => {
     console.log('Prioridad:', prioridad);
     switch (prioridad) {
       case 'Alta':
-        return 'badge bg-fondoRojo text-danger';
+        return 'badge bg-info text-primary fw-normal';
       case 'Media':
-        return 'badge bg-fondoNaranja text-naranja';
+        return 'badge bg-secondary text-info fw-normal';
       case 'Baja':
-        return 'badge bg-info text-white fw-normal';
+        return 'badge bg-primary text-info fw-normal border border-secondary';
       default:
         return 'badge bg-info text-white fw-normal';
     }
@@ -497,13 +487,13 @@ const getPrioridadClass = (prioridad) => {
 const getGravedadClass = (gravedad) => {
   switch (gravedad) {
     case 'Maquina parada':
-      return 'badge bg-danger text-white';  // Rojo
+    return 'badge bg-fondoRojo text-danger border border-naranja';
     case 'Aviso':
-      return 'badge bg-warning text-dark'; // Amarillo (texto oscuro para contraste)
+    return 'badge bg-fondoNaranja text-naranja border border-naranja';
     case 'Maquina en Marcha':
-      return 'badge bg-info text-white'; // Celeste
+    return 'badge bg-success text-success bg-opacity-10 border border-success';
     case 'Mantenimiento':
-      return 'badge bg-secondary text-white'; // Gris
+      return 'badge bg-secondary text-info border border-info'; // Gris
     default:
       return 'badge bg-secondary text-white'; // Gris
   }
