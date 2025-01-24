@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('fases_incidencias', function (Blueprint $table) {
             $table->bigInteger('id_fase_incidencia')->autoIncrement();
             $table->bigInteger('id_incidencia');
-            $table->string('nombre', 100);
-            $table->string('descripcion', 300);
+            $table->string('descripcion', 300)->nullable();
             $table->enum('estado', ['Pendiente', 'En proceso', 'Completada']);
             $table->timestamp('fecha_inicio')->useCurrent();
             $table->timestamp('fecha_fin')->nullable();

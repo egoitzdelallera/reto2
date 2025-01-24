@@ -18,6 +18,8 @@ class Incidencia extends Model
        'id_maquina',
         'id_creador',
         'fecha_ini',
+        'id_tipo_averia',
+        'id_tipo_mantenimiento',
    ];
 
   public function maquina()
@@ -53,7 +55,7 @@ class Incidencia extends Model
    }
 
     public function fasesIncidencias()
-   {
-       return $this->hasMany(FasesIncidencia::class, 'id_incidencia');
-   }
+    {
+        return $this->hasMany(FasesIncidencia::class, 'id_incidencia', 'id_incidencia');
+    }
 }

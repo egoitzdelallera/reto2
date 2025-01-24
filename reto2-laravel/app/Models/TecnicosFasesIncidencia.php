@@ -10,13 +10,14 @@ class TecnicosFasesIncidencia extends Model
     use HasFactory;
 
     protected $table = 'tecnicos_fases_incidencias';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_fase_incidencia',
         'id_tecnico',
     ];
 
-    public function faseIncidencia()
+    public function fase()
     {
         return $this->belongsTo(FasesIncidencia::class, 'id_fase_incidencia');
     }

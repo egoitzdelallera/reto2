@@ -46,6 +46,7 @@
 
 <script>
 import axios from '../axios'; // Importa la instancia de axios configurada si tienes un archivo axios.js
+import { decodificarToken } from '../utils/decodificarToken'; // Asegúrate de que la ruta sea correcta
 
 export default {
   data() {
@@ -63,11 +64,30 @@ export default {
           password: this.contrasena, // Debe coincidir con el campo de Laravel 'password'
         });
 
+        const token = response.data.access_token;
+
         // Guardar el token JWT en el almacenamiento local
-        localStorage.setItem('jwt_token', response.data.access_token);
+        localStorage.setItem('jwt_token', token);
+
+        const userData = decodificarToken(token);
+
+        if (userData) {
+            console.log('Datos del usuario:', userData);
+
+            const userToStore = {
+                id: userData.id_usuario, // Usando el id del payload
+                correo: userData.correo,  // Usando el correo del payload
+                rol: userData.rol, // Usando el rol del payload
+            };
+
+            // Guardar los datos del usuario
+            localStorage.setItem('user_data', JSON.stringify(userToStore));
+        } else {
+            console.error('Error al decodificar los datos del usuario');
+        }
 
         // Establecer el token en las cabeceras de axios para futuras solicitudes
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         // Redirigir al usuario a la página de incidencias
         this.$router.push('/incidencias');
@@ -80,8 +100,15 @@ export default {
     checkAuth() {
       const token = localStorage.getItem('jwt_token');
       if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        this.$router.push('/incidencias');
+        const userData = decodificarToken(token);
+        if (userData) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          this.$router.push('/incidencias');
+        } else {
+          console.error('Token no válido');
+          localStorage.removeItem('jwt_token');
+          this.$router.push('/');
+        }
       }
     }
   },
