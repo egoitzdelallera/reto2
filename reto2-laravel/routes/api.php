@@ -7,6 +7,7 @@ use App\Http\Controllers\MaquinaController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampusController;
+use App\Http\Controllers\FasesIncidenciaController;
 
 use App\Http\Controllers\TalleresController;
 
@@ -62,6 +63,11 @@ Route::middleware('api')->group(function () {
     Route::put('/incidencias/{id}', [IncidenciaController::class, 'update']);
     Route::delete('/incidencias/{id}', [IncidenciaController::class, 'destroy']);
 });
+
+// Rutas para las fases
+Route::post('/fases/{faseId}/finalizar', [FasesIncidenciaController::class, 'finalizarFase']);
+Route::post('/fases/{faseId}/tecnicos', [FasesIncidenciaController::class, 'asignarTecnicoAFase']);
+Route::post('/fases', [FasesIncidenciaController::class, 'crearFase']);
 
 // Rutas protegidas por JWT
 

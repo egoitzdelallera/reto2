@@ -11,10 +11,10 @@ class FasesIncidencia extends Model
 
     protected $table = 'fases_incidencias';
     protected $primaryKey = 'id_fase_incidencia';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_incidencia',
-        'nombre',
         'descripcion',
         'estado',
         'fecha_inicio',
@@ -23,7 +23,7 @@ class FasesIncidencia extends Model
 
     public function incidencia()
     {
-        return $this->belongsTo(Incidencia::class, 'id_incidencia');
+        return $this->belongsTo(Incidencia::class, 'id_incidencia', 'id_incidencia');
     }
 
     public function tecnicosFasesIncidencias()

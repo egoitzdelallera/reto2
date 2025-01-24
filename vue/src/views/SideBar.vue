@@ -126,6 +126,11 @@ export default {
                   { name: 'Contacto', active: false, route: '/ayuda/contacto' },
                   { name: 'Reportar Error', active: false, route: '/ayuda/reportar-error' }
               ]
+          },
+          {
+              title: 'Cerrar Sesión',
+              icon: 'bi bi-box-arrow-left',
+              route: '/logout',
           }
       ]);
 

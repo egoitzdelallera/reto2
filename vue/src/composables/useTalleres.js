@@ -18,7 +18,6 @@ export default function useTalleres() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Datos de la API:', response.data);
             talleres.value = response.data;
         } catch (err) {
             error.value = err;

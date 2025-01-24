@@ -1,9 +1,11 @@
 import {ref, computed, onMounted} from 'vue';
 import axios from 'axios';
 
+
 export default function useIncidencias() {
     const incidencias = ref([]);
     const searchQuery = ref('');
+    const incidencia = ref(null);
 
     const loadIncidencias = async () => {
         try{
@@ -13,7 +15,6 @@ export default function useIncidencias() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Datos de la API:', response.data);
             incidencias.value = response.data;
         } catch(error) {
             console.error('Error al cargar las incidencias', error);
@@ -28,12 +29,86 @@ export default function useIncidencias() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            return response.data;
+            incidencia.value = response.data;
+            return incidencia.value;
         } catch(error) {
             console.error('Error al cargar la incidencia', error);
             throw error;
         }
     }
+
+    const finalizarYCrearFase = async (faseId, descripcion, incidenciaId) => {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const responseFinalizar = await axios.post(
+                `http://localhost:8000/api/fases/${faseId}/finalizar`,
+                { descripcion },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log('Respuesta de la API al finalizar la fase:', responseFinalizar.data);
+            
+            const responseCrear = await axios.post(
+                `http://localhost:8000/api/fases`,
+                {id_incidencia: incidenciaId},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            console.log('Respuesta de la API al crear la nueva fase:', responseCrear.data);
+
+
+            alert('Fase finalizada y nueva fase creada con exito.');
+            loadIncidencias();
+        } catch (error) {
+            console.error('Error al finalizar la fase', error.response ? error.response.data : error);
+            alert('No se pudo finalizar la fase');
+        }
+    };
+
+    const asignarTecnicoAFase = async (faseId) => {
+        try {
+            const token = localStorage.getItem('jwt_token');
+            const userData = localStorage.getItem('user_data');
+            const tecnicoId = JSON.parse(userData).id;
+
+            const fase = incidencia.value.fases_incidencias.find((fase) => fase.id_fase_incidencia === faseId);
+            
+            if (!fase) {
+                console.error('Fase no encontrada');
+                return;
+            }
+
+            if (fase.estado === 'Completada') {
+                alert('No se pueden asignar tecnicos a una fase completada');
+                return;
+            }
+
+            console.log('Tecnico:', tecnicoId);
+            console.log('Fase:', faseId);
+
+            await axios.post(
+                `http://localhost:8000/api/fases/${faseId}/tecnicos`,
+                { id_tecnico: tecnicoId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            alert('Tecnico asignado con exito');
+            loadIncidencias();
+        } catch (error) {
+            console.error('Error al asignar tecnico a la fase', error);
+            alert('No se pudo asignar el tecnico a la fase');
+        }
+    };
 
     const filteredIncidencias = computed(() => {
         if (!searchQuery.value) {
@@ -108,5 +183,7 @@ export default function useIncidencias() {
         getGravedadClass,
         getPrioridadClass,
         getIncidenciaById,
+        finalizarYCrearFase,
+        asignarTecnicoAFase,
     };
 }

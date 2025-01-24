@@ -1,6 +1,5 @@
 <template>
-    <link href="../assets/bootstrap5_3/dist/css/bootstrap.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
   
     <div class="bg-primary min-vh-100 m-0">
       <!-- Header -->
@@ -130,7 +129,13 @@
   
                     <h6 class="text-muted">Descripción</h6>
                     <p>{{ fase.descripcion }}</p>
-                    <button @click="asignarme" class="btn btn-primary mb-3">Asignarme fase {{ index + 1 }}</button>
+                    <button 
+                      v-if="fase.estado !== 'Completada'"
+                      @click="asignarme(fase.id_fase_incidencia)" 
+                      class="btn btn-primary mb-3"
+                    >
+                      Asignarme fase {{ index + 1 }}
+                    </button>
   
                     <h6 class="text-muted mt-3">Técnicos</h6>
                     <div class="row g-3">
@@ -143,7 +148,7 @@
                                 <h5 v-html="fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join('<br>')"></h5>
                               </div>
                               <div class="contact-info">
-                                <p>{{ fase.tecnicos_fases_incidencias[0]?.tecnico?.correo }}</p>
+                                <p>{{ fase.tecnicos_fases_incidencias[index]?.tecnico?.correo }}</p>
                               </div>
                             </div>
                             <span class="badge bg-success mt-2">Habilitado</span>
@@ -214,17 +219,23 @@
                   <div class="d-flex flex-wrap gap-2">
                     <span class="tag">{{ fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join(', ') }}</span>
                   </div>
+
+                  <div class="d-grid gap-2" v-if="fase.estado !== 'Completada'">
+                    <button class="btn btn-success" @click="openPopup(fase)">Finalizar la Fase {{index + 1}}</button>
+                    <button class="btn btn-secondary">Finalizar Incidencia</button>
+                  </div>
                 </div>
-  
-                <!-- Phase 3 with Assign Button -->
-                <div v-if="showAssignButton" class="mb-4">
-                  <button class="btn btn-secondary w-100">Ver Fases</button>
+
+                <div v-if="showPopup" class="popup-backdrop">
+                <div class="popup">
+                  <h5>Finalizar Fase</h5>
+                  <p>Escribe una descripción de lo que has hecho para completar esta fase:</p>
+                  <textarea v-model="descripcion" class="form-control" rows="4" placeholder="Descripción..."></textarea>
+                  <div class="d-flex justify-content-end mt-3 gap-2">
+                    <button class="btn btn-secondary" @click="closePopup">Cancelar</button>
+                    <button class="btn btn-success" @click="confirmFinalizarFase">Confirmar</button>
+                  </div>
                 </div>
-  
-                <!-- Action Buttons -->
-                <div class="d-grid gap-2">
-                  <button class="btn btn-success">Finalizar la Fase 3</button>
-                  <button class="btn btn-secondary">Finalizar Incidencia</button>
                 </div>
               </div>
             </div>
@@ -238,15 +249,20 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useIncidencias from '../composables/useIncidencias'; // Importa el composable
+
+// Rutas
 const route = useRoute();
 const router = useRouter();
-const { getIncidenciaById } = useIncidencias();
+const { getIncidenciaById, finalizarYCrearFase, asignarTecnicoAFase } = useIncidencias();
 
 const activeTab = ref('Operario');
 const tabs = ['Operario', 'Fases', 'Máquina'];
 const incidencia = ref({});
 
-
+// Popup modal
+const showPopup = ref(false);
+const descripcion = ref('');
+const faseSeleccionada = ref(null);
 
 onMounted(async () => {
   const incidenciaId = route.params.id;
@@ -263,9 +279,50 @@ onMounted(async () => {
     router.push('/incidencias');
   }
 });
-</script>
-  <style scoped>
-  main{
-    padding: 0px;
+
+const openPopup = (fase) => {
+  showPopup.value = true;
+  descripcion.value = '';
+  faseSeleccionada.value = fase;
+}
+
+const closePopup = () => {
+  showPopup.value = false;
+  descripcion.value = '';
+  faseSeleccionada.value = null;
+};
+
+const confirmFinalizarFase = async () => {
+  if (!descripcion.value) {
+    alert('Por favor, escribe la descripcion antes de confirmar.');
+    return;
   }
+
+  if (faseSeleccionada.value) {
+    try {
+      await finalizarYCrearFase(
+        faseSeleccionada.value.id_fase_incidencia, 
+        descripcion.value,
+        incidencia.value.id_incidencia
+      );
+      // Actualiza la incidencia despues de finalizar la fase
+      const updatedIncidencia = await getIncidenciaById(route.params.id);
+      incidencia.value = updatedIncidencia;
+
+      closePopup();
+    } catch (error) {
+      console.error('Error al finalizar la fase:', error);
+    }
+  }
+}
+
+const asignarme =async (faseId) => {
+  try {
+    await asignarTecnicoAFase(faseId);
+  } catch (error) {
+    console.error('Error al asignar la fase:', error);
+  }
+}
+</script>
+  <style scoped>  
   </style>

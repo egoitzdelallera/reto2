@@ -60,6 +60,6 @@ class Incidencia extends Model
 
     public function fasesIncidencias()
     {
-        return $this->hasMany(FasesIncidencia::class, 'id_incidencia');
+        return $this->hasMany(FasesIncidencia::class, 'id_incidencia', 'id_incidencia');
     }
 }
