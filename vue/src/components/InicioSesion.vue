@@ -75,7 +75,18 @@ export default {
         console.error('Error en el inicio de sesión:', error);
         alert('Correo o contraseña incorrectos');
       }
+    },
+
+    checkAuth() {
+      const token = localStorage.getItem('jwt_token');
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        this.$router.push('/incidencias');
+      }
     }
+  },
+  created() {
+    this.checkAuth();
   }
 };
 </script>

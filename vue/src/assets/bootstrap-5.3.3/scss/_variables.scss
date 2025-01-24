@@ -40,7 +40,7 @@ $blue:    #0d6efd !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #d63384 !default;
-$red:     #dc3545 !default;
+$red:     #ff0019 !default;
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
 $green:   #198754 !default;
@@ -311,9 +311,12 @@ $cyans: (
 $primary:       $gris-1P !default;
 $secondary:     $gris-2P !default;
 $success:       $green !default;
-$info:          $cyan !default;
+$info:          $gris-3P !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
+$naranja:       $orange !default;
+$fondoRojo:     $red-P !default;
+$fondoNaranja:  $orange-P !default;
 $light:         $gray-100 !default;
 $dark:          $gray-900 !default;
 // scss-docs-end theme-color-variables
@@ -326,8 +329,11 @@ $theme-colors: (
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
+  "naranja":    $naranja,
   "light":      $light,
-  "dark":       $dark
+  "dark":       $dark,
+  "fondoRojo":  $fondoRojo,
+  "fondoNaranja": $fondoNaranja
 ) !default;
 // scss-docs-end theme-colors-map
 
@@ -1496,11 +1502,12 @@ $toast-header-border-color:         $toast-border-color !default;
 // Badges
 
 // scss-docs-start badge-variables
-$badge-font-size:                   .75em !default;
+$badge-font-size:                   .85em !default;
 $badge-font-weight:                 $font-weight-bold !default;
 $badge-color:                       $white !default;
-$badge-padding-y:                   .35em !default;
-$badge-padding-x:                   .65em !default;
+$badge-padding-y:                   .25em !default;
+$badge-padding-x:                   .45em !default;
+//$badge-border-radius:               6px !default;
 $badge-border-radius:               var(--#{$prefix}border-radius) !default;
 // scss-docs-end badge-variables
 
