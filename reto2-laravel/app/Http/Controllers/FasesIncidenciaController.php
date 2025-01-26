@@ -17,6 +17,7 @@ class FasesIncidenciaController extends Controller
 
         $request->validate([
             'descripcion' => 'required|string',
+            'userId' => 'required|integer',
         ]);
 
         $fase = FasesIncidencia::findOrFail($faseId);
@@ -25,6 +26,14 @@ class FasesIncidenciaController extends Controller
 
         if($fase->estado === 'Completada') {
             return response()->json(['error' => 'La fase ya esta completada'], 400);
+        }
+
+        $asignacion = TecnicosFasesIncidencia::where('id_fase_incidencia', $faseId)
+            ->where('id_tecnico', $request->input('userId'))
+            ->exists();
+
+        if (!$asignacion) {
+            return response()->json(['error' => 'No estás asignado a esta fase'], 403);
         }
 
         $fase->estado = 'Completada';

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
             $table->bigInteger('id_tipo_averia')->nullable();
             $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);
-            $table->bigInteger('frecuencia')->nullable();
             $table->string('multimedia', 300)->nullable();
             $table->timestamp('fecha_reporte')->useCurrent();
             $table->timestamp('fecha_cierre')->nullable();
@@ -64,6 +63,27 @@ return new class extends Migration
                         SET MESSAGE_TEXT = 'id_tipo_mantenimiento no puede ser NULL si la gravedad es Mantenimiento';
                     END IF;
                 END IF;
+            END;
+        ");
+
+        DB::unprepared("
+            CREATE TRIGGER after_incidencia_insert
+            AFTER INSERT ON incidencias
+            FOR EACH ROW
+            BEGIN
+                -- Insertar la primera fase automáticamente
+                INSERT INTO fases_incidencias (
+                    id_incidencia,
+                    descripcion, 
+                    estado, 
+                    fecha_inicio
+                ) 
+                VALUES (
+                    NEW.id_incidencia,
+                    '',                -- Campo descripcion vacío (nullable)
+                    'Pendiente',       
+                    NOW()              
+                );
             END;
         ");
     }

@@ -51,9 +51,17 @@ export default function useIncidencias() {
     const finalizarYCrearFase = async (faseId, descripcion, incidenciaId) => {
         try {
             const token = localStorage.getItem('jwt_token');
+            const userData = JSON.parse(localStorage.getItem('user_data'));
+            const userId = userData ? userData.id : null;
+
+            if (!userId) {
+                alert('No se pudo obtener el id del usuario');
+                return;
+            }
+
             const responseFinalizar = await axios.post(
                 `http://localhost:8000/api/fases/${faseId}/finalizar`,
-                { descripcion },
+                { descripcion, userId },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -82,6 +90,63 @@ export default function useIncidencias() {
             alert('No se pudo finalizar la fase');
         }
     };
+
+    const finalizarFaseYIncidencia = async (faseId, descripcion, incidenciaId) => {
+        try {
+          const token = localStorage.getItem('jwt_token');
+          const userData = JSON.parse(localStorage.getItem('user_data'));
+          const userId = userData ? userData.id : null;
+      
+          if (!userId) {
+            alert('No se pudo obtener el id del usuario');
+            return;
+          }
+      
+          descripcion = String(descripcion).trim();
+
+
+          // Verificar que la descripción no esté vacía
+          if (!descripcion || typeof descripcion !== 'string') {
+            alert('La descripción debe ser una cadena no vacía');
+            return;
+          }
+      
+          // Primero finalizar la fase
+          const responseFinalizarFase = await axios.post(
+            `http://localhost:8000/api/fases/${faseId}/finalizar`,
+            { descripcion, userId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      
+          console.log('Fase finalizada:', responseFinalizarFase.data);
+      
+          // Ahora finalizar la incidencia
+          const responseFinalizarIncidencia = await axios.put(
+            `http://localhost:8000/api/incidencias/${incidenciaId}/finalizar`,
+            { descripcion, userId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      
+          console.log('Incidencia finalizada:', responseFinalizarIncidencia.data);
+      
+          alert('La fase y la incidencia han sido finalizadas correctamente.');
+          loadIncidencias(); // Recargar las incidencias para reflejar los cambios
+      
+        } catch (error) {
+          console.error('Error al finalizar la fase o la incidencia:', error.response ? error.response.data : error);
+          alert('No se pudo finalizar la fase o la incidencia');
+        }
+      };
+      
+    
 
     const asignarTecnicoAFase = async (faseId) => {
         try {
@@ -242,6 +307,7 @@ export default function useIncidencias() {
         getIncidenciaById,
         finalizarYCrearFase,
         asignarTecnicoAFase,
+        finalizarFaseYIncidencia,
         loading,
         error,
         message,

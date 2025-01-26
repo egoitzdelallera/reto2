@@ -111,16 +111,27 @@ class IncidenciaController extends Controller
         return response()->json($incidencia);
     }
 
-    public function destroy($id)
+    public function finalizarIncidencia(Request $request, $idIncidencia)
     {
-        $incidencia = Incidencia::find($id);
+        // Buscar la incidencia
+        $incidencia = Incidencia::findOrFail($idIncidencia);
 
-        if (!$incidencia) {
-            return response()->json(['message' => 'Incidencia no encontrada'], 404);
+        // Verificar si todas las fases están completadas
+        $fasesPendientes = $incidencia->fasesIncidencias()->where('estado', '!=', 'Completada')->count();
+
+        if ($fasesPendientes > 0) {
+            return response()->json(['error' => 'No se puede finalizar la incidencia porque hay fases pendientes'], 400);
         }
 
-        $incidencia->delete();
+        // Cambiar el estado de la incidencia a 'Finalizada'
+        $incidencia->estado = 'Resuelta';
+        $incidencia->fecha_cierre = now();
+        $incidencia->save();
 
-        return response()->json(['message' => 'Incidencia eliminada correctamente']);
+        return response()->json([
+            'message' => 'Incidencia finalizada exitosamente',
+            'incidencia' => $incidencia,
+        ]);
     }
+
 }
