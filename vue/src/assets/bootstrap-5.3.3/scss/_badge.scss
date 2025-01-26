@@ -17,7 +17,7 @@
   padding: var(--#{$prefix}badge-padding-y) var(--#{$prefix}badge-padding-x);
   @include font-size(var(--#{$prefix}badge-font-size));
   font-weight: var(--#{$prefix}badge-font-weight);
-  line-height: 1;
+  line-height: 1.1;
   color: var(--#{$prefix}badge-color);
   text-align: center;
   white-space: nowrap;
