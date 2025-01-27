@@ -20,8 +20,7 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
             $table->bigInteger('id_tipo_averia')->nullable();
             $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);
-            $table->enum('frecuencia', ['Diaria', 'Semanal', 'Mensual', 'Anual'])->nullable();
-            $table->string('multimedia', 300)->nullable();
+            $table->text('multimedia')->nullable();
             $table->timestamp('fecha_reporte')->useCurrent();
             $table->timestamp('fecha_cierre')->nullable();
             $table->primary('id_incidencia');
@@ -66,6 +65,27 @@ return new class extends Migration
                 END IF;
             END;
         ");
+
+        DB::unprepared("
+            CREATE TRIGGER after_incidencia_insert
+            AFTER INSERT ON incidencias
+            FOR EACH ROW
+            BEGIN
+                -- Insertar la primera fase automáticamente
+                INSERT INTO fases_incidencias (
+                    id_incidencia,
+                    descripcion, 
+                    estado, 
+                    fecha_inicio
+                ) 
+                VALUES (
+                    NEW.id_incidencia,
+                    '',                -- Campo descripcion vacío (nullable)
+                    'Pendiente',       
+                    NOW()              
+                );
+            END;
+        ");
     }
 
     /**
@@ -76,5 +96,6 @@ return new class extends Migration
         Schema::dropIfExists('incidencias');
         DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_insert");
         DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_update");
+        DB::unprepared("DROP TRIGGER IF EXISTS after_incidencia_insert");
     }
 };

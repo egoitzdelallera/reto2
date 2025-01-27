@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Incidencia;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class IncidenciaController extends Controller
 {
@@ -53,24 +55,35 @@ class IncidenciaController extends Controller
 
 
     public function store(Request $request)
-{
-  $request->validate([
-    'id_maquina' => 'required|integer',
-     'descripcion' => 'required|string',
-     'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
-   ]);
-   
-  try {
-         // Obtener la fecha y hora actual
-         $fecha_ini = now();  // La función `now()` obtiene la fecha y hora actual
+    {
+        $request->validate([
+            'id_maquina' => 'required|integer',
+            'descripcion' => 'required|string',
+            'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
+            'id_tipo_averia' => 'required|integer',
+            'multimedia' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4',
+        ]);
+    
+        try {
+            $multimediaPath = null;
+            if($request->hasFile('multimedia')) {
+                $multimediaPath = $request->file('multimedia')->store('multimedia', 'public');
+            }
 
-        // Crear la incidencia
-        $incidencia = Incidencia::create([
-           'id_maquina' => $request->id_maquina,
-            'descripcion' => $request->descripcion,
-             'gravedad' => $request->gravedad,
-             'estado' => "Abierta",
-            'id_creador' => $request->id_creador,
+            // Log para ver la ruta guardada
+            Log::info('Archivo guardado en:', [
+                'path' => $multimediaPath
+            ]);
+
+            // Crear la incidencia
+            $incidencia = Incidencia::create([
+                'id_maquina' => $request->id_maquina,
+                'descripcion' => $request->descripcion,
+                'gravedad' => $request->gravedad,
+                'estado' => "Abierta",
+                'id_creador' => $request->id_creador,
+                'id_tipo_averia' => $request->id_tipo_averia,
+                'multimedia' => $multimediaPath, 
          ]);
          // Retornar la respuesta con la incidencia creada
         return response()->json($incidencia, 201);
@@ -78,7 +91,7 @@ class IncidenciaController extends Controller
             // Retornar un mensaje de error
             return response()->json(['message' => 'Error al crear la incidencia'], 500);
         }
- }
+    }
 
     public function update(Request $request, $id)
     {
@@ -97,8 +110,8 @@ class IncidenciaController extends Controller
             'estado' => 'required|in:Abierta, Pendiente, En Proceso, Resuelta',
             'frecuencia' => 'nullable|in:diario, semanal, mensual, anual',
             'multimedia' => 'nullable|string',
-            'fecha_ini' => 'required|date',
-            'fecha_fin' => 'nullable|date',
+            'fecha_reporte' => 'required|date',
+            'fecha_cierre' => 'nullable|date',
         ]);
 
         $incidencia->update([
@@ -111,16 +124,44 @@ class IncidenciaController extends Controller
         return response()->json($incidencia);
     }
 
-    public function destroy($id)
+    public function finalizarIncidencia(Request $request, $idIncidencia)
     {
-        $incidencia = Incidencia::find($id);
+        // Buscar la incidencia
+        $incidencia = Incidencia::findOrFail($idIncidencia);
 
-        if (!$incidencia) {
-            return response()->json(['message' => 'Incidencia no encontrada'], 404);
+        // Verificar si todas las fases están completadas
+        $fasesPendientes = $incidencia->fasesIncidencias()->where('estado', '!=', 'Completada')->count();
+
+        if ($fasesPendientes > 0) {
+            return response()->json(['error' => 'No se puede finalizar la incidencia porque hay fases pendientes'], 400);
         }
 
-        $incidencia->delete();
+        // Cambiar el estado de la incidencia a 'Finalizada'
+        $incidencia->estado = 'Resuelta';
+        $incidencia->fecha_cierre = now();
+        $incidencia->save();
 
-        return response()->json(['message' => 'Incidencia eliminada correctamente']);
+        if ($incidencia->id_tipo_mantenimiento && $incidencia->frecuencia > 0) {
+            $nuevaIncidencia = new Incidencia([
+                'id_maquina' => $incidencia->id_maquina,
+                'id_creador' => $incidencia->id_creador,
+                'descripcion' => $incidencia->descripcion,
+                'gravedad' => $incidencia->gravedad,
+                'id_tipo_mantenimiento' => $incidencia->id_tipo_mantenimiento,
+                'estado' => 'Abierta',
+                'frecuencia' => $incidencia->frecuencia,
+                'fecha_reporte' => Carbon::parse($incidencia->fecha_cierre)->copy()->addDays($incidencia->frecuencia),
+                // ... otros campos que necesites copiar
+            ]);
+    
+            $nuevaIncidencia->save();
+        }
+
+        return response()->json([
+            'message' => 'Incidencia finalizada exitosamente',
+            'incidencia' => $incidencia,
+        ]);
     }
+
+
 }

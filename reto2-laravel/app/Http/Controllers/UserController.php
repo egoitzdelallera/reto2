@@ -21,14 +21,47 @@ class UserController extends Controller
             return response()->json(['message' => 'Correo o contraseña inválidos'], 401);
         }
 
+        $user = auth()->user();
+
+        $customClaims = [
+            'id_usuario' => $user->id_usuario,
+            'nombre' => $user->nombre,
+            'apellido' => $user->apellido,
+            'correo' => $user->correo,
+            'rol' => $user->rol,
+            'estado' => $user->estado,
+            'imagen_perfil' => $user->imagen_perfil,
+            'id_campus' => $user->id_campus,
+        ];
+
+        $token = JWTAuth::claims($customClaims)->attempt($credentials);
+
         return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function logout(Request $request)
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
-        return response()->json(['message' => 'Sesión cerrada correctamente']);
+        try {
+            // Obtener el token del encabezado de la solicitud
+            $token = JWTAuth::getToken();
+
+            if (!$token) {
+                return response()->json(['error' => 'Token no encontrado'], 400);
+            }
+
+            // Invalidar el token
+            JWTAuth::invalidate($token);
+
+            return response()->json(['message' => 'Sesión cerrada correctamente'], 200);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['error' => 'Token inválido'], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['error' => 'Error al cerrar sesión, token no procesable'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocurrió un error inesperado'], 500);
+        }
     }
+
 
   public function index(Request $request)
     {
@@ -64,7 +97,7 @@ class UserController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function updatePerfil(Request $request, $id)
     {
           $user = User::find($id);
     
@@ -84,6 +117,44 @@ class UserController extends Controller
     
         $user->nombre = $request->input('nombre');
          $user->apellido = $request->input('apellido');
+    
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+    
+         $user->save();
+
+        $userWithCampus = User::with('campus:id_campus,nombre')
+            ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+            ->find($user->id_usuario);
+            $userWithCampus->campus = $userWithCampus->campus ? $userWithCampus->campus->nombre : '-';
+
+        return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $userWithCampus]);
+
+    }
+
+       public function update(Request $request, $id)
+    {
+          $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+         $validator = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+              'apellido' => 'required|string|max:255',
+             'password' => 'nullable|string|min:6',
+            'rol' => 'required|in:Administrador,Técnico,Operario',
+          
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $user->nombre = $request->input('nombre');
+         $user->apellido = $request->input('apellido');
+         $user->rol = $request->input('rol'); // Add this line
     
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
@@ -123,7 +194,7 @@ class UserController extends Controller
             'nombre' => 'required|string|max:255',
               'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users,correo',
-            'rol' => 'required|in:Administrador,Técnico,Operario',
+            'rol' => 'required|in:Administrador,Tecnico,Operario',
             'password' => 'required|string|min:6',
              'id_campus' => 'nullable|integer'
         ]);
