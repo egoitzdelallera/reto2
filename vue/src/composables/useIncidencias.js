@@ -51,9 +51,17 @@ export default function useIncidencias() {
     const finalizarYCrearFase = async (faseId, descripcion, incidenciaId) => {
         try {
             const token = localStorage.getItem('jwt_token');
+            const userData = JSON.parse(localStorage.getItem('user_data'));
+            const userId = userData ? userData.id : null;
+
+            if (!userId) {
+                alert('No se pudo obtener el id del usuario');
+                return;
+            }
+
             const responseFinalizar = await axios.post(
                 `http://localhost:8000/api/fases/${faseId}/finalizar`,
-                { descripcion },
+                { descripcion, userId },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -82,6 +90,63 @@ export default function useIncidencias() {
             alert('No se pudo finalizar la fase');
         }
     };
+
+    const finalizarFaseYIncidencia = async (faseId, descripcion, incidenciaId) => {
+        try {
+          const token = localStorage.getItem('jwt_token');
+          const userData = JSON.parse(localStorage.getItem('user_data'));
+          const userId = userData ? userData.id : null;
+      
+          if (!userId) {
+            alert('No se pudo obtener el id del usuario');
+            return;
+          }
+      
+          descripcion = String(descripcion).trim();
+
+
+          // Verificar que la descripción no esté vacía
+          if (!descripcion || typeof descripcion !== 'string') {
+            alert('La descripción debe ser una cadena no vacía');
+            return;
+          }
+      
+          // Primero finalizar la fase
+          const responseFinalizarFase = await axios.post(
+            `http://localhost:8000/api/fases/${faseId}/finalizar`,
+            { descripcion, userId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      
+          console.log('Fase finalizada:', responseFinalizarFase.data);
+      
+          // Ahora finalizar la incidencia
+          const responseFinalizarIncidencia = await axios.put(
+            `http://localhost:8000/api/incidencias/${incidenciaId}/finalizar`,
+            { descripcion, userId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      
+          console.log('Incidencia finalizada:', responseFinalizarIncidencia.data);
+      
+          alert('La fase y la incidencia han sido finalizadas correctamente.');
+          loadIncidencias(); // Recargar las incidencias para reflejar los cambios
+      
+        } catch (error) {
+          console.error('Error al finalizar la fase o la incidencia:', error.response ? error.response.data : error);
+          alert('No se pudo finalizar la fase o la incidencia');
+        }
+      };
+      
+    
 
     const asignarTecnicoAFase = async (faseId) => {
         try {
@@ -139,49 +204,7 @@ export default function useIncidencias() {
         });
     });
 
-    const getEstadoClass = (estado) => {
-        switch (estado) {
-            case 'En Proceso':
-                return 'bg-blue-100 text-blue-800';
-            case 'Abierta':
-                return 'bg-gray-100 text-gray-800';
-            case 'Pendiente':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'Resuelta':
-                 return 'bg-green-100 text-green-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    const getGravedadClass = (gravedad) => {
-        switch (gravedad) {
-            case 'Maquina parada':
-                return 'bg-red-100 text-red-800';
-            case 'Maquina en Marcha':
-                return 'bg-orange-100 text-orange-800';
-            case 'Aviso':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'Mantenimiento':
-                return 'bg-gray-100 text-gray-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    const getPrioridadClass = (prioridad) => {
-        console.log('Prioridad:', prioridad);
-        switch (prioridad) {
-            case 'Alta':
-                return 'bg-red-500 text-secondary ';
-            case 'Media':
-                return 'bg-yellow-500 text-white';
-            case 'Baja':
-                return 'bg-green-500 text-white';
-            default:
-                return 'bg-gray-500 text-white';
-        }
-    };
+    
 
     const createIncidencia = async (incidenciaData, selectedMachine,selectedTipoAveria) => {
         loading.value = true;
@@ -235,13 +258,11 @@ export default function useIncidencias() {
         searchQuery,
         filteredIncidencias,
         loadIncidencias,
-        getEstadoClass,
-        getGravedadClass,
-        getPrioridadClass,
         createIncidencia,
         getIncidenciaById,
         finalizarYCrearFase,
         asignarTecnicoAFase,
+        finalizarFaseYIncidencia,
         loading,
         error,
         message,
