@@ -1,7 +1,5 @@
-
 <script setup>
-  // Función: Mostrar las cuentas del cliente identificado usando el componente MostrarCuentas.
-  import MaquinasTabla from '../components/MaquinasTabla.vue';
+  import MaquinasTabla from '../components/maquinas/MaquinasTabla.vue';
   import SideBar from '../views/SideBar.vue';
 
 </script>

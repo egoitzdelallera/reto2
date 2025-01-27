@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
+  <div class="container-fluid bg-primary p-5">
+ 
       <!-- Panel de filtros (a la izquierda) -->
       <div
-        :class="['filter-panel', 'col-md-3', 'p-4', 'shadow-sm', 'overflow-auto', 'vh-100']"
+        :class="['filter-panel bg-secondary', 'col-md-3', 'p-4', 'shadow-sm', 'overflow-auto', 'vh-100']"
         style="background-color: #f0f8ff; margin-top: 0;"
         :style="{ transform: showFilters ? 'translateX(0)' : 'translateX(-100%)' }"
       >
@@ -18,7 +18,7 @@
               <!-- Filtro de Gravedad -->
               <div class="mb-3">
                 <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                  class="btn btn-outline-info w-100 text-start d-flex justify-content-between align-items-center"
                   @click="toggleFilter('gravedad')"
                 >
                   <span>GRAVEDAD</span>
@@ -31,9 +31,9 @@
                       type="checkbox"
                       :value="option.value"
                       v-model="selectedFilters.gravedad"
-                      class="form-check-input"
+                      class="form-check-input bg-secondary"
                     />
-                    <label :for="'gravedad-' + option.value" class="form-check-label">{{
+                    <label :for="'gravedad-' + option.value" class="form-check-label  px-2 text-black">{{
                       option.label
                     }}</label>
                   </div>
@@ -43,7 +43,7 @@
               <!-- Filtro de Prioridad -->
               <div class="mb-3">
                 <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                  class="btn btn-outline-info w-100 text-start d-flex justify-content-between align-items-center"
                   @click="toggleFilter('prioridad')"
                 >
                   <span>PRIORIDAD</span>
@@ -56,9 +56,9 @@
                       type="checkbox"
                       :value="option.value"
                       v-model="selectedFilters.prioridad"
-                      class="form-check-input"
+                      class="form-check-input bg-secondary"
                     />
-                    <label :for="'prioridad-' + option.value" class="form-check-label">{{
+                    <label :for="'prioridad-' + option.value" class="form-check-label  px-2 text-black">{{
                       option.label
                     }}</label>
                   </div>
@@ -68,7 +68,7 @@
               <!-- Filtro de Taller -->
               <div class="mb-3">
                 <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                  class="btn btn-outline-info w-100 text-start d-flex justify-content-between align-items-center"
                   @click="toggleFilter('taller')"
                 >
                   <span>TALLER</span>
@@ -81,9 +81,9 @@
                       type="checkbox"
                       :value="taller.nombre"
                       v-model="selectedFilters.taller"
-                      class="form-check-input"
+                      class="form-check-input bg-secondary"
                     />
-                    <label :for="'taller-' + taller.id_taller" class="form-check-label">{{
+                    <label :for="'taller-' + taller.id_taller" class="form-check-label  px-2 text-black">{{
                       taller.nombre
                     }}</label>
                   </div>
@@ -93,7 +93,7 @@
               <!-- Filtro de Estado -->
               <div class="mb-3">
                 <button
-                  class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center"
+                  class="btn btn-outline-info w-100 text-start d-flex justify-content-between align-items-center"
                   @click="toggleFilter('estado')"
                 >
                   <span>ESTADO</span>
@@ -106,9 +106,9 @@
                       type="checkbox"
                       :value="option.value"
                       v-model="selectedFilters.estado"
-                      class="form-check-input"
+                      class="form-check-input bg-secondary"
                     />
-                    <label :for="'estado-' + option.value" class="form-check-label">{{
+                    <label :for="'estado-' + option.value" class="form-check-label text-black px-2">{{
                       option.label
                     }}</label>
                   </div>
@@ -121,78 +121,74 @@
 
       <!-- Contenido principal -->
       <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
-        <button
-          v-show="!showFilters"
-          class="filter-toggle btn btn-primary mb-1"
-          :class="{ 'hidden': showFilters }"
-          @click="showFilters = true"
-        >
-          <i class="bi bi-funnel"></i> Filtros
-        </button>
+              
 
-        <h1 class="h2 mb-4">Incidencias</h1>
+              <h1 class="text-2xl font-bold mx-5 px-3 mb-6">Incidencias</h1>
 
-        <!-- Barra de búsqueda -->
-        <div class="d-flex justify-content-between mb-4">
-          <div class="input-group w-75">
-            <span class="input-group-text">
-              <i class="bi bi-search"></i>
-            </span>
-            <input type="text" placeholder="Buscar..." v-model="searchQuery" class="form-control" />
-          </div>
+              <!-- Barra de búsqueda -->
+              <div class="d-flex justify-content-around mb-4">
+                  <div class="input-group w-50">
+                      <span class="input-group-text">
+                          <i class="bi bi-search"></i>
+                      </span>
+                      <input type="text" placeholder="Buscar..." v-model="searchQuery" class="form-control" />
+                  </div>
 
-          <div class="d-flex justify-content-end">
-            <button class="btn btn-success ml-2" @click="openModal">
-              <i class="bi bi-plus-square"></i> Nueva Incidencia
-            </button>
-            <button class="btn btn-primary ml-2" @click="openMantenimientoModal">
-              <i class="bi bi-tools"></i> Crear Mantenimiento
-            </button>
-          </div>
-        </div>
+                   <div class="d-flex justify-content-between">
+                    <button v-show="!showFilters" class=" btn btn-primary mb-1"
+                      :class="{ 'hidden': showFilters }" @click="showFilters = true">
+                      <i class="bi bi-funnel"></i> Filtros
+                    </button>
+                     <button class="btn btn-secondary bg-black text-primary mx-3 ml-2" @click="openModal">
+                        <i class="bi bi-plus-square"></i> Nueva Incidencia
+                    </button>
+                     <button class="btn btn-primary border border-secondary ml-2" @click="openMantenimientoModal">
+                        <i class="bi bi-tools"></i> Crear Mantenimiento
+                    </button>
+                 </div>
+              </div>
 
         <!-- Tabla -->
+        <div class="container bg-primary">
         <div class="table-responsive">
           <table class="table table-hover">
-            <thead>
+            <thead class="table -light">
               <tr>
-                <th>TÍTULO</th>
-                <th>ESTADO</th>
-                <th>PRIORIDAD</th>
-                <th>FECHA</th>
-                <th>MÁQUINA</th>
-                <th>TALLER</th>
-                <th>CREADOR</th>
-                <th>TÉCNICO</th>
-                <th>GRAVEDAD</th>
+                <th class="bg-secondary text-info">TÍTULO</th>
+                <th class="bg-secondary text-info">ESTADO</th>
+                <th class="bg-secondary text-info">PRIORIDAD</th>
+                <th class="bg-secondary text-info">FECHA</th>
+                <th class="bg-secondary text-info">MÁQUINA</th>
+                <th class="bg-secondary text-info">TALLER</th>
+                <th class="bg-secondary text-info">CREADOR</th>
+                <th class="bg-secondary text-info">TÉCNICO</th>
+                <th class="bg-secondary text-info">GRAVEDAD</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody  class="table -light">
               <tr
                 v-for="(incidencia, i) in paginatedIncidencias"
                 :key="i"
                 @click="goToIncidencia(incidencia.id_incidencia)"
                 style="cursor: pointer;"
               >
-                <td class="fw-medium">{{ incidencia.descripcion }}</td>
-                <td>
-                  <span :class="['badge', getEstadoClass(incidencia.estado)]">
+                <td class="font-medium bg-primary">{{ incidencia.descripcion }}</td>
+                <td class="font-medium bg-primary">   
                     {{ incidencia.estado }}
-                  </span>
                 </td>
-                <td>
+                <td class="font-medium bg-primary">
                   <span :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]">
                     {{ incidencia.maquina.prioridad }}
                   </span>
                 </td>
-                <td>{{ formatDate(incidencia.fecha_reporte) }}</td>
-                <td>{{ incidencia.maquina.nombre }}</td>
-                <td>
+                <td class="font-medium bg-primary">{{ formatDate(incidencia.fecha_reporte) }}</td>
+                <td class="font-medium bg-primary">{{ incidencia.maquina.nombre }}</td>
+                <td class="font-medium bg-primary">
                   {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
                 </td>
-                <td>{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
-                <td>{{ incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar' }}</td>
-                <td>
+                <td class="font-medium bg-primary">{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
+                <td class="font-medium bg-primary">{{ incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar' }}</td>
+                <td class="font-medium bg-primary">
                   <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
                     {{ incidencia.gravedad }}
                   </span>
@@ -201,12 +197,13 @@
             </tbody>
           </table>
         </div>
+      </div>
 
         <!-- Paginación -->
         <nav aria-label="Page navigation" class="mt-4">
           <ul class="pagination justify-content-center">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
-              <button class="page-link" @click="previousPage" aria-label="Previous">
+              <button class="page-link text-black" @click="previousPage" aria-label="Previous">
                 <span aria-hidden="true">«</span>
               </button>
             </li>
@@ -216,17 +213,17 @@
               class="page-item"
               :class="{ active: page === currentPage }"
             >
-              <button class="page-link" @click="goToPage(page)">{{ page }}</button>
+              <button class="page-link text-black" @click="goToPage(page)">{{ page }}</button>
             </li>
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-              <button class="page-link" @click="nextPage" aria-label="Next">
+              <button class="page-link text-black" @click="nextPage" aria-label="Next">
                 <span aria-hidden="true">»</span>
               </button>
             </li>
           </ul>
         </nav>
       </div>
-    </div>
+     
 
     <!-- Modal para crear mantenimiento -->
     <div class="modal fade" :class="{ 'show d-block': showMantenimientoModal }" tabindex="-1" role="dialog">
@@ -463,6 +460,35 @@ import useTipoAveria from '@/composables/useTipoAveria';
 import useTipoMantenimiento from '@/composables/useTiposMantenimiento';
 import { ref, reactive, computed, watch, onMounted } from 'vue';
 
+const getPrioridadClass = (prioridad) => {
+    console.log('Prioridad:', prioridad);
+    switch (prioridad) {
+      case 'Alta':
+        return 'badge bg-info text-primary fw-normal';
+      case 'Media':
+        return 'badge bg-secondary text-info fw-normal';
+      case 'Baja':
+        return 'badge bg-primary text-info fw-normal border border-secondary';
+      default:
+        return 'badge bg-info text-white fw-normal';
+    }
+  };
+
+const getGravedadClass = (gravedad) => {
+  switch (gravedad) {
+    case 'Maquina parada':
+    return 'badge bg-fondoRojo text-danger border border-naranja';
+    case 'Aviso':
+    return 'badge bg-fondoNaranja text-naranja border border-naranja';
+    case 'Maquina en Marcha':
+    return 'badge bg-primary text-info bg-opacity-10 border border-info';
+    case 'Mantenimiento':
+      return 'badge bg-secondary text-info border border-info'; // Gris
+    default:
+      return 'badge bg-secondary text-white'; // Gris
+  }
+};
+
 
 const router = useRouter();
 const route = useRoute();
@@ -617,48 +643,8 @@ watch(
   { deep: true }
 );
 
-const getEstadoClass = (estado) => {
-  switch (estado) {
-    case 'Cancelada':
-      return 'badge badge-pendiente';
-    case 'En progreso':
-      return 'badge badge-en-proceso';
-    case 'Resuelta':
-      return 'badge badge-resuelta';
-    case 'Abierta':
-      return 'badge badge-Abierta';
-    default:
-      return 'badge';
-  }
-};
 
-const getPrioridadClass = (prioridad) => {
-  switch (prioridad) {
-    case 'Alta':
-      return 'badge badge-alta';
-    case 'Media':
-      return 'badge badge-media';
-    case 'Baja':
-      return 'badge badge-baja';
-    default:
-      return 'badge';
-  }
-};
 
-const getGravedadClass = (gravedad) => {
-  switch (gravedad) {
-    case 'Maquina parada':
-      return 'badge badge-maquina-parada';
-    case 'Aviso':
-      return 'badge badge-aviso';
-    case 'Maquina en Marcha':
-      return 'badge badge-maquina-en-marcha';
-    case 'Mantenimiento':
-      return 'badge badge-mantenimiento';
-    default:
-      return 'badge';
-  }
-};
 
 const goToIncidencia = (id) => {
   router.push({ name: 'IncidenciaIndividual', params: { id: id } });
@@ -855,6 +841,7 @@ const nextPage = () => {
   top: 0;
   left: 0;
   bottom: 0;
+  
   z-index: 1001;
   transition: transform 0.3s ease-out;
   transform: translateX(-100%);
@@ -910,7 +897,7 @@ const nextPage = () => {
   display: inline-block;
   padding: 0.25em 0.5em;
 }
-  fontbadge {
+  .fontbadge {
   display: inline-block;
   padding: 0.25em 0.5em;
   font-size: 0.75em;
@@ -920,63 +907,11 @@ const nextPage = () => {
       vertical-align: baseline;
   border-radius: 0.25rem;
 }
-
-.badge-pendiente {
-  background-color: #dc3545;
-  color: white;
-}
-
-
-.badge-en.badge-en-proceso {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-resuelta {
-  background-color: #198754;
-  color: white;
-}
-
-.badge-Abierta {
-  background-color: #34a36f;
-  color: white;
-}
-
-.badge-alta {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-media {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-baja {
-  background-color: #28a745;
-  color: white;
-}
-
-.badge-maquina-parada {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-aviso {
-  background-color: #ffc107;
-  color: black;
-}
-
-.badge-maquina-en-marcha {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.badge-mantenimiento {
-background-color: #007bff;
-color: white;
-}
-
+.badge:hover {
+    color: inherit;
+    background-color: inherit;
+    border-color: inherit;
+  }
 .modal {
 display: none;
 position: fixed;
@@ -1010,5 +945,13 @@ opacity: 0;
 
 .modal-backdrop.show {
 opacity: 0;
+}
+.btn-outline-info:hover{
+  background-color: #828282;
+  color: #d1d1d1;
+}
+.btn-outline-info:focus{
+box-shadow: 0 0 5px #828282;
+outline: none;
 }
 </style>
