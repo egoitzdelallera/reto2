@@ -63,31 +63,30 @@ export default function useCampus() {
             loading.value = false;
         }
     };
-     const updateCampus = async (campusId, updatedCampus) => {
-         loading.value = true;
-          error.value = null;
-        try{
-            const token = localStorage.getItem('jwt_token');
-             if (!token) {
-                 throw new Error('No se encontró un token');
-                }
-                console.log("data sent to api:", updatedCampus);
-            const response = await axios.patch(`${API_URL}/campus/${campusId}`,updatedCampus , {
-               headers: {
-                   'Authorization': `Bearer ${token}`
-                   }
-              });
-            console.log("Response from patch:", response)
-            return response.data;
-          }catch (err) {
-             console.error('Error updating campus:', err);
-            error.value = err.message || 'Error al actualizar el campus';
-             console.log('Response Data (updateCampus):', err.response?.data);
-             throw new Error('Error al actualizar el campus', {cause: err});
-        } finally {
-            loading.value = false;
+    const updateCampus = async (id, campusData) => {
+      loading.value = true
+      error.value = null
+      try {
+        console.log("Updating campus with ID:", id, "and data:", campusData)
+        const response = await axios.put(`http://localhost:8000/api/campus/${id}`, campusData)
+        console.log("Update response:", response)
+    
+        const index = campus.value.findIndex((c) => c.id === id)
+        if (index !== -1) {
+          campus.value[index] = { ...campus.value[index], ...response.data }
         }
-    };
+    
+        return response.data
+      } catch (err) {
+        console.error("Error in updateCampus:", err.response || err)
+        error.value = err.response?.data?.message || "Error al actualizar el campus"
+        throw new Error(error.value)
+      } finally {
+        loading.value = false
+      }
+    }
+    
+    
 
   return {
     campus,

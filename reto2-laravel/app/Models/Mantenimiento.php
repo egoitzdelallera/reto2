@@ -9,6 +9,8 @@ class Mantenimiento extends Model
 {
     use HasFactory;
 
+
+
     protected $table = 'incidencias'; // or your maintenance table
     protected $primaryKey = 'id_incidencia'; //or the primari key of the maintenance table
     public $timestamps = false;

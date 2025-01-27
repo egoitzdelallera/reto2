@@ -6,6 +6,7 @@ import iniciosesion from '../views/InicioSesionView.vue';
 import IncidenciaIndividual from '../views/IncidenciaIndividualView.vue';
 import MaquinasView from '../views/MaquinasView.vue';
 import LogoutView from '@/views/LogoutView.vue';
+import Campus from '../views/CreacionGeneralView.vue';
 
 
 
@@ -17,6 +18,7 @@ const routes = [
   { path: '/perfil', component: Perfil, meta: { requiresAuth: true } },
   { path: '/incidencias/:id', name: 'IncidenciaIndividual', component: IncidenciaIndividual, meta: { requiresAuth: true } },
   { path: '/logout', name: 'Logout', component: LogoutView, meta: { requiresAuth: true } },
+  { path: '/campus', name: 'campus', component: Campus, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
