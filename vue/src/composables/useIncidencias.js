@@ -87,7 +87,7 @@ export default function useIncidencias() {
             loadIncidencias();
         } catch (error) {
             console.error('Error al finalizar la fase', error.response ? error.response.data : error);
-            alert('No se pudo finalizar la fase');
+            //alert('No se pudo finalizar la fase');
         }
     };
 
@@ -142,7 +142,7 @@ export default function useIncidencias() {
       
         } catch (error) {
           console.error('Error al finalizar la fase o la incidencia:', error.response ? error.response.data : error);
-          alert('No se pudo finalizar la fase o la incidencia');
+          //alert('No se pudo finalizar la fase o la incidencia');
         }
       };
       
