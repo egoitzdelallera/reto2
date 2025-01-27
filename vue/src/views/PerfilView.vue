@@ -2,7 +2,7 @@
 
 <script setup>
   // Función: Mostrar las cuentas del cliente identificado usando el componente MostrarCuentas.
-  import Perfil from '../components/PerfilGestion.vue';
+  import Perfil from '../components/UserProfileView.vue';
   import SideBar from '../views/SideBar.vue';
 
 </script>

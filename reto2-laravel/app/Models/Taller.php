@@ -13,6 +13,7 @@ class Taller extends Model
 
     protected $table = 'talleres';
     protected $primaryKey = 'id_taller'; // Definir la clave primaria
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',
