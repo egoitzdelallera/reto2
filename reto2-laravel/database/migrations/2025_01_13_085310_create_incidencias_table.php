@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
             $table->bigInteger('id_tipo_averia')->nullable();
             $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);
+            $table->bigInteger('frecuencia')->nullable();
             $table->string('multimedia', 300)->nullable();
             $table->timestamp('fecha_reporte')->useCurrent();
             $table->timestamp('fecha_cierre')->nullable();
@@ -96,5 +97,6 @@ return new class extends Migration
         Schema::dropIfExists('incidencias');
         DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_insert");
         DB::unprepared("DROP TRIGGER IF EXISTS before_incidencias_update");
+        DB::unprepared("DROP TRIGGER IF EXISTS after_incidencia_insert");
     }
 };

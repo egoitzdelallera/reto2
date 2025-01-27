@@ -17,7 +17,7 @@ class Incidencia extends Model
         'estado',
        'id_maquina',
         'id_creador',
-        'fecha_ini',
+        'fecha_reporte',
         'id_tipo_averia',
         'id_tipo_mantenimiento',
    ];
@@ -57,5 +57,14 @@ class Incidencia extends Model
     public function fasesIncidencias()
     {
         return $this->hasMany(FasesIncidencia::class, 'id_incidencia', 'id_incidencia');
+    }
+
+    public function setFechaReporteAttribute($value)
+    {
+        if (is_null($value)) {
+            $this->attributes['fecha_reporte'] = now();
+        } else {
+            $this->attributes['fecha_reporte'] = $value;
+        }
     }
 }

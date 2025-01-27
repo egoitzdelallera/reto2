@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Incidencia;
+use Illuminate\Support\Carbon;
 
 class IncidenciaController extends Controller
 {
@@ -127,6 +128,22 @@ class IncidenciaController extends Controller
         $incidencia->estado = 'Resuelta';
         $incidencia->fecha_cierre = now();
         $incidencia->save();
+
+        if ($incidencia->id_tipo_mantenimiento && $incidencia->frecuencia > 0) {
+            $nuevaIncidencia = new Incidencia([
+                'id_maquina' => $incidencia->id_maquina,
+                'id_creador' => $incidencia->id_creador,
+                'descripcion' => $incidencia->descripcion,
+                'gravedad' => $incidencia->gravedad,
+                'id_tipo_mantenimiento' => $incidencia->id_tipo_mantenimiento,
+                'estado' => 'Abierta',
+                'frecuencia' => $incidencia->frecuencia,
+                'fecha_reporte' => Carbon::parse($incidencia->fecha_cierre)->copy()->addDays($incidencia->frecuencia),
+                // ... otros campos que necesites copiar
+            ]);
+    
+            $nuevaIncidencia->save();
+        }
 
         return response()->json([
             'message' => 'Incidencia finalizada exitosamente',
