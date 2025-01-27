@@ -29,7 +29,7 @@ return new class extends Migration
                 SELECT rol INTO user_role FROM users WHERE id_usuario = NEW.id_tecnico;
 
                 -- Comprobar si el rol es "Técnico" o "Administrador"
-                IF user_role NOT IN ("Técnico", "Administrador") THEN
+                IF user_role NOT IN ("Tecnico", "Administrador") THEN
                     SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "El usuario no tiene un rol válido para ser asignado a una fase.";
                 END IF;
             END;
@@ -43,17 +43,14 @@ return new class extends Migration
                 DECLARE fase_estado VARCHAR(255);
                 DECLARE usuario_rol VARCHAR(255);
 
-                -- Obtener el estado de la fase
                 SELECT estado INTO fase_estado
                 FROM fases_incidencias
                 WHERE id_fase_incidencia = NEW.id_fase_incidencia;
 
-                -- Obtener el rol del usuario
                 SELECT rol INTO usuario_rol
                 FROM users
                 WHERE id_usuario = NEW.id_tecnico;
 
-                -- Verificar si la fase está completada
                 IF fase_estado = "Completada" THEN
                     SIGNAL SQLSTATE "45000"
                     SET MESSAGE_TEXT = "No se pueden asignar personas a una fase que ya está completada.";

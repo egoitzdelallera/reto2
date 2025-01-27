@@ -23,8 +23,8 @@ class MantenimientoController extends Controller
                 'descripcion' => 'required|string|max:300',
                 'gravedad' => 'required|in:Mantenimiento',
                 'estado' => 'required|in:Abierta,En progreso,Resuelta,Cancelada',
-                'frecuencia' => 'nullable|integer',
-                'multimedia' => 'nullable|string|max:300',
+                'frecuencia' => 'required|integer',
+                 'multimedia' => 'nullable|string|max:300', // Remove nullable validation
             ]);
 
             Log::info('Validación exitosa');
@@ -44,8 +44,8 @@ class MantenimientoController extends Controller
                     'descripcion' => $validatedData['descripcion'],
                     'gravedad' => 'Mantenimiento',
                     'estado' => $validatedData['estado'],
-                    'frecuencia' => $validatedData['frecuencia'] ?? null,
-                    'multimedia' => $validatedData['multimedia'] ?? null,
+                    'frecuencia' => $validatedData['frecuencia'],
+                     'multimedia' => $validatedData['multimedia'] ?? '',
                 ]);
 
                 $incidenciasCreadas[] = $incidencia;

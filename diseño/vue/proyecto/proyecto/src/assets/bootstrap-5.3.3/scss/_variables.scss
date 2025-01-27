@@ -764,9 +764,9 @@ $table-active-color:          $table-color !default;
 $table-active-bg-factor:      .1 !default;
 $table-active-bg:             rgba(var(--#{$prefix}emphasis-color-rgb), $table-active-bg-factor) !default;
 
-$table-hover-color:           $table-color !default;
+$table-hover-color:           $gris-1P !default;
 $table-hover-bg-factor:       .075 !default;
-$table-hover-bg:              rgba(var(--#{$prefix}emphasis-color-rgb), $table-hover-bg-factor) !default;
+$table-hover-bg:              $table-color !default;
 
 $table-border-factor:         .2 !default;
 $table-border-width:          var(--#{$prefix}border-width) !default;

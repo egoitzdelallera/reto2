@@ -97,7 +97,7 @@ class UserController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function updatePerfil(Request $request, $id)
     {
           $user = User::find($id);
     
@@ -117,6 +117,44 @@ class UserController extends Controller
     
         $user->nombre = $request->input('nombre');
          $user->apellido = $request->input('apellido');
+    
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+    
+         $user->save();
+
+        $userWithCampus = User::with('campus:id_campus,nombre')
+            ->select('id_usuario', 'nombre', 'apellido', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus')
+            ->find($user->id_usuario);
+            $userWithCampus->campus = $userWithCampus->campus ? $userWithCampus->campus->nombre : '-';
+
+        return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $userWithCampus]);
+
+    }
+
+       public function update(Request $request, $id)
+    {
+          $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+         $validator = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+              'apellido' => 'required|string|max:255',
+             'password' => 'nullable|string|min:6',
+            'rol' => 'required|in:Administrador,Técnico,Operario',
+          
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $user->nombre = $request->input('nombre');
+         $user->apellido = $request->input('apellido');
+         $user->rol = $request->input('rol'); // Add this line
     
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
@@ -156,7 +194,7 @@ class UserController extends Controller
             'nombre' => 'required|string|max:255',
               'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users,correo',
-            'rol' => 'required|in:Administrador,Técnico,Operario',
+            'rol' => 'required|in:Administrador,Tecnico,Operario',
             'password' => 'required|string|min:6',
              'id_campus' => 'nullable|integer'
         ]);
