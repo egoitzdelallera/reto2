@@ -1,7 +1,7 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import Usuario from '../components/UsuariosGestion.vue';
-import SideBar from '../views/SideBar.vue';
+  import UsuariosTabla from '../components/usuarios/UsuariosTabla.vue';
+  import SideBar from '../views/SideBar.vue';
+  import { useRoute } from 'vue-router';
 
 const route = useRoute();
 </script>
@@ -9,7 +9,6 @@ const route = useRoute();
 <template>
   <div>
     <SideBar />
-    <Usuario :initialRole="route.query.role || 'Todos'" />
+    <UsuariosTabla :initialRole="route.query.role || 'Todos'" />
   </div>
 </template>
-

@@ -19,7 +19,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'user']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('/campus', [CampusController::class, 'index']);
-    Route::patch('/users/{id}', [UserController::class, 'update']); // Changed from post to patch
+    Route::patch('/users/{id}', [UserController::class, 'update']); 
     Route::post('/users', [UserController::class, 'store']);
      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
      //Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Removed This line

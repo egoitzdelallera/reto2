@@ -27,7 +27,8 @@
 
   // Override <a>'s hover style
   &:hover {
-    color: var(--#{$prefix}btn-close-color);
+    color: $gris-1P;
+    background-color: $gris-1P;
     text-decoration: none;
     opacity: var(--#{$prefix}btn-close-hover-opacity);
   }

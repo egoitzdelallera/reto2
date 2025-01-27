@@ -71,6 +71,7 @@ class IncidenciaController extends Controller
              'gravedad' => $request->gravedad,
              'estado' => "Abierta",
             'id_creador' => $request->id_creador,
+            'id_tipo_averia' => $request->id_tipo_averia,
          ]);
          // Retornar la respuesta con la incidencia creada
         return response()->json($incidencia, 201);
