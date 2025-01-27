@@ -35,7 +35,7 @@ export default {
       // Incluso si falla, elimina los datos locales y redirige al login
       localStorage.removeItem('jwt_token');
       localStorage.removeItem('user_data');
-      this.$router.push('/login');
+      this.$router.push('/');
     }
   },
 };

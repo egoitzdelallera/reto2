@@ -194,7 +194,7 @@ class UserController extends Controller
             'nombre' => 'required|string|max:255',
               'apellido' => 'required|string|max:255',
             'correo' => 'required|string|email|max:255|unique:users,correo',
-            'rol' => 'required|in:Administrador,Técnico,Operario',
+            'rol' => 'required|in:Administrador,Tecnico,Operario',
             'password' => 'required|string|min:6',
              'id_campus' => 'nullable|integer'
         ]);

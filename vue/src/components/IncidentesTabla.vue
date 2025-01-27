@@ -429,10 +429,20 @@
           }}</option>
         </select>
       </div>
+
+      <div class="mb-3">
+        <label for="incidencia-multimedia" class="form-label">Subir Multimedia</label>
+        <input 
+          type="file" 
+          class="form-control" 
+          id="incidencia-multimedia" 
+          @change="handleFileChange"
+        />
+      </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" @click="closeModal">Cancelar</button>
-      <button type="button" class="btn btn-primary" @click="createIncidencia">Guardar</button>
+      <button type="button" class="btn btn-primary" @click="nuevaIncidencia">Guardar</button>
     </div>
   </div>
 </div>
@@ -490,7 +500,7 @@ const itemsPerPage = 30;
 const currentPage = ref(1);
 
 const { maquinas } = useMaquinas();
-const { incidencias, createIncidencia: apiCreateIncidencia } = useIncidencias();
+const { incidencias, createIncidencia } = useIncidencias();
 const { talleres, fetchTalleres } = useTalleres();
 const { tipoAverias, fetchTipoAverias } = useTipoAveria();
 const { tiposMantenimiento, fetchTiposMantenimiento } = useTipoMantenimiento();
@@ -501,6 +511,15 @@ const newIncidencia = reactive({
   descripcion: '',
   gravedad: '',
 });
+const multimediaFile = ref(null);
+
+// Manejar la selección de archivos
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    multimediaFile.value = file;
+  }
+};
 const selectedMaquinas = ref([]);
 const newMantenimiento = reactive({
   descripcion: '',
@@ -659,7 +678,7 @@ const closeMantenimientoModal = () => {
   resetMantenimientoForm();
 };
 
-const createIncidencia = async () => {
+const nuevaIncidencia = async () => {
   try {
     if (!selectedMachine.value || !selectedTaller.value) {
       throw new Error('No Machine or Taller Selected');
@@ -667,14 +686,25 @@ const createIncidencia = async () => {
     if (!selectedTipoAveria.value) {
       throw new Error('No tipo Averia Selected');
     }
-    console.log(selectedTipoAveria.value); 
-    const newIncidenciaToSend = {
-      ...newIncidencia,
-      id_maquina: selectedMachine.value.id_maquina,
-      id_tipo_averia: selectedTipoAveria.value.id_tipo_averia,
-    };
-    console.log(newIncidenciaToSend); 
-    await apiCreateIncidencia(newIncidenciaToSend, selectedMachine.value, selectedTipoAveria.value);
+
+    const userData = JSON.parse(localStorage.getItem('user_data'));
+    
+    const formData = new FormData();
+    formData.append("descripcion", newIncidencia.descripcion);
+    formData.append("gravedad", newIncidencia.gravedad);
+    formData.append("id_maquina", selectedMachine.value.id_maquina);
+    formData.append("id_tipo_averia", selectedTipoAveria.value.id_tipo_averia);
+    formData.append("estado", "Abierta");
+    formData.append("id_creador", userData.id);
+
+    if (multimediaFile.value) {
+      formData.append("multimedia", multimediaFile.value);
+    }
+
+    console.log('multimedia: ', multimediaFile.value);
+    console.log('formData: ', formData);
+    
+    await createIncidencia(formData);
     closeModal();
   } catch (error) {
     console.error('Error creating incidencia:', error);

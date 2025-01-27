@@ -222,20 +222,32 @@
 
                   <div class="d-grid gap-2" v-if="fase.estado !== 'Completada'">
                     <button class="btn btn-success" @click="openPopup(fase)">Finalizar la Fase {{index + 1}}</button>
-                    <button class="btn btn-secondary">Finalizar Incidencia</button>
+                    <button class="btn btn-secondary" @click="openFinalizarIncidenciaPopup(fase)">Finalizar Incidencia</button>
                   </div>
                 </div>
 
                 <div v-if="showPopup" class="popup-backdrop">
-                <div class="popup">
-                  <h5>Finalizar Fase</h5>
-                  <p>Escribe una descripción de lo que has hecho para completar esta fase:</p>
-                  <textarea v-model="descripcion" class="form-control" rows="4" placeholder="Descripción..."></textarea>
-                  <div class="d-flex justify-content-end mt-3 gap-2">
-                    <button class="btn btn-secondary" @click="closePopup">Cancelar</button>
-                    <button class="btn btn-success" @click="confirmFinalizarFase">Confirmar</button>
+                  <div class="popup">
+                    <h5>Finalizar Fase</h5>
+                    <p>Escribe una descripción de lo que has hecho para completar esta fase:</p>
+                    <textarea v-model="descripcion" class="form-control" rows="4" placeholder="Descripción..."></textarea>
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                      <button class="btn btn-secondary" @click="closePopup">Cancelar</button>
+                      <button class="btn btn-success" @click="confirmFinalizarFase">Confirmar</button>
+                    </div>
                   </div>
                 </div>
+
+                <div v-if="showFinalizarIncidenciaPopup" class="popup-backdrop">
+                  <div class="popup">
+                    <h5>Finalizar Incidencia</h5>
+                    <p>Escribe una descripción de lo que has hecho para cerrar esta incidencia:</p>
+                    <textarea v-model="descripcionFinalizarIncidencia" class="form-control" rows="4" placeholder="Descripción..."></textarea>
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                      <button class="btn btn-secondary" @click="closeFinalizarIncidenciaPopup">Cancelar</button>
+                      <button class="btn btn-danger" @click="confirmFinalizarIncidencia">Confirmar</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -253,7 +265,7 @@ import useIncidencias from '../composables/useIncidencias'; // Importa el compos
 // Rutas
 const route = useRoute();
 const router = useRouter();
-const { getIncidenciaById, finalizarYCrearFase, asignarTecnicoAFase } = useIncidencias();
+const { getIncidenciaById, finalizarYCrearFase, asignarTecnicoAFase, finalizarFaseYIncidencia } = useIncidencias();
 
 const activeTab = ref('Operario');
 const tabs = ['Operario', 'Fases', 'Máquina'];
@@ -261,7 +273,9 @@ const incidencia = ref({});
 
 // Popup modal
 const showPopup = ref(false);
+const showFinalizarIncidenciaPopup = ref(false); // Estado del popup de finalizar incidencia
 const descripcion = ref('');
+const descripcionFinalizarIncidencia = ref(''); // Descripción para finalizar incidencia
 const faseSeleccionada = ref(null);
 
 onMounted(async () => {
@@ -316,7 +330,44 @@ const confirmFinalizarFase = async () => {
   }
 }
 
-const asignarme =async (faseId) => {
+const openFinalizarIncidenciaPopup = (fase) => {
+  showFinalizarIncidenciaPopup.value = true;
+  descripcionFinalizarIncidencia.value = '';
+  faseSeleccionada.value = fase;
+};
+
+const closeFinalizarIncidenciaPopup = () => {
+  showFinalizarIncidenciaPopup.value = false;
+  descripcionFinalizarIncidencia.value = '';
+  faseSeleccionada.value = null;
+};
+
+const confirmFinalizarIncidencia = async () => {
+  if (!descripcionFinalizarIncidencia.value) {
+    alert('Por favor, escribe la descripción antes de confirmar.');
+    return;
+  }
+
+  if (faseSeleccionada.value) {
+    try {
+      await finalizarFaseYIncidencia(
+        faseSeleccionada.value.id_fase_incidencia,
+        descripcionFinalizarIncidencia.value, 
+        incidencia.value.id_incidencia
+      );
+
+      const updatedIncidencia = await getIncidenciaById(route.params.id);
+      incidencia.value = updatedIncidencia;
+
+      // Cerrar el popup de confirmación
+      closePopup();
+    } catch (error) {
+      console.error('Error al finalizar la incidencia:', error);
+    }
+  }
+};
+
+const asignarme = async (faseId) => {
   try {
     await asignarTecnicoAFase(faseId);
   } catch (error) {

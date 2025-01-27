@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->autoIncrement();
             $table->string('nombre', 100);
             $table->string('descripcion', 300);
+            $table->bigInteger('frecuencia')->nullable();
             $table->primary('id_tipo_mantenimiento');
         });
     }
