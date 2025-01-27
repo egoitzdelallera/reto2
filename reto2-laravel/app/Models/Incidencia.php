@@ -12,14 +12,15 @@ class Incidencia extends Model
     protected $primaryKey = 'id_incidencia';
     public $timestamps = false;
     protected $fillable = [
-       'descripcion',
-       'gravedad',
+        'descripcion',
+        'gravedad',
         'estado',
-       'id_maquina',
+        'id_maquina',
         'id_creador',
         'fecha_reporte',
         'id_tipo_averia',
         'id_tipo_mantenimiento',
+        'multimedia',
    ];
 
   public function maquina()

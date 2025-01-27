@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->nullable();
             $table->bigInteger('id_tipo_averia')->nullable();
             $table->enum('estado', ['Abierta', 'En progreso', 'Resuelta', 'Cancelada']);
-            $table->string('multimedia', 300)->nullable();
+            $table->text('multimedia')->nullable();
             $table->timestamp('fecha_reporte')->useCurrent();
             $table->timestamp('fecha_cierre')->nullable();
             $table->primary('id_incidencia');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Incidencia;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class IncidenciaController extends Controller
 {
@@ -54,24 +55,35 @@ class IncidenciaController extends Controller
 
 
     public function store(Request $request)
-{
-  $request->validate([
-    'id_maquina' => 'required|integer',
-     'descripcion' => 'required|string',
-     'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
-   ]);
-   
-  try {
-         // Obtener la fecha y hora actual
-         $fecha_ini = now();  // La función `now()` obtiene la fecha y hora actual
+    {
+        $request->validate([
+            'id_maquina' => 'required|integer',
+            'descripcion' => 'required|string',
+            'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
+            'id_tipo_averia' => 'required|integer',
+            'multimedia' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4',
+        ]);
+    
+        try {
+            $multimediaPath = null;
+            if($request->hasFile('multimedia')) {
+                $multimediaPath = $request->file('multimedia')->store('multimedia', 'public');
+            }
 
-        // Crear la incidencia
-        $incidencia = Incidencia::create([
-           'id_maquina' => $request->id_maquina,
-            'descripcion' => $request->descripcion,
-             'gravedad' => $request->gravedad,
-             'estado' => "Abierta",
-            'id_creador' => $request->id_creador,
+            // Log para ver la ruta guardada
+            Log::info('Archivo guardado en:', [
+                'path' => $multimediaPath
+            ]);
+
+            // Crear la incidencia
+            $incidencia = Incidencia::create([
+                'id_maquina' => $request->id_maquina,
+                'descripcion' => $request->descripcion,
+                'gravedad' => $request->gravedad,
+                'estado' => "Abierta",
+                'id_creador' => $request->id_creador,
+                'id_tipo_averia' => $request->id_tipo_averia,
+                'multimedia' => $multimediaPath, 
          ]);
          // Retornar la respuesta con la incidencia creada
         return response()->json($incidencia, 201);
@@ -79,7 +91,7 @@ class IncidenciaController extends Controller
             // Retornar un mensaje de error
             return response()->json(['message' => 'Error al crear la incidencia'], 500);
         }
- }
+    }
 
     public function update(Request $request, $id)
     {
@@ -98,8 +110,8 @@ class IncidenciaController extends Controller
             'estado' => 'required|in:Abierta, Pendiente, En Proceso, Resuelta',
             'frecuencia' => 'nullable|in:diario, semanal, mensual, anual',
             'multimedia' => 'nullable|string',
-            'fecha_ini' => 'required|date',
-            'fecha_fin' => 'nullable|date',
+            'fecha_reporte' => 'required|date',
+            'fecha_cierre' => 'nullable|date',
         ]);
 
         $incidencia->update([
