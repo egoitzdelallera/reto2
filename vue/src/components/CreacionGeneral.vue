@@ -6,8 +6,8 @@
           <div class="card custom-card h-100">
             <div class="card-header custom-card-header d-flex align-items-center">
               <h5 class="card-title mb-0 text-dark me-auto">Campus</h5>
-              <button @click="showAddItemPopup('campus')" class="btn btn-sm btn-secondary">
-                <i class="bi bi-plus-lg"></i> Añadir
+              <button @click="showAddItemPopup('campus')" class="btn btn-sm btn-secondary bg-info w-25">
+                <i class="bi bi-plus-lg text-no"></i> Añadir
               </button>
             </div>
             <div class="card-body">
@@ -54,7 +54,7 @@
           <div class="card custom-card h-100">
             <div class="card-header custom-card-header d-flex align-items-center">
               <h5 class="card-title mb-0 text-dark me-auto">Talleres</h5>
-              <button @click="showAddItemPopup('talleres')" class="btn btn-sm btn-secondary">
+              <button @click="showAddItemPopup('talleres')" class="btn btn-sm btn-secondary  bg-info w-25">
                 <i class="bi bi-plus-lg"></i> Añadir
               </button>
             </div>
@@ -108,7 +108,7 @@
           <div class="card custom-card h-100">
             <div class="card-header custom-card-header d-flex align-items-center">
               <h5 class="card-title mb-0 text-dark me-auto">Tipos de Avería</h5>
-              <button @click="showAddItemPopup('tipoAverias')" class="btn btn-sm btn-secondary">
+              <button @click="showAddItemPopup('tipoAverias')" class="btn btn-sm btn-secondary  bg-info w-25">
                 <i class="bi bi-plus-lg"></i> Añadir
               </button>
             </div>
@@ -156,7 +156,7 @@
           <div class="card custom-card h-100">
             <div class="card-header custom-card-header d-flex align-items-center">
               <h5 class="card-title mb-0 text-dark me-auto">Tipos de Mantenimiento</h5>
-              <button @click="showAddItemPopup('tiposMantenimiento')" class="btn btn-sm btn-secondary">
+              <button @click="showAddItemPopup('tiposMantenimiento')" class="btn btn-sm btn-secondary  bg-info w-25">
                 <i class="bi bi-plus-lg"></i> Añadir
               </button>
             </div>

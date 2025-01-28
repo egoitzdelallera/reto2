@@ -16,7 +16,7 @@
         <!-- Main Content -->
         <div class="col-lg-8">
              <UserCard :user="user" @open-edit-modal="openEditUserModal" />
-             <UserIncidentsCard />
+
         </div>
          <!-- Phases Sidebar -->
          <div class="col-lg-4">
@@ -39,7 +39,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import UserCard from './UserCard.vue';
-import UserIncidentsCard from './UserIncidentsCard.vue';
 import UserCurrentIncidents from './UserCurrentIncidents.vue';
 import EditUserModal from './EditUserModal.vue'
 

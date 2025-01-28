@@ -86,11 +86,11 @@ export default function useMaquinas() {
     console.log('Prioridad:', prioridad);
     switch (prioridad) {
       case 'Alta':
-        return 'badge bg-fondoRojo text-danger';
+        return 'badge bg-fondoRojo text-danger border border-danger';
       case 'Media':
-        return 'badge bg-fondoNaranja text-naranja';
+        return 'badge bg-fondoNaranja text-naranja border border-naranja';
       case 'Baja':
-        return 'badge bg-info text-white fw-normal';
+        return 'badge bg-info text-white fw-normal border border-info';
       default:
         return 'badge bg-info text-white fw-normal';
     }

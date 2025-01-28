@@ -308,7 +308,7 @@ const phasesDetails = [
     technicians: [
       {
         name: 'Alfredo Fernandez',
-        role: 'Técnico',
+        role: 'Tecnico',
         email: 'alfredo@gmail.com',
         phone: '630 63 06 30',
         location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
@@ -325,7 +325,7 @@ const phasesDetails = [
     technicians: [
       {
         name: 'Alfredo Fernandez',
-        role: 'Técnico',
+        role: 'Tecnico',
         email: 'alfredo@gmail.com',
         phone: '630 63 06 30',
         location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
@@ -333,7 +333,7 @@ const phasesDetails = [
       },
       {
         name: 'Vicente Abad',
-        role: 'Técnico',
+        role: 'Tecnico',
         email: 'vicente@gmail.com',
         phone: '630 63 06 30',
         location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',
@@ -341,7 +341,7 @@ const phasesDetails = [
       },
       {
         name: 'Maite Lezama',
-        role: 'Técnico',
+        role: 'Tecnico',
         email: 'maite@gmail.com',
         phone: '630 63 06 30',
         location: 'Campus de Arriaga - Egibide → Vitoria - Gasteiz, Álava',

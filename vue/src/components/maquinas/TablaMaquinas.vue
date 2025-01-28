@@ -33,10 +33,10 @@
               </td>
               <td class="bg-primary">
                 <div class="btn-group">
-                  <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="cambiarEstado(maquina)">
+                  <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="cambiarEstado(maquina)" title="cambiar estado">
                     <i class="bi" :class="maquina.estado === 'Habilitado' ? 'bi-x-circle' : 'bi-check-circle'"></i>
                   </button>
-                  <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="editarMaquina(maquina)">
+                  <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="editarMaquina(maquina)" title="editar máquina">
                     <i class="bi bi-pencil"></i>
                   </button>
                 </div>

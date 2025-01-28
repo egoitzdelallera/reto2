@@ -24,7 +24,6 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
      //Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Removed This line
-
 });
 
 // Rutas para máquinas

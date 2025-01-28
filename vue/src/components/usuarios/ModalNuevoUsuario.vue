@@ -30,7 +30,7 @@
               class="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value="" disabled selected>Seleccione un rol</option>
               <option value="Administrador">Administrador</option>
-              <option value="Técnico">Técnico</option>
+              <option value="Tecnico">Técnico</option>
               <option value="Operario">Operario</option>
             </select>
           </div>

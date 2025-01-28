@@ -21,6 +21,7 @@ class Incidencia extends Model
         'id_tipo_averia',
         'id_tipo_mantenimiento',
         'multimedia',
+        'frecuencia',
    ];
 
   public function maquina()

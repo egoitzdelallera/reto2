@@ -118,7 +118,7 @@
           submenu: [
           { name: 'Todos', active: false, route: '/usuarios' },
             { name: 'Administradores', active: false, route: '/usuarios/administradores' },
-            { name: 'Técnicos', active: false, route: '/usuarios/tecnicos' },
+            { name: 'Tecnicos', active: false, route: '/usuarios/tecnicos' },
             { name: 'Operarios', active: false, route: '/usuarios/operarios' },
             
           ]

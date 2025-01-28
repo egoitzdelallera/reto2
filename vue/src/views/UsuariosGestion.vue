@@ -28,7 +28,7 @@
                   <div class="btn-group" role="group" aria-label="Filtrar por rol">
                       <button @click="changeRole('Todos')" class="btn" :class="selectedRole === 'Todos' ? 'btn-primary' : 'btn-outline-primary'">Todos</button>
                       <button @click="changeRole('Administrador')" class="btn" :class="selectedRole === 'Administrador' ? 'btn-primary' : 'btn-outline-primary'">Administradores</button>
-                      <button @click="changeRole('Técnico')" class="btn" :class="selectedRole === 'Técnico' ? 'btn-primary' : 'btn-outline-primary'">Técnicos</button>
+                      <button @click="changeRole('Tecnico')" class="btn" :class="selectedRole === 'Tecnico' ? 'btn-primary' : 'btn-outline-primary'">Técnicos</button>
                       <button @click="changeRole('Operario')" class="btn" :class="selectedRole === 'Operario' ? 'btn-primary' : 'btn-outline-primary'">Operarios</button>
                   </div>
                   </div>
@@ -206,7 +206,7 @@
                    <label for="newRol" class="form-label">Rol</label>
                       <select class="form-select" id="newRol" v-model="newUser.rol">
                           <option value="Administrador">Administrador</option>
-                          <option value="Técnico">Técnico</option>
+                          <option value="Tecnico">Técnico</option>
                           <option value="Operario">Operario</option>
                       </select>
                   </div>
@@ -533,7 +533,7 @@ const fetchCampus = async () => {
 const getRoleBadgeClass = (rol) => {
 const classes = {
   'Administrador': 'bg-danger',
-  'Técnico': 'bg-primary',
+  'Tecnico': 'bg-primary',
   'Operario': 'bg-warning text-dark'
 }
 return classes[rol] || 'bg-secondary'

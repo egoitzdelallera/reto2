@@ -11,8 +11,8 @@ class IncidenciaController extends Controller
 {
     public function index()
     {
-         $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'tecnico'])
-            ->get();
+        $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'fasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias.tecnico'])
+        ->get();
         
         $incidencias->each(function ($incidencia) {
             if ($incidencia->creador) {
