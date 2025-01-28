@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class TipoMantenimiento extends Model
 {
     use HasFactory;
@@ -15,7 +15,9 @@ class TipoMantenimiento extends Model
 
     protected $fillable = [
         'nombre',
+        'estado',
         'descripcion'
+
     ];
 
     public function incidencias()

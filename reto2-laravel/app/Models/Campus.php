@@ -15,7 +15,8 @@ class Campus extends Model
 
     protected $fillable = [
         'nombre',
-        'ubicacion'
+        'ubicacion',
+        'estado' // Add 'estado' here
     ];
 
     public function talleres()

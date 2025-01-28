@@ -24,7 +24,6 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
      Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
      //Route::get('/incidenciasPerfil', [IncidenciaController::class, 'index']); //Removed This line
-
 });
 
 // Rutas para máquinas
@@ -70,10 +69,8 @@ Route::get('/tipos-averia', [TipoAveriaController::class, 'index']);
 Route::get('/tipos-mantenimiento', [TipoMantenimientoController::class, 'index']);
 Route::get('/tipos-mantenimiento/{id}', [TipoMantenimientoController::class, 'show']);
 Route::post('/tipos-mantenimiento', [TipoMantenimientoController::class, 'store']);
-Route::put('/tipos-mantenimiento/{id}', [TipoMantenimientoController::class, 'update']);
 Route::delete('/tipos-mantenimiento/{id}', [TipoMantenimientoController::class, 'destroy']);
-//}); //Remove This line
-//}); //Remove This line
+
 
 //});
 
@@ -100,18 +97,20 @@ Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
 //Rutas campus
 Route::middleware('jwt.auth')->group(function () {
    Route::get('/campus', [CampusController::class, 'index']);
+   Route::patch('/campus/{id}', [GestionTodoController::class, 'updateCampus']);
+   Route::patch('/campus/{id}/toggle-status', [GestionTodoController::class, 'toggleCampusStatus']);
+   Route::patch('/talleres/{id}', [GestionTodoController::class, 'updateTaller']);
+   Route::patch('/tipo-averias/{id}/toggle-status', [GestionTodoController::class, 'toggleTipoAveriaStatus']);   
+   Route::patch('/tipo-mantenimientos/{id}/toggle-status', [GestionTodoController::class, 'toggleTipoMantenimientoStatus']);   
+   Route::patch('/talleres/{id}/toggle-status', [GestionTodoController::class, 'toggleTallerStatus']);
+   Route::patch('/tipo-mantenimiento/{id}', [GestionTodoController::class, 'updateTipoMantenimiento']);
+
 });
    Route::post('/campus', [GestionTodoController::class, 'createCampus']);
-Route::put('/campus/{id}', [GestionTodoController::class, 'updateCampus']);
+   Route::put('/tipo-averias/{id}', [GestionTodoController::class, 'updateTipoAveria']);
 Route::post('/talleres', [GestionTodoController::class, 'createTaller']);
-Route::put('/talleres/{id}', [GestionTodoController::class, 'updateTaller']);
 
 Route::post('/tipo-averias', [GestionTodoController::class, 'createTipoAveria']);
-Route::put('/tipo-averias/{id}', [GestionTodoController::class, 'updateTipoAveria']);
 Route::get('/tipos-averia', [TipoAveriaController::class, 'index']);
 
-
 Route::post('/tipo-mantenimientos', [GestionTodoController::class, 'createTipoMantenimiento']);
-Route::put('/tipo-mantenimientos/{id}', [GestionTodoController::class, 'updateTipoMantenimiento']);
-
-
