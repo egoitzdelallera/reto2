@@ -134,19 +134,22 @@
       });
   
       const updatedMenuItems = computed(() => {
-        const incidenciasTalleres = (talleres.value || []).map(taller => ({
-          name: taller.nombre,
-          active: true,
-          route: `/incidencias/`
-        }));
-        return filteredMenuItems.value.map((item) => {
-          if (item.title === 'Incidencias') {
-            return { ...item, submenu: [...item.submenu, ...incidenciasTalleres] };
-          }
-          return item;
-        });
-      });
-  
+  const incidenciasTalleres = (talleres.value || [])
+    .filter(taller => taller.estado === 'Habilitado') // Filter out disabled talleres
+    .map(taller => ({
+      name: taller.nombre,
+      active: true,
+      route: `/incidencias/`
+    }));
+    
+  return filteredMenuItems.value.map((item) => {
+    if (item.title === 'Incidencias') {
+      return { ...item, submenu: [...item.submenu, ...incidenciasTalleres] };
+    }
+    return item;
+  });
+});
+
       const showSubmenu = (index) => {
         clearTimeout(submenuTimeout.value);
         submenuTimeout.value = setTimeout(() => {

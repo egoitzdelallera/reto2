@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-overlay">
+  <div class="modal-overlay">
     <div class="modal-container bg-primary">
       <div class="modal-header border-b mb-4 pb-2">
         <h5 class="text-xl font-bold">Nueva Máquina</h5>
@@ -20,7 +20,7 @@
             <label for="newTaller" class="form-label block text-sm font-medium text-gray-700">Taller</label>
             <select id="newTaller" v-model="newMaquina.id_taller"
               class="form-select mt-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              <option v-for="taller in talleres" :key="taller.id_taller" :value="taller.id_taller">
+               <option v-for="taller in filteredTalleres" :key="taller.id_taller" :value="taller.id_taller">
                 {{ taller.nombre }}
               </option>
             </select>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import useMaquinas from '@/composables/useMaquinas';
 
 const { createMaquina } = useMaquinas();
@@ -107,6 +107,10 @@ const submitNewMaquina = async () => {
       }, 1000);
   }
 };
+
+const filteredTalleres = computed(() => {
+      return props.talleres ? props.talleres.filter(taller => taller.estado === 'Habilitado') : [];
+});
 </script>
 <style scoped>
 .modal-overlay {
