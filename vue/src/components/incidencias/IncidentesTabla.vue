@@ -264,9 +264,9 @@ const createMantenimiento = async (mantenimientoData) => {
         descripcion: mantenimientoData.descripcion,
         gravedad: 'Mantenimiento',
         estado: 'Abierta',
-        frecuencia: calculateTotalDays.value,
+        frecuencia: mantenimientoData.frecuencia,
     };
-
+     
     const response = await fetch('http://localhost:8000/api/mantenimientos', {
       method: 'POST',
       headers: {
@@ -275,23 +275,21 @@ const createMantenimiento = async (mantenimientoData) => {
       },
       body: JSON.stringify(newMantenimientoToSend),
     });
-
     if (!response.ok) {
         const responseText = await response.text();
-        console.error("Error response text:", responseText);
+       console.error("Error response text:", responseText);
         try {
            const errorData = JSON.parse(responseText);
-            console.error("Parsed error data:", errorData);
+           console.error("Parsed error data:", errorData);
             throw new Error(`Error al crear el mantenimiento: ${response.status} - ${errorData.message || response.statusText}`);
-        }catch (jsonError){
-             throw new Error(`Error al crear el mantenimiento: ${response.status} - ${jsonError || response.statusText}`);
+        }catch(jsonError){
+            throw new Error(`Error al crear el mantenimiento: ${response.status} - ${jsonError || response.statusText}`);
        }
     }
 
     const createdMantenimiento = await response.json();
-     console.log('Mantenimiento creado:', createdMantenimiento);
-    closeMantenimientoModal();
-
+    console.log('Mantenimiento creado:', createdMantenimiento);
+      closeMantenimientoModal();
 };
 
 const calculateTotalDays = computed(() => {
@@ -329,7 +327,7 @@ const resetMantenimientoForm = () => {
   newMantenimiento.frecuenciaCantidad = null;
   newMantenimiento.frecuencia = null;
   newMantenimiento.fechaSemanal = null;
-  selectedMantenimientoTaller.value = [];
+    selectedMantenimientoTaller.value = [];
   selectedMantenimientoMachine.value = [];
   selectedTipoMantenimiento.value = null;
 };

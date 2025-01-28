@@ -7,33 +7,24 @@ use App\Models\Incidencia;
 use Illuminate\Http\Request;
 use App\Models\TecnicosFasesIncidencia;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class FasesIncidenciaController extends Controller
 {
     public function finalizarFase(Request $request, $faseId)
     {
-
-        error_log('Datos recibidos:' . json_encode($request->all()));
-
         $request->validate([
             'descripcion' => 'required|string',
             'userId' => 'required|integer',
         ]);
 
+        // Establecer la variable de sesión en MySQL
+        DB::statement("SET @current_user_id = ?", [$request->input('userId')]);
+
         $fase = FasesIncidencia::findOrFail($faseId);
 
-        error_log('Estado de la fase antes de completar: ' . $fase->estado);
-
-        if($fase->estado === 'Completada') {
-            return response()->json(['error' => 'La fase ya esta completada'], 400);
-        }
-
-        $asignacion = TecnicosFasesIncidencia::where('id_fase_incidencia', $faseId)
-            ->where('id_tecnico', $request->input('userId'))
-            ->exists();
-
-        if (!$asignacion) {
-            return response()->json(['error' => 'No estás asignado a esta fase'], 403);
+        if ($fase->estado === 'Completada') {
+            return response()->json(['error' => 'La fase ya está completada'], 400);
         }
 
         $fase->estado = 'Completada';
@@ -46,6 +37,7 @@ class FasesIncidenciaController extends Controller
             'fase' => $fase,
         ]);
     }
+
 
     public function crearFase(Request $request)
     {

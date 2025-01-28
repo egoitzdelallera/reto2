@@ -138,7 +138,7 @@
       </div>
     </div>
   </div>
-    <div v-if="showModal" class="modal-backdrop fade show"></div>
+  <div v-if="showModal" class="modal-backdrop fade show"></div>
 </template>
 
 <script setup>
@@ -150,9 +150,9 @@ const props = defineProps({
   maquinas: Array,
   filteredMaquinas: Array,
   tiposMantenimiento: Array,
-    selectedMantenimientoTaller: Array,
-    selectedMantenimientoMachine: Array,
-    selectedTipoMantenimiento: String
+   selectedMantenimientoTaller: Array,
+   selectedMantenimientoMachine: Array,
+   selectedTipoMantenimiento:String
 });
 const emit = defineEmits(['close-modal', 'create-mantenimiento', 'update:selectedMantenimientoTaller', 'update:selectedMantenimientoMachine', 'update:selectedTipoMantenimiento']);
 
@@ -182,68 +182,11 @@ const selectedMantenimientoMachine = computed({
 const closeModal = () => {
   emit('close-modal');
 };
-const createMantenimiento = async () => {
-  try {
-      if (selectedMantenimientoMachine.value.length === 0) {
-          throw new Error('Debe seleccionar al menos una máquina.');
-      }
 
-      if (!newMantenimiento.descripcion) {
-          throw new Error('Debe indicar una descripción para el mantenimiento.');
-        }
-    if (!selectedTipoMantenimiento.value) {
-          throw new Error('Debe seleccionar un tipo de mantenimiento.');
-        }
-      if (!newMantenimiento.frecuenciaTipo || !newMantenimiento.frecuenciaCantidad) {
-           throw new Error('Frecuencia o cantidad no introducida');
-       }
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      throw new Error('Usuario no autenticado');
-    }
-      const frecuenciaEnDias = calculateTotalDays.value;
-
-
-    const newMantenimientoToSend = {
-        maquinas: selectedMantenimientoMachine.value.map(maquina => ({ id_maquina: maquina.id_maquina })),
-        id_tipo_mantenimiento: selectedTipoMantenimiento.value,
-        descripcion: newMantenimiento.descripcion,
-        gravedad: 'Mantenimiento',
-        estado: 'Abierta',
-        frecuencia: frecuenciaEnDias,
-    };
-
-    const response = await fetch('http://localhost:8000/api/mantenimientos', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newMantenimientoToSend),
-    });
-
-    if (!response.ok) {
-        const responseText = await response.text();
-        console.error("Error response text:", responseText);
-       try {
-            const errorData = JSON.parse(responseText);
-            console.error("Parsed error data:", errorData);
-            throw new Error(`Error al crear el mantenimiento: ${response.status} - ${errorData.message || response.statusText}`);
-         } catch (jsonError) {
-            throw new Error(`Error al crear el mantenimiento: ${response.status} - ${jsonError || response.statusText}`);
-         }
-    }
-
-    const createdMantenimiento = await response.json();
-    console.log('Mantenimiento creado:', createdMantenimiento);
-    emit('close-modal');
-    emit('create-mantenimiento', createdMantenimiento);
-
-  } catch (error) {
-    console.error('Error al crear el mantenimiento:', error);
-      alert(error.message);
-  }
+const createMantenimiento = () => {
+  emit('create-mantenimiento', { ...newMantenimiento, frecuencia: calculateTotalDays.value});
 };
+
 const calculateTotalDays = computed(() => {
   let days = 0;
   switch (newMantenimiento.frecuenciaTipo) {

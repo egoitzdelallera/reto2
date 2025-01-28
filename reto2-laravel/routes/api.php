@@ -12,7 +12,8 @@ use App\Http\Controllers\TipoMantenimientoController;
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\FasesIncidenciaController;
 use App\Http\Controllers\TalleresController;
-use App\Http\Controllers\GestionTodoController; 
+use App\Http\Controllers\GestionTodoController;
+
 
 // Rutas protegidas por JWT
 Route::middleware('jwt.auth')->group(function () {
@@ -101,6 +102,19 @@ Route::middleware('jwt.auth')->get('user', [UserController::class, 'user']);
 Route::middleware('jwt.auth')->group(function () {
    Route::get('/campus', [CampusController::class, 'index']);
 });
+   Route::post('/campus', [GestionTodoController::class, 'createCampus']);
+Route::put('/campus/{id}', [GestionTodoController::class, 'updateCampus']);
+Route::post('/talleres', [GestionTodoController::class, 'createTaller']);
+Route::put('/talleres/{id}', [GestionTodoController::class, 'updateTaller']);
+
+Route::post('/tipo-averias', [GestionTodoController::class, 'createTipoAveria']);
+Route::put('/tipo-averias/{id}', [GestionTodoController::class, 'updateTipoAveria']);
+Route::get('/tipos-averia', [TipoAveriaController::class, 'index']);
+
+
+Route::post('/tipo-mantenimientos', [GestionTodoController::class, 'createTipoMantenimiento']);
+Route::put('/tipo-mantenimientos/{id}', [GestionTodoController::class, 'updateTipoMantenimiento']);
+
 
 
 Route::post('/campus', [GestionTodoController::class, 'createCampus']);
