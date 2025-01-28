@@ -247,53 +247,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import carta from '../views/carta.vue';
 
 // Reusing your existing data structure
 const activeTab = ref('Operario');
 const tabs = ['Operario', 'Fases', 'Máquina'];
 
-const incident = {
-  title: 'Título incidencia',
-  priority: 'Alta',
-  machineStatus: 'Máquina parada',
-  enabledStatus: 'Habilitado',
-  machine: 'Torno PM74',
-  status: 'En Proceso',
-  description:
-    'He tenido un problema con el torno y e tenido un problema con el torno y e tenido un problema con el torno y e tenido un problema con el torno y problema con el torno.',
-  date: 'Hace 3 días',
-  failureType: 'Neumática',
-  workshop: 'Taller Neumática',
-  campus: 'Arriaga'
-};
-
-const operator = {
-  name: 'Pepe Lopez Gomez',
-  role: 'Operario',
-  email: 'pepe@gmail.com',
-  phone: '630 63 06 30'
-};
-
-const phases = [
-  {
-    status: 'Completada',
-    dateRange: '2 de Agosto / 14 de Agosto',
-    description: 'Título fase 1 - He cambiado el ac...',
-    tags: ['Alfredo Fernandez']
-  },
-  {
-    status: 'Completada',
-    dateRange: '14 de Agosto / 20 de Agosto',
-    description: 'Título fase 2 - He cambiado el ac...',
-    tags: ['Alfredo Fernandez', 'Vicente Abad', 'Maite Lezama']
-  },
-  {
-    status: 'En Proceso',
-    dateRange: '20 de Agosto ',
-    description: 'Título fase 3 - He cambiado el ac...'
-  }
-];
 
 const showAssignButton = true;
 
