@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_campus')->autoIncrement();
             $table->string('nombre', 100);
             $table->string('ubicacion', 200);
+            $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->primary('id_campus');
         });
     }

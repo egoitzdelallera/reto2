@@ -52,7 +52,7 @@ export default function useIncidencias() {
         try {
             const token = localStorage.getItem('jwt_token');
             const userData = JSON.parse(localStorage.getItem('user_data'));
-            const userId = userData ? userData.id : null;
+            const userId = userData?.id;
 
             if (!userId) {
                 alert('No se pudo obtener el id del usuario');
