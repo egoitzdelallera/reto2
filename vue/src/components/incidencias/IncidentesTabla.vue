@@ -117,6 +117,7 @@ const selectedMantenimientoMachine = ref([]);
 const newIncidencia = reactive({
   descripcion: '',
   gravedad: '',
+  multimedia: [],
 });
 
 const newMantenimiento = reactive({
