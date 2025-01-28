@@ -37,15 +37,7 @@
                  {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
                </td>
                <td class="font-medium bg-primary">{{ incidencia.creador?.nombre || 'Sin creador' }}</td>
-               <td class="font-medium bg-primary">
-                  {{ 
-                    incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0
-                      ? incidencia.fases_incidencias[incidencia.fases_incidencias.length - 1].tecnicos_fases_incidencias
-                        .map(tecnico => tecnico.tecnico.nombre)
-                        .join(', ') 
-                      : 'No asignado' 
-                  }}
-                </td>
+               <td class="font-medium bg-primary">{{ incidencia.tecnico ? incidencia.tecnico.nombre : 'Sin asignar' }}</td>
                <td class="font-medium bg-primary">
                  <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
                    {{ incidencia.gravedad }}

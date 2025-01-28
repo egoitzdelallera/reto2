@@ -38,6 +38,32 @@ return new class extends Migration
                 END IF;
             END;
         ");
+
+        DB::unprepared("
+        CREATE TRIGGER before_fase_update
+        BEFORE UPDATE ON fases_incidencias
+        FOR EACH ROW
+        BEGIN
+
+            IF NEW.estado = 'Completada' THEN
+                
+                IF @current_user_id IS NULL THEN
+                    SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'El ID del usuario no fue proporcionado.';
+                END IF;
+
+                -- Verificar si el usuario está asignado a la fase
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM tecnicos_fases_incidencias
+                    WHERE id_fase_incidencia = NEW.id_fase_incidencia
+                    AND id_tecnico = user_id
+                ) THEN
+                    SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'No puedes finalizar esta fase porque no estás asignado a ella.';
+                END IF;
+            END IF;
+        END;");
     }
 
     /**
@@ -48,5 +74,6 @@ return new class extends Migration
         Schema::dropIfExists('fases_incidencias');
 
         DB::unprepared("DROP TRIGGER IF EXISTS before_crear_fase");
+        DB::unprepared("DROP TRIGGER IF EXISTS before_fase_update");
     }
 };

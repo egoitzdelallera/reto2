@@ -68,6 +68,16 @@
                     <h6 class="text-muted">Campus</h6>
                     <p>{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
                   </div>
+                  <div v-if="incidencia.multimedia && incidencia.multimedia.includes('.jpg')">
+                    <img :src="getMultimediaUrl(incidencia.multimedia)" alt="Imagen de la incidencia" />
+                  </div>
+                  <div v-else-if="incidencia.multimedia">
+                      <p>Archivo multimedia disponible para descargar:</p>
+                      <a :href="getMultimediaUrl(incidencia.multimedia)" target="_blank" download>{{incidencia.multimedia}}</a>
+                    </div>
+                  <div v-else>
+                    <p>No hay multimedia asociada a esta incidencia.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -139,19 +149,23 @@
   
                     <h6 class="text-muted mt-3">Técnicos</h6>
                     <div class="row g-3">
-                      <div class="col-12">
+                      <div class="col-12" v-for="(tecnicoFase, index) in fase.tecnicos_fases_incidencias" :key="index">
                         <div class="card">
                           <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
                               <div class="rounded-circle bg-secondary" style="width: 48px; height: 48px;"></div>
                               <div class="ms-3">
-                                <h5 v-html="fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join('<br>')"></h5>
-                              </div>
-                              <div class="contact-info">
-                                <p>{{ fase.tecnicos_fases_incidencias[index]?.tecnico?.correo }}</p>
+                                <!-- Mostramos el nombre completo del técnico -->
+                                <h5>{{ tecnicoFase.tecnico.nombre }} {{ tecnicoFase.tecnico.apellido }}</h5>
                               </div>
                             </div>
-                            <span class="badge bg-success mt-2">Habilitado</span>
+                            <div class="row g-3">
+                              <div class="col-md-6">
+                                <h6 class="text-muted">Correo Electrónico</h6>
+                                <!-- Correo del técnico -->
+                                <p>{{ tecnicoFase.tecnico.correo }}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -277,6 +291,10 @@ const showFinalizarIncidenciaPopup = ref(false); // Estado del popup de finaliza
 const descripcion = ref('');
 const descripcionFinalizarIncidencia = ref(''); // Descripción para finalizar incidencia
 const faseSeleccionada = ref(null);
+const getMultimediaUrl = (path) => {
+  // Asegúrate de que esta ruta apunte a tu carpeta de almacenamiento público
+  return `/public/storage/${path}`; 
+};
 
 onMounted(async () => {
 const incidenciaId = route.params.id;

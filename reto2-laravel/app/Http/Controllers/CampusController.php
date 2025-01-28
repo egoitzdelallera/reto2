@@ -22,4 +22,5 @@ class CampusController extends Controller
 
         return response()->json($incidencias);
     }
+    
 }

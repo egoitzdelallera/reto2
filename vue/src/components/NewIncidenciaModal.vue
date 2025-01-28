@@ -1,7 +1,7 @@
 <template>
-    <div class="modal fade " :class="{ 'show d-block': showModal }" tabindex="-1" role="dialog">
+    <div class="modal fade" :class="{ 'show d-block': showModal }" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
-        <div class="modal-content bg-primary">
+        <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Nueva Incidencia</h5>
             <button type="button" class="btn-close" @click="closeModal"></button>
@@ -57,19 +57,10 @@
                 v-model="newIncidencia.gravedad"
                 required
               >
-                <option value="Maquina parada">Maquina parada</option>
-                <option value="Maquina en Marcha">Maquina en Marcha</option>
-                <option value="Aviso">Aviso</option>
+                <option v-for="option in filters.gravedad" :key="option.value" :value="option.value">{{
+                  option.label
+                }}</option>
               </select>
-            </div>
-            <div class="mb-3">
-              <label for="incidencia-multimedia" class="form-label">Subir Multimedia</label>
-              <input 
-                type="file" 
-                class="form-control" 
-                id="incidencia-multimedia" 
-                @change="handleFileChange"
-              />
             </div>
           </div>
           <div class="modal-footer">
@@ -84,7 +75,6 @@
     
     <script setup>
     import { reactive, computed } from 'vue';
-    import useIncidencias from '@/composables/useIncidencias';
     
     const props = defineProps({
       showModal: Boolean,
@@ -102,7 +92,6 @@
     const newIncidencia = reactive({
       descripcion: '',
       gravedad: '',
-      multimedia: [],
     });
     
     const selectedTaller = computed({
@@ -122,45 +111,9 @@
     const closeModal = () => {
       emit('close-modal');
     };
-
-    const handleFileChange = (event) => {
-      const files = event.target.files;
-      if (files.length > 0) {
-        // Aquí almacenamos solo el primer archivo en la propiedad reactiva
-        newIncidencia.multimedia = files[0];  // Asignamos el primer archivo
-      }
-    };
-
-    const { createIncidencia: createIncidenciaApi } = useIncidencias();
-
     
-    const createIncidencia = async () => {
-      const formData = new FormData();
-      const userData = JSON.parse(localStorage.getItem('user_data'));
-
-      // Añadimos los datos normales de la incidencia
-      formData.append('descripcion', newIncidencia.descripcion);
-      formData.append('gravedad', newIncidencia.gravedad);
-      formData.append('id_maquina', selectedMachine.value.id_maquina);
-      formData.append('id_tipo_averia', selectedTipoAveria.value.id_tipo_averia);
-      formData.append('id_creador', userData.id);
-
-      // Añadimos los archivos multimedia
-      if (newIncidencia.multimedia) {
-        formData.append('multimedia', newIncidencia.multimedia);
-      }
-
-      for (let [key, value] of formData.entries()) {
-          console.log(`${key}: ${value}`);
-      }
-
-      // Llamamos a la función de la API de incidencias
-      try {
-        await createIncidenciaApi(formData);  // Usamos la función del composable
-        closeModal();
-      } catch (error) {
-        console.error('Error creando la incidencia:', error);
-      }
+    const createIncidencia = () => {
+      emit('create-incidencia', { ...newIncidencia,  id_maquina: selectedMachine.value.id_maquina, id_tipo_averia: selectedTipoAveria.value.id_tipo_averia });
     };
     const updateFilteredMachines = () => {
           emit('update:selectedMachine', null)

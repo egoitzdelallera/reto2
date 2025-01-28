@@ -11,7 +11,7 @@ class IncidenciaController extends Controller
 {
     public function index()
     {
-         $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'tecnico'])
+         $incidencias = Incidencia::with(['maquina', 'maquina.taller', 'creador:id_usuario,nombre,apellido,correo,rol,estado,imagen_perfil,id_campus', 'creador.campus:id_campus,nombre', 'fasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias', 'fasesIncidencias.tecnicosFasesIncidencias.tecnico'])
             ->get();
         
         $incidencias->each(function ($incidencia) {
@@ -61,7 +61,8 @@ class IncidenciaController extends Controller
             'descripcion' => 'required|string',
             'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
             'id_tipo_averia' => 'required|integer',
-            'multimedia' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4',
+            'multimedia' => 'nullable|file',
+            'id_creador' => 'required|integer',
         ]);
     
         try {
@@ -119,7 +120,7 @@ class IncidenciaController extends Controller
             'descripcion' => $request->descripcion,
             'gravedad' => $request->gravedad,
             'estado' => "Abierta",
-             'id_creador' => 1,
+            'id_creador' => 1,
         ]);
         return response()->json($incidencia);
     }

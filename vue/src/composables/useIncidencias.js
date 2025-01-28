@@ -52,7 +52,7 @@ export default function useIncidencias() {
         try {
             const token = localStorage.getItem('jwt_token');
             const userData = JSON.parse(localStorage.getItem('user_data'));
-            const userId = userData ? userData.id : null;
+            const userId = userData?.id;
 
             if (!userId) {
                 alert('No se pudo obtener el id del usuario');
@@ -206,7 +206,7 @@ export default function useIncidencias() {
 
     
 
-    const createIncidencia = async (incidenciaData, selectedMachine,selectedTipoAveria) => {
+    const createIncidencia = async (formData) => {
         loading.value = true;
         error.value = null;
         message.value = null; // Reset message before request
@@ -216,20 +216,10 @@ export default function useIncidencias() {
                 throw new Error("No JWT token found");
             }
 
-            const newIncidencia = {
-              id_maquina: selectedMachine.id_maquina,
-              descripcion: incidenciaData.descripcion,
-              gravedad: incidenciaData.gravedad,
-              estado: 'Abierta', // Estado por defecto
-              id_creador: 1, //  usuario que crea la incidencia
-              fecha_ini: new Date().toISOString(), // Fecha actual
-              id_tipo_averia:selectedTipoAveria.id_tipo_averia,
-            };
-
-
-            const response = await axios.post('http://localhost:8000/api/incidencias', newIncidencia, {
+            const response = await axios.post('http://localhost:8000/api/incidencias', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
                 },
             });
              if(response.status === 201){
@@ -241,7 +231,6 @@ export default function useIncidencias() {
         } catch (err) {
             error.value = err;
             console.error('Error al crear la incidencia', err);
-           message.value = "Error al crear la incidencia, revisa los datos."
             throw err;
         } finally {
             loading.value = false;
