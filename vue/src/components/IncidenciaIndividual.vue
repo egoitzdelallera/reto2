@@ -40,36 +40,29 @@
                         </div>
                         <span class="badge bg-black text-white mt-3" style="font-size: 1em;" title="estado de la incidencia">{{ incidencia.estado }}</span>
                       </div>
-
-                      <hr class="my-3" style="border-top: 1px solid black;">
-
-                      <div class="row g-3">
+                        <div class="row g-3 mx-1 mt-3" style="border-top: 1px solid grey;">
                         <div class="col-md-6">
-                        <h6 class="text-muted">Máquina</h6>
+                        <h4 class="text-muted">Máquina</h4>
                         <p class="text-info">{{ incidencia.maquina?.nombre }}</p>
                         </div>
                         <div class="col-md-6">
-                        <h6 class="text-muted">Estado</h6>
+                        <h4 class="text-muted">Estado</h4>
                         <p class="text-info">{{ incidencia.estado }}</p>
                         </div>
-                        <div class="col-12">
-                        <h6 class="text-muted">Descripción</h6>
-                        <p class="text-info">{{ incidencia.descripcion }}</p>
-                        </div>
                         <div class="col-md-6">
-                        <h6 class="text-muted">Fecha</h6>
+                        <h4 class="text-muted">Fecha</h4>
                         <p class="text-info">{{ incidencia.fecha_reporte }}</p>
                         </div>
                         <div class="col-md-6">
-                        <h6 class="text-muted">Tipo de avería</h6>
+                        <h4 class="text-muted">Tipo de avería</h4>
                         <p class="text-info">{{ incidencia.tipo_averia?.nombre }}</p>
                         </div>
                         <div class="col-md-6">
-                        <h6 class="text-muted">Taller</h6>
+                        <h4 class="text-muted">Taller</h4>
                         <p class="text-info">{{ incidencia.maquina?.taller?.nombre }}</p>
                         </div>
                         <div class="col-md-6">
-                        <h6 class="text-muted">Campus</h6>
+                        <h4 class="text-muted">Campus</h4>
                         <p class="text-info">{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
                         </div>
                       </div>
@@ -77,7 +70,7 @@
                     </div>
 
                   <!-- Tabs Card -->
-                  <div class="card bg-secondary">
+                  <div class="card bg-primary mb-5">
                       <div class="card-body">
                           <h3 class="card-title mb-4 text-info">Detalles de la incidencia</h3>
 
@@ -94,9 +87,11 @@
                           </ul>
 
                           <!-- Operator Tab -->
-                          <div v-if="activeTab === 'Operario'" class="tab-content">
+                          <div v-if="activeTab === 'Operario'" class="tab-content ms-2">
                               <div class="d-flex align-items-center mb-4">
-                                  <div class="rounded-circle bg-primary" style="width: 64px; height: 64px;"></div>
+                                  <div class="rounded-circle bg-primary">
+                                    <i class="bi bi-person-circle fs-2"></i>
+                                  </div>
                                   <div class="ms-3">
                                       <h4 class="h5 mb-1 text-info">{{ incidencia.creador?.nombre }} {{ incidencia.creador?.apellido }}</h4>
                                       <p class="text-muted mb-0 text-info">{{ incidencia.creador?.rol }}</p>
@@ -111,61 +106,60 @@
                           </div>
 
                           <!-- Phases Tab -->
-                          <div v-else-if="activeTab === 'Fases'" class="tab-content">
-                              <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
-                                  <div class="d-flex justify-content-between align-items-center mb-3">
-                                      <h4 class="h5 mb-0 text-info">Título Fase {{ index + 1 }} - {{ fase.nombre }}</h4>
-                                      <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">
-                                          {{ fase.estado }}
-                                      </span>
+                            <div v-else-if="activeTab === 'Fases'" class="tab-content">
+                              <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4" style="border-bottom: 1px solid grey; padding-bottom: 1rem;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                  <h2 class="mb-0 text-info">Fase {{ index + 1 }} - {{ fase.descripcion }}</h2>
+                                  <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">
+                                    {{ fase.estado }}
+                                  </span>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                  <div class="col-md-6">
+                                    <h6 class="text-muted">Fecha de Inicio</h6>
+                                    <p class="text-info">{{ fase.fecha_inicio }}</p>
                                   </div>
-
-                                  <div class="row g-3 mb-3">
-                                      <div class="col-md-6">
-                                          <h6 class="text-muted">Fecha de Inicio</h6>
-                                          <p class="text-info">{{ fase.fecha_inicio }}</p>
-                                      </div>
-                                      <div v-if="fase.fecha_fin" class="col-md-6">
-                                          <h6 class="text-muted">Fecha de Final</h6>
-                                          <p class="text-info">{{ fase.fecha_fin }}</p>
-                                      </div>
+                                  <div v-if="fase.fecha_fin" class="col-md-6">
+                                    <h6 class="text-muted">Fecha de Final</h6>
+                                    <p class="text-info">{{ fase.fecha_fin }}</p>
                                   </div>
+                                </div>
+                                <button
+                                  v-if="fase.estado !== 'Completada'"
+                                  @click="asignarme(fase.id_fase_incidencia)"
+                                  class="btn btn-secondary"
+                                >
+                                  Asignarme fase {{ index + 1 }}
+                                </button>
 
-                                  <h6 class="text-muted">Descripción</h6>
-                                  <p class="text-info">{{ fase.descripcion }}</p>
-                                  <button
-                                      v-if="fase.estado !== 'Completada'"
-                                      @click="asignarme(fase.id_fase_incidencia)"
-                                      class="btn btn-primary mb-3"
-                                  >
-                                      Asignarme fase {{ index + 1 }}
-                                  </button>
-
-                                  <h6 class="text-muted mt-3">Técnicos</h6>
-                                  <div class="row g-3">
-                                      <div class="col-12" v-for="(tecnicoFase, index) in fase.tecnicos_fases_incidencias" :key="index">
-                                          <div class="card bg-primary">
-                                              <div class="card-body">
-                                                  <div class="d-flex align-items-center mb-3">
-                                                      <div class="rounded-circle bg-secondary" style="width: 48px; height: 48px;"></div>
-                                                      <div class="ms-3">
-                                                          <!-- Mostramos el nombre completo del técnico -->
-                                                          <h5 class="text-info">{{ tecnicoFase.tecnico.nombre }} {{ tecnicoFase.tecnico.apellido }}</h5>
-                                                      </div>
-                                                  </div>
-                                                  <div class="row g-3">
-                                                      <div class="col-md-6">
-                                                          <h6 class="text-muted">Correo Electrónico</h6>
-                                                          <!-- Correo del técnico -->
-                                                          <p class="text-info">{{ tecnicoFase.tecnico.correo }}</p>
-                                                      </div>
-                                                  </div>
-                                              </div>
+                                <h6 class="text-muted mt-3">Técnicos</h6>
+                                <div class="row g-3">
+                                  <div class="col-12" v-for="(tecnicoFase, index) in fase.tecnicos_fases_incidencias" :key="index">
+                                    <div class="card bg-primary">
+                                      <div class="card-body bg-secondary">
+                                        <div class="d-flex align-items-center mb-3">
+                                          <div class="rounded-circle text-info">
+                                          <i class="bi bi-person-circle fs-2"></i>
                                           </div>
+                                          <div class="ms-3">
+                                            <!-- Mostramos el nombre completo del técnico -->
+                                            <h4 class="text-info">{{ tecnicoFase.tecnico.nombre }} {{ tecnicoFase.tecnico.apellido }}</h4>
+                                          </div>
+                                        </div>
+                                        <div class="row g-3">
+                                          <div class="col-md-6">
+                                            <h6 class="text-muted">Correo Electrónico</h6>
+                                            <!-- Correo del técnico -->
+                                            <p class="text-info">{{ tecnicoFase.tecnico.correo }}</p>
+                                          </div>
+                                        </div>
                                       </div>
+                                    </div>
                                   </div>
+                                </div>
                               </div>
-                          </div>
+                            </div>
 
                           <!-- Machine Tab -->
                           <div v-else-if="activeTab === 'Máquina'" class="tab-content">
@@ -205,16 +199,12 @@
 
               <!-- Phases Sidebar -->
               <div class="col-lg-4">
-                  <div class="card bg-secondary">
+                  <div class="card bg-primary">
                       <div class="card-body">
                           <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4">
                               <div class="d-flex align-items-center mb-2">
-                                  <div
-                                      class="rounded-circle me-2"
-                                      :class="fase.estado?.toLowerCase()"
-                                      style="width: 12px; height: 12px;"
-                                  ></div>
-                                  <h5 class="mb-0 text-info">Fase {{ index + 1 }}</h5>
+
+                                  <h5 class="mb-0 mx-1 text-info">Fase {{ index + 1 }}</h5>
                                   <span
                                       class="badge ms-2"
                                       :class="['status', `status-${fase.estado?.toLowerCase()}`]"
@@ -228,9 +218,16 @@
                                   <span class="tag text-info">{{ fase.tecnicos_fases_incidencias.map(tecnico => tecnico.tecnico.nombre + ' ' + tecnico.tecnico.apellido).join(', ') }}</span>
                               </div>
 
-                              <div class="d-grid gap-2" v-if="fase.estado !== 'Completada'">
-                                  <button class="btn btn-success" @click="openPopup(fase)">Finalizar la Fase {{index + 1}}</button>
-                                  <button class="btn btn-secondary" @click="openFinalizarIncidenciaPopup(fase)">Finalizar Incidencia</button>
+                              <div class="d-grid gap-2 mt-3" v-if="fase.estado !== 'Completada'">
+                                <button
+                                  v-if="fase.estado !== 'Completada'"
+                                  @click="asignarme(fase.id_fase_incidencia)"
+                                  class="btn btn-secondary text-info"
+                                >
+                                  Asignarme fase {{ index + 1 }}
+                                </button>
+                                  <button class="btn btn-info text-primary" @click="openPopup(fase)">Finalizar la Fase {{index + 1}}</button>
+                                  <button class="btn btn-primary" @click="openFinalizarIncidenciaPopup(fase)">Finalizar Incidencia</button>
                               </div>
                           </div>
 
@@ -241,7 +238,7 @@
                                   <textarea v-model="descripcion" class="form-control" rows="4" placeholder="Descripción..."></textarea>
                                   <div class="d-flex justify-content-end mt-3 gap-2">
                                       <button class="btn btn-secondary" @click="closePopup">Cancelar</button>
-                                      <button class="btn btn-success" @click="confirmFinalizarFase">Confirmar</button>
+                                      <button class="btn btn-primary bg-fondoRojo" @click="confirmFinalizarFase">Confirmar</button>
                                   </div>
                               </div>
                           </div>
@@ -409,19 +406,25 @@ border-radius: 10px;
 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 width: 500px
 }
-
 .tab-button {
-background-color: #343a40; /* Color gris de fondo */
-border: none;
-color: #fff;
-padding: 10px 20px;
-cursor: pointer;
-border-radius: 5px 5px 0 0;
-transition: background-color 0.3s ease;
+  background-color: #ededed; /* Color gris de fondo */
+  border: 1px solid #dedede;
+  color: #828282;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  transition: background-color 0.3s ease;
+  outline: none; /* Eliminar el borde azul al hacer focus */
+}
+
+.tab-button:focus {
+  box-shadow: none; /* Asegurarse de que no haya borde al hacer focus */
 }
 
 .tab-button.active {
-background-color: #1c1f23; /* Color gris oscuro de fondo cuando está activo */
+  background-color: #e6e6e6;
+  color: black; /* Color gris oscuro de fondo cuando está activo */
+  font-weight: 700;
 }
 
 .status {
