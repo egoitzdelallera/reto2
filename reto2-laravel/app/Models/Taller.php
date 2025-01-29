@@ -12,18 +12,22 @@ class Taller extends Model
     use HasFactory;
 
     protected $table = 'talleres';
+    protected $primaryKey = 'id_taller'; // Definir la clave primaria
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',
-        'ubicacion',
+        'id_campus',
         'id_responsable',
         'estado',
         'id_campus'
     ];
+
+   
     
     public function responsable()
     {
-        return $this->belongsTo(Maquina::class, 'id_responsable');
+        return $this->belongsTo(User::class, 'id_responsable');
     }
 
     public function campus()

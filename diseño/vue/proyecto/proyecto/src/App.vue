@@ -3,7 +3,7 @@
 
   <div class="app-container">
     <Sidebar v-if="showSidebar" />
-    <main class="main-content" :class="{ 'with-sidebar': showSidebar }">
+    <main class="main-content p-0" :class="{ 'with-sidebar': showSidebar }">
       <router-view></router-view>
     </main>
   </div>
@@ -38,7 +38,8 @@ const showSidebar = computed(() => route.path !== '/login')
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  
+  padding-left: 300px !important;
 }
 
 

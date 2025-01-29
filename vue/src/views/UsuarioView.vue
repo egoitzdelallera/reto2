@@ -1,14 +1,14 @@
-
 <script setup>
-  // Función: Mostrar las cuentas del cliente identificado usando el componente MostrarCuentas.
-  import Usuario from '../components/UsuariosGestion.vue';
+  import UsuariosTabla from '../components/usuarios/UsuariosTabla.vue';
   import SideBar from '../views/SideBar.vue';
+  import { useRoute } from 'vue-router';
 
+const route = useRoute();
 </script>
 
 <template>
   <div>
-    <SideBar> </SideBar>
-    <Usuario> </Usuario>
+    <SideBar />
+    <UsuariosTabla :initialRole="route.query.role || 'Todos'" />
   </div>
 </template>

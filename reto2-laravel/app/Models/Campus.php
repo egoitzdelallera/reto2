@@ -10,6 +10,8 @@ class Campus extends Model
     use HasFactory;
 
     protected $table = 'campus';
+    protected $primaryKey = 'id_campus';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',

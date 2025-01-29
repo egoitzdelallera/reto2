@@ -11,6 +11,9 @@ class TipoAveria extends Model
 
     protected $table = 'tipo_averia';
 
+    protected $primaryKey = 'id_tipo_averia';
+    public $timestamps = false;
+
     protected $fillable = [
         'nombre'
     ];

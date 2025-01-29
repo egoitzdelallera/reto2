@@ -10,6 +10,8 @@ class TipoMantenimiento extends Model
     use HasFactory;
 
     protected $table = 'tipo_mantenimiento';
+    protected $primaryKey = 'id_tipo_mantenimiento';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombre',

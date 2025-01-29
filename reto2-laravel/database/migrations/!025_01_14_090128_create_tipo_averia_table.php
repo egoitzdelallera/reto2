@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tipo_averia', function (Blueprint $table) {
             $table->bigInteger('id_tipo_averia')->autoIncrement();
             $table->string('nombre', 100);
+            $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->primary('id_tipo_averia');
         });
     }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigInteger('id_tipo_mantenimiento')->autoIncrement();
             $table->string('nombre', 100);
             $table->string('descripcion', 300);
+            $table->enum('estado', ['Habilitado', 'Deshabilitado']);
             $table->primary('id_tipo_mantenimiento');
         });
     }

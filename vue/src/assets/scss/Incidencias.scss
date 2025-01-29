@@ -60,6 +60,7 @@ $color-hover: #dfe0e0;
   background: $color-fondo;
   border-radius: 0.5rem;
   overflow: hidden;
+
 }
 
 .table-header {
@@ -88,7 +89,7 @@ $color-hover: #dfe0e0;
   align-items: center;
   border-bottom: 1px solid $color-borde;
   @include transicion(background-color);
-  border-radius: 10px;
+  border-radius: 5px;
   margin-bottom: 3px;
 
   &:hover {

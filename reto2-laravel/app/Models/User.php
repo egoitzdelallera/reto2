@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth; // Importa Auth
+use Illuminate\Http\Request;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -19,10 +21,12 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'nombre',
         'correo',
+        'apellido',
         'rol',
         'estado',
         'imagen_perfil',
-        'id_campus'
+        'id_campus',
+        'password' // Añadido password a fillable
     ];
 
     protected $hidden = [
@@ -66,12 +70,7 @@ class User extends Authenticatable implements JWTSubject
         )->where('rol', 'Tecnico');
     }
 
-    public function getAuthPassword()
-    {
-        return $this->password;
-    }
-
-    /**
+     /**
      * Implementar el método requerido por JWTSubject
      */
     public function getJWTIdentifier()
@@ -79,7 +78,6 @@ class User extends Authenticatable implements JWTSubject
         // Devuelve el identificador único de usuario (en tu caso, 'id_usuario')
         return $this->getKey();
     }
-
     /**
      * Implementar el método requerido por JWTSubject para reclamar información adicional
      */
@@ -89,5 +87,22 @@ class User extends Authenticatable implements JWTSubject
         return [
             'rol' => $this->rol, // Añade el rol del usuario al token (ejemplo)
         ];
+    }
+
+
+    public function getAllUsers(Request $request)
+    {
+      $query =  User::select('id_usuario', 'nombre', 'correo', 'rol', 'estado', 'imagen_perfil', 'id_campus');
+         // Añadir ordenación si se especifica
+        if ($request->has('orderBy') && $request->has('orderDir')) {
+            $orderBy = $request->input('orderBy');
+            $orderDir = $request->input('orderDir');
+                $query->orderBy($orderBy, $orderDir);
+            }else{
+             $query->orderBy('id_usuario', 'asc');
+            }
+             $users = $query->get();
+     
+        return response()->json($users);
     }
 }
