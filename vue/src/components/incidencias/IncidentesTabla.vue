@@ -9,7 +9,7 @@
         :talleres="talleres"
         :selectedFilters="selectedFilters"
       />
-
+<!-- Incidencias -->
       <!-- Contenido principal -->
       <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
         <h1 class="h2 mb-4 px-4">Incidencias</h1>
