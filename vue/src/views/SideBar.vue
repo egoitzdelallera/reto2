@@ -96,21 +96,6 @@ export default {
         roles: ['Administrador', 'Tecnico', 'Operario']
       },
       {
-        title: 'Ayuda',
-        icon: 'bi bi-info-circle',
-        route: '/ayuda',
-        submenuTitle: 'Centro de Ayuda',
-        submenuSubtitle: 'Soporte y recursos.',
-        sectionTitle: 'Recursos',
-        submenu: [
-          { name: 'Guías', active: false, route: '/ayuda/guias' },
-          { name: 'FAQ', active: false, route: '/ayuda/faq' },
-          { name: 'Contacto', active: false, route: '/ayuda/contacto' },
-          { name: 'Reportar Error', active: false, route: '/ayuda/reportar-error' }
-        ],
-        roles: ['Administrador', 'Tecnico', 'Operario']
-      },
-      {
         title: 'Cerrar Sesión',
         icon: 'bi bi-box-arrow-left',
         route: '/logout',
@@ -154,7 +139,10 @@ export default {
             console.log('Calculating logoSrc. isCollapsed:', isCollapsed.value);
             return isCollapsed.value ? faviconLogo : egibideLogo;
         });
-
+ const getMultimediaUrl = (path) => {
+    const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    return path.startsWith("/storage") ? `${baseURL}${path}` : path;
+};
     const showSubmenu = (index) => {
       clearTimeout(submenuTimeout.value);
       submenuTimeout.value = setTimeout(() => {
@@ -176,6 +164,12 @@ export default {
     };
 
     const navigateTo = (route, role, name) => {
+        if (route.endsWith('.pdf')) {
+             const baseURL = import.meta.env.VITE_URL || window.location.origin;
+              const fullPath = `${baseURL}${route}`
+           window.open(fullPath, '_blank');
+           return
+        }
       if (route === '/usuarios') {
         router.push({ path: route, query: { role: role || 'Todos' } });
         return;
@@ -208,6 +202,7 @@ export default {
       toggleSidebar,
       navigateTo,
       logoSrc,
+        getMultimediaUrl
     };
   }
 };

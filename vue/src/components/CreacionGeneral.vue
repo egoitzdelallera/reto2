@@ -59,12 +59,7 @@
             </button>
           </div>
           <div class="card-body">
-            <input
-              v-model="searchQuery"
-              type="text"
-              class="form-control mb-3 custom-input"
-              placeholder="Buscar taller por nombre"
-            />
+            
             <div v-if="talleresLoading" class="text-center">
               <div class="spinner-border text-secondary" role="status">
                 <span class="visually-hidden">Cargando...</span>
