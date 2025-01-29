@@ -22,7 +22,7 @@ class MantenimientoController extends Controller
                 'id_tipo_mantenimiento' => 'required|integer|exists:tipo_mantenimiento,id_tipo_mantenimiento',
                 'descripcion' => 'required|string|max:300',
                 'gravedad' => 'required|in:Mantenimiento',
-                'estado' => 'required|in:Abierta,En progreso,Resuelta,Cancelada',
+                'estado' => 'required|in:Abierta,En proceso,Resuelta,Cancelada',
                 'frecuencia' => 'required|integer',
                  'multimedia' => 'nullable|string|max:300', // Remove nullable validation
             ]);

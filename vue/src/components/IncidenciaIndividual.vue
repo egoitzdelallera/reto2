@@ -139,7 +139,9 @@
                   <div v-for="(fase, index) in incidencia.fases_incidencias" :key="index" class="mb-4" style="border-bottom: 1px solid grey; padding-bottom: 1rem;">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                       <h2 class="mb-0 text-info">Fase {{ index + 1 }} - {{ fase.descripcion }}</h2>
-                      <span :class="['status', `status-${fase.estado?.toLowerCase()}`]">
+                       <span
+                          :class="['badge', 'ms-2', 'status', `status-${fase.estado?.toLowerCase()}`, { 'bg-warning': fase.estado?.toLowerCase() === 'en proceso'}]"
+                      >
                         {{ fase.estado }}
                       </span>
                     </div>
@@ -235,11 +237,10 @@
 
                   <h5 class="mb-0 mx-1 text-info">Fase {{ index + 1 }}</h5>
                   <span
-                    class="badge ms-2"
-                    :class="['status', `status-${fase.estado?.toLowerCase()}`]"
-                  >
-                    {{ fase.estado }}
-                  </span>
+                          :class="['badge', 'ms-2', 'status', `status-${fase.estado?.toLowerCase()}`, { 'bg-warning': fase.estado?.toLowerCase() === 'en proceso'}]"
+                      >
+                        {{ fase.estado }}
+                      </span>
                 </div>
                 <p class="text-muted small mb-2 text-info">{{ fase.fecha_inicio }} / {{ fase.fecha_fin }}</p>
                 <p class="mb-2 text-info">{{ fase.descripcion }}</p>
@@ -492,9 +493,10 @@ const closeImageModal = () => {
 }
 
 .status-enproceso {
-background-color: #ffc107;
-color: black;
+  background-color: #ffc107;
+  color: black;
 }
+
 .status-pendiente {
   background-color: #dc3545;
 }

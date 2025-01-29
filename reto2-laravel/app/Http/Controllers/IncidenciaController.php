@@ -114,7 +114,7 @@ class IncidenciaController extends Controller
             'gravedad' => 'in:Maquina parada,Maquina en Marcha,Aviso,Mantenimiento',
             'id_tipo_mantenimiento' => 'nullable|integer',
             'id_tipo_averia' => 'nullable|integer',
-            'estado' => 'required|in:Abierta, Pendiente, En Proceso, Resuelta',
+            'estado' => 'required|in:Abierta, Pendiente, En Progreso, Resuelta',
             'frecuencia' => 'nullable|in:diario, semanal, mensual, anual',
             'multimedia' => 'nullable|string',
             'fecha_reporte' => 'required|date',

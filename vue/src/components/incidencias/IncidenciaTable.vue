@@ -16,8 +16,7 @@
                 v-if="sortColumn === 'prioridad'"
                 :class="['bi', sortOrder === 'asc' ? 'bi-caret-up bg-secondary text-info  p-0 m-0' : 'bi-caret-down bg-secondary text-info p-0 m-0']"
                 style="white-space: nowrap;"
-              >
-          </i>
+              ></i>
               <span
                 class="bg-secondary text-info bi bi-caret-right p-0 m-0"
                 v-else
@@ -73,55 +72,103 @@
           </tr>
         </thead>
         <tbody class="table -light">
-          <tr
-            v-for="(incidencia, i) in paginatedIncidencias"
-            :key="i"
-            @click="goToIncidencia(incidencia.id_incidencia)"
-            style="cursor: pointer;"
-            :class="{ 'bg-secondary': isOwnTechnicianRow(incidencia) }"
-          >
-            <td class="font-medium bg-primary">
-              {{ incidencia.descripcion }}
-            </td>
-            <td class="font-medium bg-primary">
-              {{ incidencia.estado }}
-            </td>
-            <td class="font-medium bg-primary">
-              <span
-                :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]"
+          <template v-for="(incidencia, i) in paginatedIncidencias" :key="i">
+            <template v-if="!isOperator">
+              <tr
+                :class="{ 'bg-secondary': isOwnTechnicianRow(incidencia) }"
+                @click="goToIncidencia(incidencia.id_incidencia)"
+                style="cursor: pointer;"
               >
-                {{ incidencia.maquina.prioridad }}
-              </span>
-            </td>
-            <td class="font-medium bg-primary">
-              {{ formatDate(incidencia.fecha_reporte) }}
-            </td>
-            <td class="font-medium bg-primary">
-              {{ incidencia.maquina.nombre }}
-            </td>
-            <td class="font-medium bg-primary">
-              {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
-            </td>
-            <td class="font-medium bg-primary">
-              {{ incidencia.creador?.nombre || 'Sin creador' }}
-            </td>
-            <td class="font-medium bg-primary">
-              {{
-                incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0
-                  ? incidencia.fases_incidencias[
-                      incidencia.fases_incidencias.length - 1
-                    ].tecnicos_fases_incidencias
-                      .map((tecnico) => tecnico.tecnico.nombre)
-                      .join(', ')
-                  : 'No asignado'
-              }}
-            </td>
-            <td class="font-medium bg-primary">
-              <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
-                {{ incidencia.gravedad }}
-              </span>
-            </td>
-          </tr>
+                <td class="font-medium bg-primary">
+                  {{ incidencia.descripcion }}
+                </td>
+                <td class="font-medium bg-primary">
+                  {{ incidencia.estado }}
+                </td>
+                <td class="font-medium bg-primary">
+                  <span
+                    :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]"
+                  >
+                    {{ incidencia.maquina.prioridad }}
+                  </span>
+                </td>
+                <td class="font-medium bg-primary">
+                  {{ formatDate(incidencia.fecha_reporte) }}
+                </td>
+                <td class="font-medium bg-primary">
+                  {{ incidencia.maquina.nombre }}
+                </td>
+                <td class="font-medium bg-primary">
+                  {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
+                </td>
+                <td class="font-medium bg-primary">
+                  {{ incidencia.creador?.nombre || 'Sin creador' }}
+                </td>
+                <td class="font-medium bg-primary">
+                  {{
+                    incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0
+                      ? incidencia.fases_incidencias[
+                          incidencia.fases_incidencias.length - 1
+                        ].tecnicos_fases_incidencias
+                          .map((tecnico) => tecnico.tecnico.nombre)
+                          .join(', ')
+                      : 'No asignado'
+                  }}
+                </td>
+                <td class="font-medium bg-primary">
+                  <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
+                    {{ incidencia.gravedad }}
+                  </span>
+                </td>
+              </tr>
+            </template>
+             <tr
+               v-else
+                :class="{ 'bg-secondary': isOwnTechnicianRow(incidencia) }"
+                >
+                    <td class="font-medium bg-primary">
+                    {{ incidencia.descripcion }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                    {{ incidencia.estado }}
+                    </td>
+                     <td class="font-medium bg-primary">
+                        <span
+                        :class="['badge', getPrioridadClass(incidencia.maquina.prioridad)]"
+                        >
+                            {{ incidencia.maquina.prioridad }}
+                        </span>
+                    </td>
+                    <td class="font-medium bg-primary">
+                        {{ formatDate(incidencia.fecha_reporte) }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                        {{ incidencia.maquina.nombre }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                        {{ incidencia.maquina?.taller?.nombre || 'Sin taller' }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                        {{ incidencia.creador?.nombre || 'Sin creador' }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                        {{
+                            incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0
+                            ? incidencia.fases_incidencias[
+                                incidencia.fases_incidencias.length - 1
+                                ].tecnicos_fases_incidencias
+                            .map((tecnico) => tecnico.tecnico.nombre)
+                            .join(', ')
+                            : 'No asignado'
+                            }}
+                    </td>
+                    <td class="font-medium bg-primary">
+                         <span :class="['badge', getGravedadClass(incidencia.gravedad)]">
+                            {{ incidencia.gravedad }}
+                         </span>
+                     </td>
+               </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -158,7 +205,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
@@ -172,6 +219,26 @@ const router = useRouter();
 
 const sortColumn = ref(null);
 const sortOrder = ref(null);
+const userRole = ref(null);
+
+onMounted(() => {
+  const userData = localStorage.getItem('user_data');
+  if (userData) {
+    try {
+      const user = JSON.parse(userData);
+      userRole.value = user.rol;
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error);
+      userRole.value = null;
+    }
+  } else {
+    userRole.value = null;
+  }
+});
+
+const isOperator = computed(() => {
+  return userRole.value === 'Operario';
+});
 
 const getPrioridadClass = (prioridad) => {
   switch (prioridad) {
@@ -201,33 +268,40 @@ const getGravedadClass = (gravedad) => {
   }
 };
 const isOwnTechnicianRow = (incidencia) => {
-    const userData = localStorage.getItem('user_Data');
+  const userData = localStorage.getItem('user_Data');
 
-    if(!userData) return false;
+  if (!userData) return false;
 
-    try {
-        const user = JSON.parse(userData);
-        if (incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0) {
-          const lastFase = incidencia.fases_incidencias[incidencia.fases_incidencias.length - 1];
-            if (lastFase.tecnicos_fases_incidencias && lastFase.tecnicos_fases_incidencias.length > 0) {
-            return lastFase.tecnicos_fases_incidencias.some(tecnico => tecnico.tecnico.id === user.id)
-             }
-        }
-        return false
-    } catch (error) {
-        console.error("Error parsing user data from localStorage:", error);
-        return false
+  try {
+    const user = JSON.parse(userData);
+    if (incidencia.fases_incidencias && incidencia.fases_incidencias.length > 0) {
+      const lastFase = incidencia.fases_incidencias[
+        incidencia.fases_incidencias.length - 1
+      ];
+      if (
+        lastFase.tecnicos_fases_incidencias &&
+        lastFase.tecnicos_fases_incidencias.length > 0
+      ) {
+        return lastFase.tecnicos_fases_incidencias.some(
+          (tecnico) => tecnico.tecnico.id === user.id
+        );
+      }
     }
+    return false;
+  } catch (error) {
+    console.error('Error parsing user data from localStorage:', error);
+    return false;
+  }
 };
 
 const filteredIncidencias = computed(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para la comparación de fechas
-    return props.incidencias.filter(incidencia => {
-      const reportDate = new Date(incidencia.fecha_reporte);
-        reportDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 también para la fecha de la incidencia
-      return reportDate <= today;
-    });
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para la comparación de fechas
+  return props.incidencias.filter((incidencia) => {
+    const reportDate = new Date(incidencia.fecha_reporte);
+    reportDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 también para la fecha de la incidencia
+    return reportDate <= today;
+  });
 });
 
 const sortedIncidencias = computed(() => {
@@ -239,8 +313,8 @@ const sortedIncidencias = computed(() => {
       const gravedadOrder = {
         'Maquina parada': 1,
         'Maquina en Marcha': 2,
-        'Aviso': 3,
-        'Mantenimiento': 4,
+        Aviso: 3,
+        Mantenimiento: 4,
       };
       const prioridadOrder = {
         Alta: 1,
@@ -313,7 +387,9 @@ const totalPages = computed(() => {
 });
 
 const goToIncidencia = (id) => {
-  router.push({ name: 'IncidenciaIndividual', params: { id: id } });
+  if (!isOperator.value) {
+    router.push({ name: 'IncidenciaIndividual', params: { id: id } });
+  }
 };
 
 const formatDate = (dateString) => {
