@@ -72,7 +72,7 @@
               <i :class="['bi', openFilters.taller ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
             </button>
             <div class="mt-2" v-show="openFilters.taller">
-              <div v-for="taller in talleres" :key="taller.id_taller" class="form-check">
+              <div v-for="taller in filteredTalleres" :key="taller.id_taller" class="form-check">
                 <input
                   :id="'taller-' + taller.id_taller"
                   type="checkbox"
@@ -118,7 +118,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 
 const props = defineProps({
   showFilters: Boolean,
@@ -137,7 +137,9 @@ const openFilters = reactive({
 const toggleFilter = (filterName) => {
   openFilters[filterName] = !openFilters[filterName];
 };
-
+const filteredTalleres = computed(() => {
+      return props.talleres ? props.talleres.filter(taller => taller.estado === 'Habilitado') : [];
+  });
 </script>
 
 <style scoped>

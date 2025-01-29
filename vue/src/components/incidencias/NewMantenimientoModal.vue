@@ -29,7 +29,7 @@
                                   border-radius: 5px;
                                 "
             >
-              <div v-for="taller in talleres" :key="taller.id_taller" class="form-check">
+              <div v-for="taller in filteredTalleres" :key="taller.id_taller" class="form-check">
                 <input
                   :id="'taller-mantenimiento-' + taller.id_taller"
                   type="checkbox"
@@ -45,7 +45,7 @@
           </div>
           <div class="mb-3">
             <label for="mantenimiento-maquina" class="form-label">Máquina</label>
-            <div
+             <div
               class="mt-2"
               style="
                                   max-height: 250px;
@@ -56,7 +56,7 @@
                                 "
             >
               <div
-                v-for="maquina in filteredMaquinas"
+                v-for="maquina in filteredMachines"
                 :key="maquina.id_maquina"
                 class="form-check"
               >
@@ -113,7 +113,7 @@
               required
             >
               <option value="">Selecciona un tipo de mantenimiento</option>
-              <option v-for="tipo in tiposMantenimiento" :key="tipo.id_tipo_mantenimiento" :value="tipo.id_tipo_mantenimiento">
+              <option v-for="tipo in filteredTiposMantenimiento" :key="tipo.id_tipo_mantenimiento" :value="tipo.id_tipo_mantenimiento">
                 {{ tipo.nombre }}
               </option>
             </select>
@@ -148,11 +148,10 @@ const props = defineProps({
   showModal: Boolean,
   talleres: Array,
   maquinas: Array,
-  filteredMaquinas: Array,
-  tiposMantenimiento: Array,
+    tiposMantenimiento: Array,
    selectedMantenimientoTaller: Array,
    selectedMantenimientoMachine: Array,
-   selectedTipoMantenimiento:String
+   selectedTipoMantenimiento:String,
 });
 const emit = defineEmits(['close-modal', 'create-mantenimiento', 'update:selectedMantenimientoTaller', 'update:selectedMantenimientoMachine', 'update:selectedTipoMantenimiento']);
 
@@ -177,8 +176,25 @@ const selectedMantenimientoMachine = computed({
         get: () => props.selectedTipoMantenimiento,
         set: (value) => emit('update:selectedTipoMantenimiento', value)
     });
+ const filteredTalleres = computed(() => {
+      return props.talleres ? props.talleres.filter(taller => taller.estado === 'Habilitado') : [];
+  });
 
+ const filteredMachines = computed(() => {
+   if (!selectedMantenimientoTaller.value || selectedMantenimientoTaller.value.length === 0) {
+        return [];
+    }
 
+  const selectedTallerIds = selectedMantenimientoTaller.value.map(taller => taller.id_taller);
+    return props.maquinas
+        ? props.maquinas.filter(maquina =>
+            selectedTallerIds.includes(maquina.id_taller) && maquina.estado === 'Habilitado'
+        )
+        : [];
+  });
+   const filteredTiposMantenimiento = computed(() => {
+        return props.tiposMantenimiento ? props.tiposMantenimiento.filter(tipo => tipo.estado === 'Habilitado') : [];
+    });
 const closeModal = () => {
   emit('close-modal');
 };

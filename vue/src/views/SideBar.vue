@@ -131,23 +131,25 @@ export default {
     });
 
     const filteredMenuItems = computed(() => {
-      return menuItems.value.filter(item => item.roles.includes(userRole.value));
-    });
-
-     const updatedMenuItems = computed(() => {
-      const incidenciasTalleres = (talleres.value || []).map(taller => ({
-        name: taller.nombre,
-        active: false, // Elimina el punto azul
-        route: `/incidencias/`
-      }));
-      return filteredMenuItems.value.map((item) => {
-        if (item.title === 'Incidencias') {
-          return { ...item, submenu: [...item.submenu, ...incidenciasTalleres] };
-        }
-        return item;
+        return menuItems.value.filter(item => item.roles.includes(userRole.value));
       });
-    });
-
+  
+      const updatedMenuItems = computed(() => {
+  const incidenciasTalleres = (talleres.value || [])
+    .filter(taller => taller.estado === 'Habilitado') // Filter out disabled talleres
+    .map(taller => ({
+      name: taller.nombre,
+      active: true,
+      route: `/incidencias/`
+    }));
+    
+  return filteredMenuItems.value.map((item) => {
+    if (item.title === 'Incidencias') {
+      return { ...item, submenu: [...item.submenu, ...incidenciasTalleres] };
+    }
+    return item;
+  });
+});
      const logoSrc = computed(() => {
             console.log('Calculating logoSrc. isCollapsed:', isCollapsed.value);
             return isCollapsed.value ? faviconLogo : egibideLogo;
