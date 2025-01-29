@@ -2,81 +2,94 @@
   <div class="container-fluid bg-primary p-5">
     <div class="row">
       <!-- Panel de filtros (a la izquierda) -->
-      <FilterPanel :showFilters="showFilters" @toggle="showFilters = !showFilters"
-          :filters="filters"
-          :talleres="talleres"
-          :selectedFilters="selectedFilters"
-        />
+      <FilterPanel
+        :showFilters="showFilters"
+        @toggle="showFilters = !showFilters"
+        :filters="filters"
+        :talleres="talleres"
+        :selectedFilters="selectedFilters"
+      />
 
       <!-- Contenido principal -->
       <div :class="['main-content', 'col', { 'col-md-9': showFilters }]">
         <h1 class="h2 mb-4 px-4">Incidencias</h1>
-        
-         <div class="d-flex justify-content-around mb-4">
-                  <div class="input-group w-50">
-                      <span class="input-group-text">
-                          <i class="bi bi-search"></i>
-                      </span>
-                      <input type="text" placeholder="Buscar..." v-model="searchQuery" class="form-control" />
-                  </div>
 
-                   <div class="d-flex justify-content-between">
-                    <button v-show="!showFilters" class=" btn btn-primary mb-1"
-                      :class="{ 'hidden': showFilters }" @click="showFilters = true">
-                      <i class="bi bi-funnel"></i> Filtros
-                    </button>
-                     <button class="btn btn-secondary bg-black text-primary mx-3 ml-2" @click="openModal">
-                        <i class="bi bi-plus-square"></i> Nueva Incidencia
-                    </button>
-                     <button  class="btn btn-primary border border-secondary ml-2" @click="openMantenimientoModal">
-                        <i class="bi bi-tools"></i> Crear Mantenimiento
-                    </button>
-                 </div>
-              </div>
-         <IncidenciaTable
-        :incidencias="filteredIncidencias"
+        <div class="d-flex justify-content-around mb-4">
+          <div class="input-group w-50">
+            <span class="input-group-text">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              v-model="searchQuery"
+              class="form-control"
+            />
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <button
+              v-show="!showFilters"
+              class="btn btn-primary mb-1"
+              :class="{ 'hidden': showFilters }"
+              @click="showFilters = true"
+            >
+              <i class="bi bi-funnel"></i> Filtros
+            </button>
+            <button class="btn btn-secondary bg-black text-primary mx-3 ml-2" @click="openModal">
+              <i class="bi bi-plus-square"></i> Nueva Incidencia
+            </button>
+            <button
+              v-if="isAdmin"
+              class="btn btn-primary border border-secondary ml-2"
+              @click="openMantenimientoModal"
+            >
+              <i class="bi bi-tools"></i> Crear Mantenimiento
+            </button>
+          </div>
+        </div>
+        <IncidenciaTable
+          :incidencias="filteredIncidencias"
           :searchQuery="searchQuery"
-        :currentPage="currentPage"
-        :itemsPerPage="itemsPerPage"
-        @page-change="currentPage = $event"
-      />
-      
+          :currentPage="currentPage"
+          :itemsPerPage="itemsPerPage"
+          @page-change="currentPage = $event"
+        />
+      </div>
     </div>
-    </div>
-     <!-- Modal para crear incidencia -->
-     <NewIncidenciaModal
-        :showModal="showModal"
-        :talleres="talleres"
-        :maquinas="maquinas"
-        :filteredMaquinas="filteredMaquinas"
-        :tipoAverias="tipoAverias"
-        :filters="filters"
-        :selectedTaller="selectedTaller"
-        :selectedMachine="selectedMachine"
-        :selectedTipoAveria="selectedTipoAveria"
-        @update:selectedTaller="selectedTaller = $event"
-        @update:selectedMachine="selectedMachine = $event"
-        @update:selectedTipoAveria="selectedTipoAveria = $event"
-        @close-modal="closeModal"
-        @create-incidencia="createIncidencia"
-         />
+    <!-- Modal para crear incidencia -->
+    <NewIncidenciaModal
+      :showModal="showModal"
+      :talleres="talleres"
+      :maquinas="maquinas"
+      :filteredMaquinas="filteredMaquinas"
+      :tipoAverias="tipoAverias"
+      :filters="filters"
+      :selectedTaller="selectedTaller"
+      :selectedMachine="selectedMachine"
+      :selectedTipoAveria="selectedTipoAveria"
+      @update:selectedTaller="selectedTaller = $event"
+      @update:selectedMachine="selectedMachine = $event"
+      @update:selectedTipoAveria="selectedTipoAveria = $event"
+      @close-modal="closeModal"
+      @create-incidencia="createIncidencia"
+    />
     <!-- Modal para crear mantenimiento (solo visible para administradores) -->
     <NewMantenimientoModal
-        
-        :showModal="showMantenimientoModal"
-        :talleres="talleres"
-         :maquinas="maquinas"
-          :filteredMaquinas="filteredMantenimientoMaquinas"
-         :tiposMantenimiento="tiposMantenimiento"
-           :selectedMantenimientoTaller="selectedMantenimientoTaller"
-           :selectedMantenimientoMachine="selectedMantenimientoMachine"
-           :selectedTipoMantenimiento="selectedTipoMantenimiento"
-        @update:selectedMantenimientoTaller="selectedMantenimientoTaller = $event"
-          @update:selectedMantenimientoMachine="selectedMantenimientoMachine = $event"
-          @update:selectedTipoMantenimiento="selectedTipoMantenimiento = $event"
-           @close-modal="closeMantenimientoModal"
-        @create-mantenimiento="createMantenimiento"
-      />
+      :showModal="showMantenimientoModal"
+      :talleres="talleres"
+      :maquinas="maquinas"
+      :filteredMaquinas="filteredMantenimientoMaquinas"
+      :tiposMantenimiento="tiposMantenimiento"
+      :selectedMantenimientoTaller="selectedMantenimientoTaller"
+      :selectedMantenimientoMachine="selectedMantenimientoMachine"
+      :selectedTipoMantenimiento="selectedTipoMantenimiento"
+      @update:selectedMantenimientoTaller="selectedMantenimientoTaller = $event"
+      @update:selectedMantenimientoMachine="selectedMantenimientoMachine = $event"
+      @update:selectedTipoMantenimiento="selectedTipoMantenimiento = $event"
+      @close-modal="closeMantenimientoModal"
+      @create-mantenimiento="createMantenimiento"
+    />
   </div>
 </template>
 
@@ -117,7 +130,6 @@ const selectedMantenimientoMachine = ref([]);
 const newIncidencia = reactive({
   descripcion: '',
   gravedad: '',
-  multimedia: [],
 });
 
 const newMantenimiento = reactive({
@@ -132,7 +144,7 @@ const newMantenimiento = reactive({
 // Determine if the user is an admin
 const isAdmin = computed(() => {
   const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
-  return userData.rol === 'Administrador';
+  return userData && userData.rol === 'Administrador';
 });
 
 onMounted(async () => {
@@ -148,7 +160,7 @@ const filters = reactive({
     { value: 'Maquina parada', label: 'Maquina parada' },
     { value: 'Aviso', label: 'Aviso' },
     { value: 'Maquina en Marcha', label: 'Maquina en Marcha' },
-     { value: 'Mantenimiento', label: 'Mantenimiento' },
+    { value: 'Mantenimiento', label: 'Mantenimiento' },
   ],
   prioridad: [
     { value: 'Alta', label: 'Alta' },
@@ -174,15 +186,21 @@ const filteredMaquinas = computed(() => {
   if (!selectedTaller.value) {
     return maquinas.value;
   }
-  return maquinas.value.filter((maquina) => maquina.id_taller === selectedTaller.value.id_taller);
+  return maquinas.value.filter(
+    (maquina) => maquina.id_taller === selectedTaller.value.id_taller
+  );
 });
 
 const filteredMantenimientoMaquinas = computed(() => {
   if (selectedMantenimientoTaller.value.length === 0) {
     return maquinas.value;
   }
-  const selectedTallerIds = selectedMantenimientoTaller.value.map((taller) => taller.id_taller);
-  return maquinas.value.filter((maquina) => selectedTallerIds.includes(maquina.id_taller));
+  const selectedTallerIds = selectedMantenimientoTaller.value.map(
+    (taller) => taller.id_taller
+  );
+  return maquinas.value.filter((maquina) =>
+    selectedTallerIds.includes(maquina.id_taller)
+  );
 });
 
 const filteredIncidencias = computed(() => {
@@ -190,7 +208,9 @@ const filteredIncidencias = computed(() => {
 
   return incidencias.value.filter((incidencia) => {
     const matchesSearch = Object.values(incidencia).some(
-      (value) => value && value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
+      (value) =>
+        value &&
+        value.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
     );
     const matchesTaller =
       !tallerFilter || incidencia.maquina?.taller?.nombre === tallerFilter;
@@ -204,7 +224,8 @@ const filteredIncidencias = computed(() => {
         selectedFilters.gravedad.includes(incidencia.gravedad)) &&
       (selectedFilters.prioridad.length === 0 ||
         selectedFilters.prioridad.includes(incidencia.maquina.prioridad)) &&
-      (selectedFilters.estado.length === 0 || selectedFilters.estado.includes(incidencia.estado));
+      (selectedFilters.estado.length === 0 ||
+        selectedFilters.estado.includes(incidencia.estado));
 
     return matchesSearch && matchesFilters && matchesTaller && matchesSelectTaller;
   });
@@ -231,7 +252,7 @@ const openModal = () => {
 };
 
 const openMantenimientoModal = () => {
-    showMantenimientoModal.value = true;
+  showMantenimientoModal.value = true;
 };
 
 const closeModal = () => {
@@ -246,51 +267,64 @@ const closeMantenimientoModal = () => {
 
 const createIncidencia = async (newIncidenciaToSend) => {
   try {
-    await apiCreateIncidencia(newIncidenciaToSend, selectedMachine.value, selectedTipoAveria.value);
+    await apiCreateIncidencia(
+      newIncidenciaToSend,
+      selectedMachine.value,
+      selectedTipoAveria.value
+    );
     closeModal();
   } catch (error) {
     console.error('Error creating incidencia:', error);
   }
 };
 const createMantenimiento = async (mantenimientoData) => {
-    
-    const token = localStorage.getItem('jwt_token');
-    if (!token) {
-      throw new Error('Usuario no autenticado');
-    }
+  const token = localStorage.getItem('jwt_token');
+  if (!token) {
+    throw new Error('Usuario no autenticado');
+  }
 
-    const newMantenimientoToSend = {
-        maquinas: selectedMantenimientoMachine.value.map(maquina => ({ id_maquina: maquina.id_maquina })),
-        id_tipo_mantenimiento: selectedTipoMantenimiento.value,
-        descripcion: mantenimientoData.descripcion,
-        gravedad: 'Mantenimiento',
-        estado: 'Abierta',
-        frecuencia: mantenimientoData.frecuencia,
-    };
-     
-    const response = await fetch('http://localhost:8000/api/mantenimientos', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newMantenimientoToSend),
-    });
-    if (!response.ok) {
-        const responseText = await response.text();
-       console.error("Error response text:", responseText);
-        try {
-           const errorData = JSON.parse(responseText);
-           console.error("Parsed error data:", errorData);
-            throw new Error(`Error al crear el mantenimiento: ${response.status} - ${errorData.message || response.statusText}`);
-        }catch(jsonError){
-            throw new Error(`Error al crear el mantenimiento: ${response.status} - ${jsonError || response.statusText}`);
-       }
-    }
+  const newMantenimientoToSend = {
+    maquinas: selectedMantenimientoMachine.value.map((maquina) => ({
+      id_maquina: maquina.id_maquina,
+    })),
+    id_tipo_mantenimiento: selectedTipoMantenimiento.value,
+    descripcion: mantenimientoData.descripcion,
+    gravedad: 'Mantenimiento',
+    estado: 'Abierta',
+    frecuencia: mantenimientoData.frecuencia,
+  };
 
-    const createdMantenimiento = await response.json();
-    console.log('Mantenimiento creado:', createdMantenimiento);
-      closeMantenimientoModal();
+  const response = await fetch('http://localhost:8000/api/mantenimientos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(newMantenimientoToSend),
+  });
+  if (!response.ok) {
+    const responseText = await response.text();
+    console.error('Error response text:', responseText);
+    try {
+      const errorData = JSON.parse(responseText);
+      console.error('Parsed error data:', errorData);
+      throw new Error(
+        `Error al crear el mantenimiento: ${response.status} - ${
+          errorData.message || response.statusText
+        }`
+      );
+    } catch (jsonError) {
+      throw new Error(
+        `Error al crear el mantenimiento: ${response.status} - ${
+          jsonError || response.statusText
+        }`
+      );
+    }
+  }
+
+  const createdMantenimiento = await response.json();
+  console.log('Mantenimiento creado:', createdMantenimiento);
+  closeMantenimientoModal();
 };
 
 const calculateTotalDays = computed(() => {
@@ -328,7 +362,7 @@ const resetMantenimientoForm = () => {
   newMantenimiento.frecuenciaCantidad = null;
   newMantenimiento.frecuencia = null;
   newMantenimiento.fechaSemanal = null;
-    selectedMantenimientoTaller.value = [];
+  selectedMantenimientoTaller.value = [];
   selectedMantenimientoMachine.value = [];
   selectedTipoMantenimiento.value = null;
 };

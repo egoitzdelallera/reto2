@@ -1,11 +1,9 @@
 <template>
     <div class="modal-overlay">
-      <div class="modal-container">
+      <div class="modal-container bg-primary">
         <div class="modal-header border-b mb-4 pb-2">
           <h5 class="text-xl font-bold">Cambiar estado</h5>
-          <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
-            <span aria-hidden="true">×</span>
-          </button>
+          
         </div>
         <div class="modal-body">
             <p>
@@ -17,10 +15,10 @@
                 {{ alertMessage }}
             </div>
         </div>
-        <div class="modal-footer border-t pt-4 flex justify-end">
+        <div class="modal-footer">
           <button type="button" @click="closeModal"
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancelar</button>
-          <button type="button" class="btn btn-danger" @click="toggleStatus">Cambiar estado</button>
+            class="btn btn-secondary">Cancelar</button>
+          <button type="button" class="btn btn-primary" @click="toggleStatus">Cambiar estado</button>
         </div>
       </div>
     </div>

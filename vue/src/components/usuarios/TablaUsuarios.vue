@@ -1,40 +1,39 @@
 <template>
-    <div class="container">
+    <div class="container bg-primary">
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-light">
             <tr>
-              <th>FOTO</th>
-              <th>NOMBRE</th>
-              <th>APELLIDO</th>
-              <th>CORREO</th>
-              <th>CAMPUS</th>
-              <th>ROL</th>
-  
-              <th>ESTADO</th>
-              <th>ACCIONES</th>
+              <th class="bg-secondary text-info">FOTO</th>
+              <th class="bg-secondary text-info">NOMBRE</th>
+              <th class="bg-secondary text-info">APELLIDO</th>
+              <th class="bg-secondary text-info">CORREO</th>
+              <th class="bg-secondary text-info">CAMPUS</th>
+              <th class="bg-secondary text-info">ROL</th>
+              <th class="bg-secondary text-info">ESTADO</th>
+              <th class="bg-secondary text-info">ACCIONES</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="table-light">
             <tr v-for="user in usuarios" :key="user.id_usuario">
-              <td>
+              <td class="font-medium bg-primary">
                 <i class="bi bi-person-circle fs-2"></i>
               </td>
-              <td>{{ user.nombre }}</td>
-              <td>{{ user.apellido }}</td>
-              <td>{{ user.correo }}</td>
-              <td>{{ user.campus.nombre }}</td>
-              <td>
+              <td class="font-medium bg-primary">{{ user.nombre }}</td>
+              <td class="font-medium bg-primary">{{ user.apellido }}</td>
+              <td class="font-medium bg-primary">{{ user.correo }}</td>
+              <td class="font-medium bg-primary">{{ user.campus.nombre }}</td>
+              <td class="font-medium bg-primary">
                 <span class="badge" :class="getRoleBadgeClass(user.rol)">
                   {{ user.rol }}
                 </span>
               </td>
   
-              <td>
+              <td class="font-medium bg-primary">
                 <span
                   class="badge"
                   :class="
-                    user.estado === 'Habilitado' || user.estado === true ? 'bg-success' : 'bg-danger'
+                    user.estado === 'Habilitado' || user.estado === true ? 'bg-black text-white fw-normal' : 'badge bg-secondary text-black fw-normal'
                   "
                 >
                   {{
@@ -44,20 +43,16 @@
                   }}
                 </span>
               </td>
-              <td>
+                <td class="bg-primary">
                 <div class="btn-group">
-                  <button
-                    class="btn btn-sm"
-                    :class="user.estado ? 'btn-outline-danger' : 'btn-outline-success'"
-                    @click="confirmarDeshabilitarUsuario(user)"
-                  >
+                    <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="confirmarDeshabilitarUsuario(user)" title="cambiar estado">
                     <i class="bi" :class="user.estado ? 'bi-person-x' : 'bi-person-check'"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-primary" @click="editarUsuario(user)">
-                    <i class="bi bi-pencil"></i>
+                    </button>
+                  <button class="btn btn-sm btn-outline-info bg-secondary text-info" @click="editarUsuario(user)" title="editar usuario">
+                  <i class="bi bi-pencil"></i>
                   </button>
                 </div>
-              </td>
+                </td>
             </tr>
           </tbody>
         </table>

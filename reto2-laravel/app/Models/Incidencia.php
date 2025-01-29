@@ -20,8 +20,8 @@ class Incidencia extends Model
         'fecha_reporte',
         'id_tipo_averia',
         'id_tipo_mantenimiento',
-        'frecuencia',
         'multimedia',
+        'frecuencia',
    ];
 
   public function maquina()

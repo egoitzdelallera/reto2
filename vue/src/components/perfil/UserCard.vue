@@ -9,7 +9,7 @@
                         <span class="badge bg-secondary">{{ user.specialization }}</span>
                      </div>
                 </div>
-                <span class="badge" :class="user.estado === 'Habilitado' ? 'bg-success' : 'bg-danger'">
+                <span class="badge" :class="user.estado === 'Habilitado' ? 'bg-black text-primary' : 'bg-secondary text-black'">
                     {{ user.estado }}
                     </span>
             </div>

@@ -6,7 +6,7 @@
         <div class="card custom-card h-100">
           <div class="card-header custom-card-header d-flex align-items-center">
             <h5 class="card-title mb-0 text-dark me-auto">Campus</h5>
-            <button @click="showAddItemPopup('campus')" class="btn btn-sm btn-secondary">
+            <button @click="showAddItemPopup('campus')" class="btn btn-sm btn-secondary bg-info w-25">
               <i class="bi bi-plus-lg"></i> Añadir
             </button>
           </div>
@@ -54,7 +54,7 @@
         <div class="card custom-card h-100">
           <div class="card-header custom-card-header d-flex align-items-center">
             <h5 class="card-title mb-0 text-dark me-auto">Talleres</h5>
-            <button @click="showAddItemPopup('talleres')" class="btn btn-sm btn-secondary">
+            <button @click="showAddItemPopup('talleres')" class="btn btn-sm btn-secondary  bg-info w-25">
               <i class="bi bi-plus-lg"></i> Añadir
             </button>
           </div>
@@ -85,7 +85,7 @@
                   >
                     <i :class="taller.estado === 'Deshabilitado' ? 'bi-toggle-off' : 'bi-toggle-on'" class="bi"></i>
                   </button>
-                  <button @click="showModifyPopup(taller, 'talleres')" class="btn btn-sm btn-outline-secondary">
+                  <button @click="showModifyPopup(taller, 'talleres')" class="btn btn-sm btn-outline-secondary ">
                     <i class="bi bi-pencil"></i>
                   </button>
                 </div>
@@ -108,7 +108,7 @@
         <div class="card custom-card h-100">
           <div class="card-header custom-card-header d-flex align-items-center">
             <h5 class="card-title mb-0 text-dark me-auto">Tipos de Avería</h5>
-            <button @click="showAddItemPopup('tipoAverias')" class="btn btn-sm btn-secondary">
+            <button @click="showAddItemPopup('tipoAverias')" class="btn btn-sm btn-secondary  bg-info w-25">
               <i class="bi bi-plus-lg"></i> Añadir
             </button>
           </div>

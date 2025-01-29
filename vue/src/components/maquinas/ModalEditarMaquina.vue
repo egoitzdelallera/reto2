@@ -1,28 +1,25 @@
 <template>
     <div class="modal-overlay">
-      <div class="modal-container">
+      <div class="modal-container bg-primary">
         <div class="modal-header border-b mb-4 pb-2">
           <h5 class="text-xl font-bold">Editar Maquina</h5>
-          <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
-            <span aria-hidden="true">×</span>
-          </button>
         </div>
         <div class="modal-body">
           <form @submit.prevent="submitEditMaquina">
             <div class="mb-3">
               <label for="editNombre" class="form-label block text-sm font-medium text-gray-700">Nombre</label>
               <input type="text" id="editNombre" v-model="maquinaToEdit.nombre"
-                class="form-control mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                class="form-control mt-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
             </div>
             <div class="mb-3">
               <label for="editDescripcion" class="form-label block text-sm font-medium text-gray-700">Descripción</label>
               <textarea id="editDescripcion" v-model="maquinaToEdit.descripcion"
-                class="form-control mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                class="form-control mt-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
             </div>
             <div class="mb-3">
               <label for="editTaller" class="form-label block text-sm font-medium text-gray-700">Taller</label>
               <select id="editTaller" v-model="maquinaToEdit.id_taller"
-                class="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                class="form-select mt-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <option v-for="taller in talleres" :key="taller.id_taller" :value="taller.id_taller">
                   {{ taller.nombre }}
                 </option>
@@ -31,7 +28,7 @@
             <div class="mb-3">
               <label for="editPrioridad" class="form-label block text-sm font-medium text-gray-700">Prioridad</label>
               <select id="editPrioridad" v-model="maquinaToEdit.prioridad"
-                class="form-select mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                class="form-select mt-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <option value="Alta">Alta</option>
                 <option value="Media">Media</option>
                 <option value="Baja">Baja</option>
@@ -42,9 +39,9 @@
             </div>
           </form>
         </div>
-        <div class="modal-footer border-t pt-4 flex justify-end">
+        <div class="modal-footer">
           <button type="button" @click="closeModal"
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancelar</button>
+            class="btn btn-secondary">Cancelar</button>
           <button type="submit" class="btn btn-primary" @click="submitEditMaquina">Guardar Cambios</button>
         </div>
       </div>

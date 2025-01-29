@@ -11,9 +11,9 @@ export default function useUsuarios() {
      const router = useRouter();
     const getRoleBadgeClass = (rol) => {
         const classes = {
-        'Administrador': 'bg-danger',
-        'Técnico': 'bg-primary',
-        'Operario': 'bg-warning text-dark'
+        'Administrador': 'bg-info text-primary',
+        'Tecnico': 'bg-secondary text-black',
+        'Operario': 'bg-primary text-info border border-secondary'
         }
         return classes[rol] || 'bg-secondary'
     };

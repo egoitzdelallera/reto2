@@ -51,6 +51,7 @@ $gris-2P:  #d1d1d1 !default;
 $gris-3P:  #828282 !default;
 $red-P:     #ffbdbd !default;
 $orange-P:  #ffd9bd !default;
+$green-P:   #bdffcc !default;
 // scss-docs-end color-variables
 
 // scss-docs-start colors-map
@@ -73,7 +74,8 @@ $colors: (
   "gris-2P":    $gris-2P,
   "gris-3P":    $gris-3P,
   "red-P":      $red-P,
-  "orange-P":   $orange-P
+  "orange-P":   $orange-P,
+  "green-P":    $green-P,
 ) !default;
 // scss-docs-end colors-map
 
@@ -317,6 +319,7 @@ $danger:        $red !default;
 $naranja:       $orange !default;
 $fondoRojo:     $red-P !default;
 $fondoNaranja:  $orange-P !default;
+$fondoVerde:  $orange-P !default;
 $light:         $gray-100 !default;
 $dark:          $gray-900 !default;
 // scss-docs-end theme-color-variables

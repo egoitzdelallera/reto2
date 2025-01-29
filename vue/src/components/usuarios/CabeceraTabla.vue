@@ -1,7 +1,7 @@
 <template>
-    <div class="row text-white py-3 mb-4">
+    <div class="row text-white py-3 mb-4 mx-5">
     <div class="col">
-        <h2 class="text-2xl font-bold mx-5 px-3 mb-6">Usuarios: {{ selectedRole }}</h2>
+        <h2 class="text-2xl font-bold mx-5 px-2 mb-6 text-black">Usuarios: {{ selectedRole }}</h2>
     </div>
     <div class="container mb-4 bg-primary">
         <div class="row align-items-center">
@@ -25,9 +25,9 @@
                 style="box-shadow: none;"
             >Administradores</button>
             <button
-                @click="cambiarRol('Técnico')"
+                @click="cambiarRol('Tecnico')"
                 class="btn"
-                :class="selectedRole === 'Técnico' ? 'btn-info text-primary' : 'btn-outline-info'"
+                :class="selectedRole === 'Tecnico' ? 'btn-info text-primary' : 'btn-outline-info'"
                 style="box-shadow: none;"
             >Técnicos</button>
             <button
