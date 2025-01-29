@@ -68,13 +68,16 @@
                     <h6 class="text-muted">Campus</h6>
                     <p>{{ incidencia.maquina?.taller?.campus?.nombre }}</p>
                   </div>
-                  <div v-if="incidencia.multimedia && incidencia.multimedia.includes('.jpg')">
+                  <div v-if="incidencia.multimedia && (incidencia.multimedia.includes('.jpg') || incidencia.multimedia.includes('.png') || incidencia.multimedia.includes('.jpeg'))">
                     <img :src="getMultimediaUrl(incidencia.multimedia)" alt="Imagen de la incidencia" />
                   </div>
+                  <div v-else-if="incidencia.multimedia && (incidencia.multimedia.includes('.mp4') || incidencia.multimedia.includes('.webm') || incidencia.multimedia.includes('.ogg'))">
+                    <video :src="getMultimediaUrl(incidencia.multimedia)" controls width="100%" alt="Video de la incidencia"></video>
+                  </div>
                   <div v-else-if="incidencia.multimedia">
-                      <p>Archivo multimedia disponible para descargar:</p>
-                      <a :href="getMultimediaUrl(incidencia.multimedia)" target="_blank" download>{{incidencia.multimedia}}</a>
-                    </div>
+                    <p>Archivo multimedia disponible para descargar:</p>
+                    <a :href="getMultimediaUrl(incidencia.multimedia)" target="_blank" download>{{ incidencia.multimedia }}</a>
+                  </div>
                   <div v-else>
                     <p>No hay multimedia asociada a esta incidencia.</p>
                   </div>
@@ -292,9 +295,10 @@ const descripcion = ref('');
 const descripcionFinalizarIncidencia = ref(''); // Descripción para finalizar incidencia
 const faseSeleccionada = ref(null);
 const getMultimediaUrl = (path) => {
-  // Asegúrate de que esta ruta apunte a tu carpeta de almacenamiento público
-  return `/public/storage/${path}`; 
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  return path.startsWith("/storage") ? `${baseURL}${path}` : path;
 };
+
 
 onMounted(async () => {
 const incidenciaId = route.params.id;

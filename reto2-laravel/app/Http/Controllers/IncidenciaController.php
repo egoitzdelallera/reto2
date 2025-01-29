@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Incidencia;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class IncidenciaController extends Controller
 {
@@ -31,6 +32,11 @@ class IncidenciaController extends Controller
         if (!$incidencia) {
             return response()->json(['message' => 'Incidencia no encontrada'], 404);
         }
+
+        if($incidencia->multimedia){
+            $incidencia->multimedia = Storage::url($incidencia->multimedia);
+        }
+
         return response()->json($incidencia);
     }
     public function index2(Request $request)
