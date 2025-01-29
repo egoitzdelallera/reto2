@@ -15,7 +15,8 @@ class TipoAveria extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nombre'
+        'nombre',
+        'estado'
     ];
 
     public function incidencias()

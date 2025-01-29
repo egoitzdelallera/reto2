@@ -15,7 +15,8 @@ class TipoMantenimiento extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion'
+        'descripcion',
+        'estado'
     ];
 
     public function incidencias()

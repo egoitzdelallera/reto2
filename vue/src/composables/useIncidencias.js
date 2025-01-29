@@ -14,39 +14,23 @@ export default function useIncidencias() {
         loading.value = true;
         error.value = null;
         try {
-          const token = localStorage.getItem('jwt_token');
-          const userDataString = localStorage.getItem('user_data'); // Obtener la información del usuario
-      
-          if (!token) {
-            throw new Error("No JWT token found");
-          }
-      
-          const userData = userDataString ? JSON.parse(userDataString) : null; // Parsea el JSON o asigna null
-          const isAdmin = userData?.role === 'admin'; // Determinar si el usuario es admin
-      
-          const response = await axios.get('http://localhost:8000/api/incidencias', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-      
-          // Filtrar incidencias si el usuario no es admin
-          if (!isAdmin) {
-            incidencias.value = response.data.filter(
-              (incidencia) =>
-                incidencia.estado !== 'resuelta' && incidencia.estado !== 'cancelada'
-            );
-          } else {
-            incidencias.value = response.data; // Mantener todas las incidencias si es admin
-          }
+            const token = localStorage.getItem('jwt_token');
+            if (!token) {
+                throw new Error("No JWT token found");
+            }
+            const response = await axios.get('http://localhost:8000/api/incidencias', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            incidencias.value = response.data;
         } catch (err) {
-          error.value = err;
-          console.error('Error al cargar las incidencias', err);
+            error.value = err;
+            console.error('Error al cargar las incidencias', err);
         } finally {
-          loading.value = false;
+            loading.value = false;
         }
-      };
-
+    };
 
     const getIncidenciaById = async (id) => {
         try{
@@ -203,20 +187,26 @@ export default function useIncidencias() {
     };
 
     const filteredIncidencias = computed(() => {
-        const userDataString = localStorage.getItem('user_data');
-        const userData = userDataString ? JSON.parse(userDataString) : null;
-        const isAdmin = userData?.role === 'admin';
-        
-        if(isAdmin){
+        if (!searchQuery.value) {
             return incidencias.value;
         }
-    
-        return incidencias.value.filter(incidencia => incidencia.estado !== 'resuelta' && incidencia.estado !== 'cancelada')
+
+        return incidencias.value.filter((incidencia) => {
+            const lowerCaseQuery = searchQuery.value.toLowerCase();
+            return (
+              incidencia.descripcion.toLowerCase().includes(lowerCaseQuery) ||
+              incidencia.estado.toLowerCase().includes(lowerCaseQuery) ||
+              (incidencia.maquina && incidencia.maquina.nombre.toLowerCase().includes(lowerCaseQuery))||
+              (incidencia.creador && incidencia.creador.nombre.toLowerCase().includes(lowerCaseQuery)) ||
+              (incidencia.tecnico && incidencia.tecnico.nombre.toLowerCase().includes(lowerCaseQuery)) ||
+              incidencia.gravedad.toLowerCase().includes(lowerCaseQuery)
+            );
+        });
     });
 
     
 
-    const createIncidencia = async (incidenciaData, selectedMachine,selectedTipoAveria) => {
+    const createIncidencia = async (formData) => {
         loading.value = true;
         error.value = null;
         message.value = null; // Reset message before request
@@ -226,20 +216,10 @@ export default function useIncidencias() {
                 throw new Error("No JWT token found");
             }
 
-            const newIncidencia = {
-              id_maquina: selectedMachine.id_maquina,
-              descripcion: incidenciaData.descripcion,
-              gravedad: incidenciaData.gravedad,
-              estado: 'Abierta', // Estado por defecto
-              id_creador: 1, //  usuario que crea la incidencia
-              fecha_ini: new Date().toISOString(), // Fecha actual
-              id_tipo_averia:selectedTipoAveria.id_tipo_averia,
-            };
-
-
-            const response = await axios.post('http://localhost:8000/api/incidencias', newIncidencia, {
+            const response = await axios.post('http://localhost:8000/api/incidencias', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
                 },
             });
              if(response.status === 201){
@@ -251,7 +231,6 @@ export default function useIncidencias() {
         } catch (err) {
             error.value = err;
             console.error('Error al crear la incidencia', err);
-           message.value = "Error al crear la incidencia, revisa los datos."
             throw err;
         } finally {
             loading.value = false;
